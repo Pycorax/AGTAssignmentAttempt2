@@ -31,6 +31,9 @@
     <Filter Include="Projectile">
       <UniqueIdentifier>{74fc0887-e5e6-4dcf-a7bf-adb0ed14c647}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CustomScenes">
+      <UniqueIdentifier>{4b22c06a-72b3-4288-b6bd-1e9ad8203b06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -137,6 +140,12 @@
     </ClCompile>
     <ClCompile Include="Source\Projectile\ProjectileManager.cpp">
       <Filter>Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomScenes\SplashScene.cpp">
+      <Filter>CustomScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomScenes\GameScene.cpp">
+      <Filter>CustomScenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +268,12 @@
     </ClInclude>
     <ClInclude Include="Source\Projectile\ProjectileManager.h">
       <Filter>Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\GameScene.h">
+      <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\SplashScene.h">
+      <Filter>CustomScenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

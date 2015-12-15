@@ -8,6 +8,8 @@
 #include <GLFW/glfw3.h>
 */
 
+#include "IntroState.h"
+
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
@@ -260,7 +262,7 @@ void Application::Init()
 	// Initialise the GSM
 	theGSM = new CGameStateManager();
 	theGSM->Init( "DM2240 with Game State Management", 800, 600 );
-	theGSM->ChangeState( CPlayState::Instance() );
+	theGSM->ChangeState( CIntroState::Instance() );
 }
 
 /********************************************************************************

@@ -2,7 +2,7 @@
 
 #include "GameStateManager.h"
 
-#define GSM_DEBUG_MODE TRUE
+#define GSM_DEBUG_MODE FALSE
 
 class CGameState
 {

@@ -6,6 +6,7 @@ using namespace std;
 #include "menustate.h"
 #include "introstate.h"
 #include "playstate.h"
+#include "CustomScenes\SplashScene.h"
 
 CIntroState CIntroState::theIntroState;
 
@@ -14,6 +15,8 @@ void CIntroState::Init()
 #if GSM_DEBUG_MODE
 	cout << "CIntroState::Init\n" << endl;
 #endif
+	scene = new SplashScene(800, 600);
+	scene->Init();
 }
 
 void CIntroState::Init(const int width, const int height)
@@ -21,6 +24,8 @@ void CIntroState::Init(const int width, const int height)
 #if GSM_DEBUG_MODE
 	cout << "CIntroState::Init\n" << endl;
 #endif
+	scene = new SplashScene(width, height);
+	scene->Init();
 }
 
 void CIntroState::Cleanup()
@@ -35,6 +40,10 @@ void CIntroState::Pause()
 #if GSM_DEBUG_MODE
 	cout << "CIntroState::Pause\n" << endl;
 #endif
+	// Delete the scene
+	scene->Exit();
+	delete scene;
+	scene = NULL;
 }
 
 void CIntroState::Resume()
@@ -128,10 +137,19 @@ void CIntroState::Update(CGameStateManager* theGSM)
 #if GSM_DEBUG_MODE
 	cout << "CIntroState::Update\n" << endl;
 #endif
+	// Update the scene
+	scene->Update(0.16667);
 }
 
 void CIntroState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 {
+	// Update the scene
+	scene->Update(m_dElapsedTime);
+
+	if (scene->HasEnded())
+	{
+		theGSM->ChangeState(CPlayState::Instance());
+	}
 }
 
 void CIntroState::Draw(CGameStateManager* theGSM) 
@@ -139,4 +157,6 @@ void CIntroState::Draw(CGameStateManager* theGSM)
 #if GSM_DEBUG_MODE
 	cout << "CIntroState::Draw\n" << endl;
 #endif
+	// Render the scene
+	scene->Render();
 }

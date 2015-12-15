@@ -1,6 +1,7 @@
 #pragma once
 
-#include "gamestate.h"
+#include "GameState.h"
+#include "SceneManager.h"
 
 class CIntroState : public CGameState
 {
@@ -29,4 +30,7 @@ protected:
 
 private:
 	static CIntroState theIntroState;
+
+	// The handler for the scene
+	CSceneManager *scene;	// Use this for 3D gameplay
 };

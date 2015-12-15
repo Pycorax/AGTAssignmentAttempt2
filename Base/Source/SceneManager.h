@@ -56,37 +56,6 @@ class CSceneManager : public Scene
 		U_TEXT_COLOR,
 		U_TOTAL,
 	};
-	enum GEOMETRY_TYPE
-	{
-		GEO_RAY,
-		GEO_AXES,
-		GEO_CROSSHAIR,
-		GEO_LIGHTBALL,
-		GEO_SPHERE,
-		GEO_SPHERE2,
-		GEO_SPHERE3,
-		GEO_SPHERE4,
-		GEO_SPHERE5,
-		GEO_SPHERE6,
-		GEO_SPHERE7,
-		GEO_SPHERE8,
-		GEO_SPHERE9,
-		GEO_QUAD,
-		GEO_CUBE,
-		GEO_RING,
-		GEO_CONE,
-		GEO_LEFT,
-		GEO_RIGHT,
-		GEO_TOP,
-		GEO_BOTTOM,
-		GEO_FRONT,
-		GEO_BACK,
-		GEO_GRASS_DARKGREEN,
-		GEO_GRASS_LIGHTGREEN,
-		GEO_OBJECT,
-		GEO_TEXT,
-		NUM_GEOMETRY,
-	};
 
 public:
 	CSceneManager(void);
@@ -113,13 +82,7 @@ public:
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size=1.0f, float x=0.0f, float y=0.0f, bool rotate=false);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 
-	// Render the main components of this scene
-	void RenderGUI();
-	void RenderMobileObjects();
-	void RenderFixedObjects();
-	void RenderLights();
-	void RenderGround();
-	void RenderSkybox();
+	void RenderLights(void);
 
 	enum WEAPON_ACTION
 	{
@@ -131,9 +94,11 @@ public:
 		WA_TOTAL,
 	};
 
-private:
+	// GameStates to query this to check if scenes have ended
+	bool HasEnded(void) const;
+
+protected:
 	unsigned m_vertexArrayID;
-	Mesh* meshList[NUM_GEOMETRY];
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
@@ -171,6 +136,11 @@ private:
 
 	// Projectile
 	CProjectileManager* m_cProjectileManager;
+
+	void endScene(void);
+
+private:
+	bool m_endScene;
 };
 
 #endif

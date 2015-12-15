@@ -11,8 +11,6 @@
 //Include GLFW
 #include <GLFW/glfw3.h>
 
-#define TYPE_OF_VIEW 3	// 2 = 2D, 3 = 3D
-
 class CPlayState : public CGameState
 {
 public:
@@ -49,9 +47,5 @@ private:
 	GLFWwindow* m_window;
 
 	// The handler for the scene
-	#if TYPE_OF_VIEW == 3
-		CSceneManager *scene;	// Use this for 3D gameplay
-	#else
-		CSceneManager2D *scene;	// Use this for 2D gameplay
-	#endif
+	CSceneManager *scene;	// Use this for 3D gameplay
 };

@@ -5,6 +5,7 @@ using namespace std;
 #include "GameStateManager.h"
 #include "playstate.h"
 #include "menustate.h"
+#include "CustomScenes\GameScene.h"
 
 CPlayState CPlayState::thePlayState;
 
@@ -15,11 +16,7 @@ void CPlayState::Init()
 #endif
 	counter = 0;
 
-	#if TYPE_OF_VIEW == 3
-		scene = new CSceneManager(800, 600);	// Use this for 3D gameplay
-	#else
-		scene = new CSceneManager2D(800, 600);	// Use this for 2D gameplay
-	#endif
+	scene = new CSceneManager(800, 600);
 	scene->Init();
 }
 
@@ -30,11 +27,7 @@ void CPlayState::Init(const int width, const int height)
 #endif
 	counter = 0;
 
-	#if TYPE_OF_VIEW == 3
-		scene = new CSceneManager(width, height);	// Use this for 3D gameplay
-	#else
-		scene = new CSceneManager2D(width, height);	// Use this for 2D gameplay
-	#endif
+	scene = new GameScene(width, height);
 	scene->Init();
 }
 
@@ -109,7 +102,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM, const unsigned char key
 #endif
 	if (key == 32)
 	{
-		theGSM->ChangeState( CMenuState::Instance() );
+		//theGSM->ChangeState( CMenuState::Instance() );
 	}
 	else
 	{
