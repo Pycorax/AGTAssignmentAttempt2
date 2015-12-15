@@ -53,17 +53,17 @@ public:
 	void MoveLeftRight(const bool mode, const float timeDiff);
 
 	// Get position x of the player
-	int GetPos_x(void);
+	float GetPos_x(void);
 	// Get position y of the player
-	int GetPos_y(void);
+	float GetPos_y(void);
 	// Get position z of the player
-	int GetPos_z(void);
+	float GetPos_z(void);
 	// Get position of the player
 	Vector3 GetPosition();
 	// Get direction of the player
 	Vector3 GetDirection();
 	// Get Jumpspeed of the player
-	int GetJumpspeed(void);
+	float GetJumpspeed(void);
 
 	// Update Jump Upwards
 	void UpdateJumpUpwards();

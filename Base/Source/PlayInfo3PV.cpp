@@ -144,19 +144,19 @@ void CPlayInfo3PV::MoveLeftRight(const bool mode, const float timeDiff)
 
 
 // Get position x of the player
-int CPlayInfo3PV::GetPos_x(void)
+float CPlayInfo3PV::GetPos_x(void)
 {
 	return curPosition.x;
 }
 
 // Get position y of the player
-int CPlayInfo3PV::GetPos_y(void)
+float CPlayInfo3PV::GetPos_y(void)
 {
 	return curPosition.y;
 }
 
 // Get position y of the player
-int CPlayInfo3PV::GetPos_z(void)
+float CPlayInfo3PV::GetPos_z(void)
 {
 	return curPosition.z;
 }
@@ -174,7 +174,7 @@ Vector3 CPlayInfo3PV::GetDirection()
 }
 
 // Get Jumpspeed of the player
-int CPlayInfo3PV::GetJumpspeed(void)
+float CPlayInfo3PV::GetJumpspeed(void)
 {
 	return jumpspeed;
 }
