@@ -6,6 +6,11 @@ class CPlayInfo3PV
 {
 	static const float DIRECTION_SPEED;
 
+	// Stores the movement direction for a frame. to be cleared each frame
+	Vector3 m_deltaMovement;
+	// Movement Speed
+	float m_movementSpeed;
+
 public:
 	CPlayInfo3PV(void);
 	virtual ~CPlayInfo3PV(void);
@@ -92,6 +97,7 @@ private:
 	// Hero's information
 	Vector3 curPosition;
 	Vector3 curDirection;
+	float m_rotationY;
 	Vector3 curUp;
 	int jumpspeed;
 

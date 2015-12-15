@@ -7,6 +7,8 @@ const float CPlayInfo3PV::DIRECTION_SPEED = 100.0f;
 CPlayInfo3PV::CPlayInfo3PV(void)
 	: theAvatarMesh(NULL)
 	, jumpspeed(0)
+	, m_rotationY(0.0f)
+	, m_movementSpeed(200.0f)
 {
 	Init();
 }
@@ -117,11 +119,11 @@ void CPlayInfo3PV::MoveFrontBack(const bool mode, const float timeDiff)
 {
 	if (mode)
 	{
-		curPosition.z = curPosition.z - (int) (200.0f * timeDiff);
+		m_deltaMovement.z -= 1.0f;
 	}
 	else
 	{
-		curPosition.z = curPosition.z + (int) (200.0f * timeDiff);
+		m_deltaMovement.z += 1.0f;
 	}
 }
 
@@ -132,11 +134,11 @@ void CPlayInfo3PV::MoveLeftRight(const bool mode, const float timeDiff)
 {
 	if (mode)
 	{
-		curPosition.x = curPosition.x + (int) (200.0f * timeDiff);
+		m_deltaMovement.x += 1.0f;
 	}
 	else
 	{
-		curPosition.x = curPosition.x - (int) (200.0f * timeDiff);
+		m_deltaMovement -= 1.0f;
 	}
 }
 
@@ -233,33 +235,35 @@ void CPlayInfo3PV::Update(double dt)
 	{
 		MoveFrontBack( false, dt );
 	}
-	else
-	{
-//		MoveVel_W = 0.0f;
-	}
 	if (myKeys['s'] == true)
 	{
 		MoveFrontBack( true, dt );
-	}
-	else
-	{
-//		MoveVel_S = 0.0f;
 	}
 	if (myKeys['a'] == true)
 	{
 		MoveLeftRight( true, dt );
 	}
-	else
-	{
-//		MoveVel_A = 0.0f;
-	}
 	if (myKeys['d'] == true)
 	{
 		MoveLeftRight( false, dt );
 	}
-	else
+
+	// Do calculations to move if we can actually move
+	if (m_deltaMovement != Vector3::ZERO_VECTOR)
 	{
-//		MoveVel_D = 0.0f;
+		// Normalize the delta movement
+		m_deltaMovement.Normalize();
+
+		// Set default rotation
+		Mtx44 charRotMatrix;
+		charRotMatrix.SetToRotation(m_rotationY, 0, 1, 0);
+		// Get change in position with regards to direction
+		Vector3 deltaPos = charRotMatrix * (m_deltaMovement * m_movementSpeed * dt);
+		// Add the resulting change in position to char position
+		curPosition += deltaPos;
+
+		// Reset the Movement
+		m_deltaMovement = Vector3::ZERO_VECTOR;
 	}
 
 	// Rotation
@@ -313,6 +317,9 @@ void CPlayInfo3PV::TurnLeft(const double dt)
 	right.y = 0;
 	right.Normalize();
 	curUp = right.Cross(view).Normalized();
+
+	// Update the Rotation Angle
+	m_rotationY += yaw;
 }
 /********************************************************************************
 Turn right
@@ -329,6 +336,9 @@ void CPlayInfo3PV::TurnRight(const double dt)
 	right.y = 0;
 	right.Normalize();
 	curUp = right.Cross(view).Normalized();
+
+	// Update the Rotation Angle
+	m_rotationY += yaw;
 }
 /********************************************************************************
 LookUp
