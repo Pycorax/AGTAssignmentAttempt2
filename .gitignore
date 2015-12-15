@@ -1,0 +1,9 @@
+.vs/
+*.pdb
+*.suo
+Debug/Common.lib
+ipch/
+Common/Debug/
+*.sdf
+Base/Debug/
+*.user
