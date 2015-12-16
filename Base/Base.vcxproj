@@ -28,6 +28,7 @@
     <ClCompile Include="Source\CustomStates\OptionState.cpp" />
     <ClCompile Include="Source\CustomStates\PlayState.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\GameState.cpp" />
     <ClCompile Include="Source\GameStateManager.cpp" />
     <ClCompile Include="Source\Goodies.cpp" />
     <ClCompile Include="Source\GoodiesFactory.cpp" />

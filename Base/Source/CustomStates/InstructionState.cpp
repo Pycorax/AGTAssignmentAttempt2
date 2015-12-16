@@ -7,18 +7,19 @@
 
 InstructionState InstructionState::theMenuState;
 
+InstructionState* InstructionState::Instance()
+{
+	return &theMenuState;
+}
+
+InstructionState::~InstructionState()
+{
+}
+
 void InstructionState::Init(const int width, const int height)
 {
 	scene = new InstructionMenuScene(width, height);
 	scene->Init();
-}
-
-void InstructionState::Cleanup()
-{
-	// Delete the scene
-	scene->Exit();
-	delete scene;
-	scene = NULL;
 }
 
 void InstructionState::Pause()
@@ -48,30 +49,6 @@ void InstructionState::HandleEvents(CGameStateManager* theGSM, const double mous
 		scene->UpdateWeaponStatus(scene->WA_FIRE);
 }
 
-void InstructionState::Update(CGameStateManager* theGSM) 
+InstructionState::InstructionState() : CGameState()
 {
-	scene->Update(0.16667);
-
-	if (scene->HasEnded())
-	{
-		theGSM->ChangeState(CPlayState::Instance());
-	}
-}
-
-void InstructionState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
-{
-	scene->Update(m_dElapsedTime);
-
-	if (scene->HasEnded())
-	{
-		if (scene->GetNextState() != nullptr)
-		{
-			theGSM->ChangeState(scene->GetNextState());
-		}
-	}
-}
-
-void InstructionState::Draw(CGameStateManager* theGSM) 
-{
-	scene->Render();
 }

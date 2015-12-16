@@ -8,6 +8,10 @@
 
 CMenuState CMenuState::theMenuState;
 
+CMenuState::~CMenuState()
+{
+}
+
 void CMenuState::Init(const int width, const int height)
 {
 #if GSM_DEBUG_MODE
@@ -15,17 +19,6 @@ void CMenuState::Init(const int width, const int height)
 #endif
 	scene = new MainMenuScene(width, height);
 	scene->Init();
-}
-
-void CMenuState::Cleanup()
-{
-#if GSM_DEBUG_MODE
-	cout << "CMenuState::Cleanup\n" << endl;
-#endif
-	// Delete the scene
-	scene->Exit();
-	delete scene;
-	scene = NULL;
 }
 
 void CMenuState::Pause()
@@ -128,36 +121,11 @@ void CMenuState::HandleEvents(CGameStateManager* theGSM, const double mouse_x, c
 		scene->UpdateWeaponStatus(scene->WA_FIRE);
 }
 
-void CMenuState::Update(CGameStateManager* theGSM) 
+CMenuState* CMenuState::Instance()
 {
-#if GSM_DEBUG_MODE
-	cout << "CMenuState::Update\n" << endl;
-#endif
-	scene->Update(0.16667);
-
-	if (scene->HasEnded())
-	{
-		theGSM->ChangeState(CPlayState::Instance());
-	}
+	return &theMenuState;
 }
 
-void CMenuState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
+CMenuState::CMenuState() : CGameState()
 {
-	scene->Update(m_dElapsedTime);
-
-	if (scene->HasEnded())
-	{
-		if (scene->GetNextState() != nullptr)
-		{
-			theGSM->ChangeState(scene->GetNextState());
-		}
-	}
-}
-
-void CMenuState::Draw(CGameStateManager* theGSM) 
-{
-#if GSM_DEBUG_MODE
-	cout << "CMenuState::Draw\n" << endl;
-#endif
-	scene->Render();
 }

@@ -7,18 +7,19 @@
 
 HighScoreState HighScoreState::theMenuState;
 
+HighScoreState* HighScoreState::Instance()
+{
+	return &theMenuState;
+}
+
+HighScoreState::HighScoreState() : CGameState()
+{
+}
+
 void HighScoreState::Init(const int width, const int height)
 {
 	scene = new HighScoreMenuScene(width, height);
 	scene->Init();
-}
-
-void HighScoreState::Cleanup()
-{
-	// Delete the scene
-	scene->Exit();
-	delete scene;
-	scene = NULL;
 }
 
 void HighScoreState::Pause()
@@ -46,32 +47,4 @@ void HighScoreState::HandleEvents(CGameStateManager* theGSM, const double mouse_
 {
 	if (button_Left == true)
 		scene->UpdateWeaponStatus(scene->WA_FIRE);
-}
-
-void HighScoreState::Update(CGameStateManager* theGSM) 
-{
-	scene->Update(0.16667);
-
-	if (scene->HasEnded())
-	{
-		theGSM->ChangeState(CPlayState::Instance());
-	}
-}
-
-void HighScoreState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
-{
-	scene->Update(m_dElapsedTime);
-
-	if (scene->HasEnded())
-	{
-		if (scene->GetNextState() != nullptr)
-		{
-			theGSM->ChangeState(scene->GetNextState());
-		}
-	}
-}
-
-void HighScoreState::Draw(CGameStateManager* theGSM) 
-{
-	scene->Render();
 }

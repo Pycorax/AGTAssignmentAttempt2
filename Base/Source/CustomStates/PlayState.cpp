@@ -9,6 +9,10 @@ using namespace std;
 
 CPlayState CPlayState::thePlayState;
 
+CPlayState::~CPlayState()
+{
+}
+
 void CPlayState::Init(const int width, const int height)
 {
 #if GSM_DEBUG_MODE
@@ -18,17 +22,6 @@ void CPlayState::Init(const int width, const int height)
 
 	scene = new GameScene(width, height);
 	scene->Init();
-}
-
-void CPlayState::Cleanup()
-{
-#if GSM_DEBUG_MODE
-	cout << "CPlayState::Cleanup\n" << endl;
-#endif
-	// Delete the scene
-	scene->Exit();
-	delete scene;
-	scene = NULL;
 }
 
 void CPlayState::Pause()
@@ -89,7 +82,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM, const unsigned char key
 	//	}
 	//} while (m_iUserChoice == -1);
 #endif
-	if (key == 27)
+	if (key == 27)		// Escape key
 	{
 			
 	}
@@ -128,36 +121,11 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM, const double mouse_x, c
 		scene->UpdateWeaponStatus(scene->WA_FIRE_SECONDARY);
 }
 
-
-void CPlayState::Update(CGameStateManager* theGSM)
+CPlayState* CPlayState::Instance()
 {
-#if GSM_DEBUG_MODE
-	cout << "CPlayState::Update\n" << endl;
-#endif
-	// Update the scene
-	scene->Update(0.16667);
+	return &thePlayState;
 }
 
-void CPlayState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
+CPlayState::CPlayState()
 {
-	// Update the scene
-	scene->Update(m_dElapsedTime);
-
-	if (scene->HasEnded())
-	{
-		if (scene->GetNextState() != nullptr)
-		{
-			theGSM->ChangeState(scene->GetNextState());
-	}
-	}
-}
-
-void CPlayState::Draw(CGameStateManager* theGSM)
-{
-#if GSM_DEBUG_MODE
-	cout << "CPlayState::Draw : " << counter << "\n" << endl;
-#endif
-
-	// Render the scene
-	scene->Render();
 }

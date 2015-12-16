@@ -9,18 +9,14 @@
 
 OptionState OptionState::theMenuState;
 
+OptionState::~OptionState()
+{
+}
+
 void OptionState::Init(const int width, const int height)
 {
 	scene = new OptionMenuScene(width, height);
 	scene->Init();
-}
-
-void OptionState::Cleanup()
-{
-	// Delete the scene
-	scene->Exit();
-	delete scene;
-	scene = NULL;
 }
 
 void OptionState::Pause()
@@ -50,30 +46,11 @@ void OptionState::HandleEvents(CGameStateManager* theGSM, const double mouse_x, 
 		scene->UpdateWeaponStatus(scene->WA_FIRE);
 }
 
-void OptionState::Update(CGameStateManager* theGSM) 
+OptionState* OptionState::Instance()
 {
-	scene->Update(0.16667);
-
-	if (scene->HasEnded())
-	{
-		theGSM->ChangeState(CPlayState::Instance());
-	}
+	return &theMenuState;
 }
 
-void OptionState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
+OptionState::OptionState() : CGameState()
 {
-	scene->Update(m_dElapsedTime);
-
-	if (scene->HasEnded())
-	{
-		if (scene->GetNextState() != nullptr)
-		{
-			theGSM->ChangeState(scene->GetNextState());
-		}
-	}
-}
-
-void OptionState::Draw(CGameStateManager* theGSM) 
-{
-	scene->Render();
 }

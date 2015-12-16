@@ -180,6 +180,9 @@
     <ClCompile Include="Source\CustomStates\HighScoreState.cpp">
       <Filter>CustomStates</Filter>
     </ClCompile>
+    <ClCompile Include="Source\GameState.cpp">
+      <Filter>Game State Management</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
