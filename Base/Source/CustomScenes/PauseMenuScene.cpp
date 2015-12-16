@@ -4,10 +4,8 @@
 #include "../LoadTGA.h"
 #include <sstream>
 #include "../Application.h"
-#include "../CustomStates/playState.h"
 #include "../CustomStates/OptionState.h"
-#include "../CustomStates/InstructionState.h"
-#include "../CustomStates/HighScoreState.h"
+#include "../CustomStates/PauseState.h"
 
 using std::ostringstream;
 
@@ -71,7 +69,7 @@ void PauseMenuScene::Update(double dt)
 	}
 	else if (m_button[BT_QUIT].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(OptionState::Instance());
+		changeState(nullptr, true, PauseState::TAG_RETURN_TO_MENU);
 	}
 }
 

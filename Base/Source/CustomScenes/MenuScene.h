@@ -17,6 +17,9 @@ class MenuScene : public CSceneManager
 		MS_TOTAL
 	};
 
+	// For Pausing and Resuming
+	void OnResume();
+
 	// Mouse Input
 	bool m_rawLeftClick;
 	MOUSE_STATE_TYPE m_leftMouseState;

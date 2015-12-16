@@ -148,7 +148,7 @@ protected:
 
 	void endState(void);
 	// Setting killThisState to true will remove this current state-scene. E.g. of uses: SplashScreen
-	void changeState(CGameState* state, bool killThisState = false);
+	void changeState(CGameState* state, bool killThisState = false, string tag = "");
 
 private:
 	StateCommand* m_nextState;

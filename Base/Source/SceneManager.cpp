@@ -483,9 +483,9 @@ void CSceneManager::endState(void)
 	changeState(nullptr, true);
 }
 
-void CSceneManager::changeState(CGameState* state, bool killThisState)
+void CSceneManager::changeState(CGameState* state, bool killThisState, string tag)
 {
-	m_nextState = new StateCommand(state, killThisState, "");
+	m_nextState = new StateCommand(state, killThisState, tag);
 }
 
 void CSceneManager::initGL()

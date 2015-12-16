@@ -130,6 +130,14 @@ void MenuScene::renderUIButton(UIButton btn)
 	Render2DMesh(btn.GetMesh(), false, btnScale.x, btnScale.y, btnPos.x, btnPos.y);
 }
 
+void MenuScene::OnResume()
+{
+	CSceneManager::OnResume();
+	
+	// Hide the Cursor
+	Application::SetCursorShown();
+}
+
 /********************************************************************************
 Render GUI
 ********************************************************************************/
