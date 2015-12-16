@@ -1,7 +1,7 @@
 #pragma once
 
 // Inheritance Include
-#include "gamestate.h"
+#include "../GameState.h"
 
 class CMenuState : public CGameState
 {

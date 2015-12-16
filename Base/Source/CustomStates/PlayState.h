@@ -1,15 +1,6 @@
 #pragma once
 
-#include "GameState.h"
-#include "SceneManager.h"
-#include "SceneManager2D.h"
-#include "timer.h"
-
-//Include GLEW
-#include <GL/glew.h>
-
-//Include GLFW
-#include <GLFW/glfw3.h>
+#include "../GameState.h"
 
 class CPlayState : public CGameState
 {

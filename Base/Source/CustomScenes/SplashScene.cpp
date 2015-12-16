@@ -4,7 +4,7 @@
 #include "../LoadTGA.h"
 #include <sstream>
 #include "../Application.h"
-#include "../menustate.h"
+#include "../CustomStates/menustate.h"
 
 using std::ostringstream;
 

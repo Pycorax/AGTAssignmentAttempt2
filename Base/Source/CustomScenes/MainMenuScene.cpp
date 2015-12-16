@@ -4,7 +4,7 @@
 #include "../LoadTGA.h"
 #include <sstream>
 #include "../Application.h"
-#include "../playState.h"
+#include "../CustomStates/playState.h"
 
 using std::ostringstream;
 

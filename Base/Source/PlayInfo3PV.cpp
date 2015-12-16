@@ -1,6 +1,7 @@
 #include "PlayInfo3PV.h"
 #include "MeshBuilder.h"
 #include "Application.h"
+#include "Mtx44.h"
 
 const float CPlayInfo3PV::DIRECTION_SPEED = 100.0f;
 

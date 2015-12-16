@@ -3,7 +3,6 @@
 
 #include "timer.h"
 #include "GameStateManager.h"
-#include "playstate.h"
 
 class Application
 {

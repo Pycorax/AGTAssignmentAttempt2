@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameState.h"
+#include "../GameState.h"
 
 class CIntroState : public CGameState
 {

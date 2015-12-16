@@ -1,11 +1,10 @@
 #include <iostream>
-using namespace std;
 
-#include "GameStateManager.h"
+#include "../GameStateManager.h"
 #include "playstate.h"
-#include "gamestate.h"
+#include "../gamestate.h"
 #include "menustate.h"
-#include "CustomScenes/MainMenuScene.h"
+#include "../CustomScenes/MainMenuScene.h"
 
 CMenuState CMenuState::theMenuState;
 

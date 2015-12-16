@@ -1,12 +1,11 @@
 #include <iostream>
-using namespace std;
 
-#include "GameStateManager.h"
-#include "gamestate.h"
+#include "../GameStateManager.h"
+#include "../gamestate.h"
 #include "menustate.h"
 #include "introstate.h"
 #include "playstate.h"
-#include "CustomScenes\SplashScene.h"
+#include "../CustomScenes/SplashScene.h"
 
 CIntroState CIntroState::theIntroState;
 

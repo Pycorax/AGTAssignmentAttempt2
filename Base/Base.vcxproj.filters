@@ -34,11 +34,11 @@
     <Filter Include="CustomScenes">
       <UniqueIdentifier>{4b22c06a-72b3-4288-b6bd-1e9ad8203b06}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game State Management\CustomStates">
-      <UniqueIdentifier>{f5dfae81-40d9-43ab-9c13-e77c0f0be851}</UniqueIdentifier>
-    </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{1e425661-a4ea-42f5-8d7e-6980b3dffbc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CustomStates">
+      <UniqueIdentifier>{f5dfae81-40d9-43ab-9c13-e77c0f0be851}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -144,15 +144,6 @@
     <ClCompile Include="Source\CustomScenes\GameScene.cpp">
       <Filter>CustomScenes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\IntroState.cpp">
-      <Filter>Game State Management\CustomStates</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\MenuState.cpp">
-      <Filter>Game State Management\CustomStates</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\PlayState.cpp">
-      <Filter>Game State Management\CustomStates</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CustomScenes\MenuScene.cpp">
       <Filter>CustomScenes</Filter>
     </ClCompile>
@@ -161,6 +152,15 @@
     </ClCompile>
     <ClCompile Include="Source\CustomScenes\MainMenuScene.cpp">
       <Filter>CustomScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomStates\IntroState.cpp">
+      <Filter>CustomStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomStates\MenuState.cpp">
+      <Filter>CustomStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomStates\PlayState.cpp">
+      <Filter>CustomStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -281,15 +281,6 @@
     <ClInclude Include="Source\CustomScenes\SplashScene.h">
       <Filter>CustomScenes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\IntroState.h">
-      <Filter>Game State Management\CustomStates</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\MenuState.h">
-      <Filter>Game State Management\CustomStates</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\PlayState.h">
-      <Filter>Game State Management\CustomStates</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CustomScenes\MenuScene.h">
       <Filter>CustomScenes</Filter>
     </ClInclude>
@@ -298,6 +289,15 @@
     </ClInclude>
     <ClInclude Include="Source\CustomScenes\MainMenuScene.h">
       <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\IntroState.h">
+      <Filter>CustomStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\MenuState.h">
+      <Filter>CustomStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\PlayState.h">
+      <Filter>CustomStates</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
