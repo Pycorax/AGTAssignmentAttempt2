@@ -17,9 +17,11 @@
     <ClCompile Include="Source\CustomScenes\GameScene.cpp" />
     <ClCompile Include="Source\CustomScenes\MainMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\MenuScene.cpp" />
+    <ClCompile Include="Source\CustomScenes\OptionMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\SplashScene.cpp" />
     <ClCompile Include="Source\CustomStates\IntroState.cpp" />
     <ClCompile Include="Source\CustomStates\MenuState.cpp" />
+    <ClCompile Include="Source\CustomStates\OptionState.cpp" />
     <ClCompile Include="Source\CustomStates\PlayState.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\GameStateManager.cpp" />
@@ -59,9 +61,11 @@
     <ClInclude Include="Source\CustomScenes\GameScene.h" />
     <ClInclude Include="Source\CustomScenes\MainMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\MenuScene.h" />
+    <ClInclude Include="Source\CustomScenes\OptionMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\SplashScene.h" />
     <ClInclude Include="Source\CustomStates\IntroState.h" />
     <ClInclude Include="Source\CustomStates\MenuState.h" />
+    <ClInclude Include="Source\CustomStates\OptionState.h" />
     <ClInclude Include="Source\CustomStates\PlayState.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GameState.h" />

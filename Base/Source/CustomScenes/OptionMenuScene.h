@@ -3,12 +3,13 @@
 // Inheritance Include
 #include "../CustomScenes/MenuScene.h"
 
-class MainMenuScene : public MenuScene
+class OptionMenuScene : public MenuScene
 {
 	enum GEOMETRY_TYPE
 	{
-		GEO_BT_START,
-		GEO_BT_OPTIONS,
+		GEO_BT_BACK,
+		GEO_BT_MUSIC_ON,
+		GEO_BT_MUSIC_OFF,
 		GEO_AXES,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -16,14 +17,14 @@ class MainMenuScene : public MenuScene
 
 	enum BUTTON_TYPE
 	{
-		BT_START,
-		BT_OPTIONS,
+		BT_BACK,
+		BT_MUSIC_TOGGLE,
 		BT_TOTAL
 	};
 
 public:
-	MainMenuScene(const int window_width = 800, const int window_height = 600);
-	~MainMenuScene();
+	OptionMenuScene(const int window_width = 800, const int window_height = 600);
+	~OptionMenuScene();
 
 	virtual void Init();
 	virtual void Update(double dt);

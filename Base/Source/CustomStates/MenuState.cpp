@@ -22,6 +22,10 @@ void CMenuState::Cleanup()
 #if GSM_DEBUG_MODE
 	cout << "CMenuState::Cleanup\n" << endl;
 #endif
+	// Delete the scene
+	scene->Exit();
+	delete scene;
+	scene = NULL;
 }
 
 void CMenuState::Pause()

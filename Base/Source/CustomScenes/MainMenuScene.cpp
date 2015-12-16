@@ -5,6 +5,7 @@
 #include <sstream>
 #include "../Application.h"
 #include "../CustomStates/playState.h"
+#include "../CustomStates/OptionState.h"
 
 using std::ostringstream;
 
@@ -33,8 +34,10 @@ void MainMenuScene::Init()
 	}
 
 	// Load the meshes
-	meshList[GEO_BUTTON] = MeshBuilder::GenerateQuad("Button", Color(), 1.0f);
-	meshList[GEO_BUTTON]->textureID = LoadTGA("Image//btn_start.tga");
+	meshList[GEO_BT_START] = MeshBuilder::GenerateQuad("btn_start", Color(), 1.0f);
+	meshList[GEO_BT_START]->textureID = LoadTGA("Image//btn_start.tga");
+	meshList[GEO_BT_OPTIONS] = MeshBuilder::GenerateQuad("btn_options", Color(), 1.0f);
+	meshList[GEO_BT_OPTIONS]->textureID = LoadTGA("Image//btn_options.tga");
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
@@ -45,7 +48,8 @@ void MainMenuScene::Init()
 	const Vector3 SCALE_BUTTON_SIZE(50, 50);
 
 	createButtonList(BT_TOTAL);
-	m_button[BT_START].Init(meshList[GEO_BUTTON], Vector3(m_window_width * 0.5, m_window_height * 0.5), NORMAL_BUTTON_SIZE);
+	m_button[BT_START].Init(meshList[GEO_BT_START], Vector3(m_window_width * 0.5, m_window_height * 0.6), NORMAL_BUTTON_SIZE);
+	m_button[BT_OPTIONS].Init(meshList[GEO_BT_OPTIONS], Vector3(m_window_width * 0.5, m_window_height * 0.4), NORMAL_BUTTON_SIZE);
 }
 
 void MainMenuScene::Update(double dt)
@@ -55,6 +59,10 @@ void MainMenuScene::Update(double dt)
 	if (m_button[BT_START].GetState() == UIButton::DOWN_STATE)
 	{
 		changeState(CPlayState::Instance());
+	}
+	else if (m_button[BT_OPTIONS].GetState() == UIButton::DOWN_STATE)
+	{
+		changeState(OptionState::Instance());
 	}
 }
 
