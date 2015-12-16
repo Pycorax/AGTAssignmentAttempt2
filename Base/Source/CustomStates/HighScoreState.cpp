@@ -22,16 +22,6 @@ void HighScoreState::Init(const int width, const int height)
 	scene->Init();
 }
 
-void HighScoreState::Pause()
-{
-
-}
-
-void HighScoreState::Resume()
-{
-
-}
-
 void HighScoreState::HandleEvents(CGameStateManager* theGSM)
 {
 

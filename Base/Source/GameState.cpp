@@ -16,6 +16,22 @@ void CGameState::Cleanup()
 	}
 }
 
+void CGameState::Pause()
+{
+	if (scene)
+	{
+		scene->OnPause();
+	}
+}
+
+void CGameState::Resume()
+{
+	if (scene)
+	{
+		scene->OnResume();
+	}
+}
+
 void CGameState::Update(CGameStateManager* theGSM)
 {
 	Update(theGSM, 0.16667);
@@ -29,14 +45,21 @@ void CGameState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 		// Update the scene
 		scene->Update(m_dElapsedTime);
 
-		// Chceck if the scene has ended
+		// If a new state is specified, load it.
+		// Store this so that if this current state is to be popped, we don't push this first and end up popping the new one instead of the old one
+		CGameState* nextState = scene->GetNextState();
+
+		// Check if the scene has ended
 		if (scene->HasEnded())
 		{
-			// If a new state is specified, load it
-			if (scene->GetNextState() != nullptr)
-			{
-				theGSM->ChangeState(scene->GetNextState());
-			}
+			Cleanup();
+			theGSM->PopState();
+		}
+
+		// Set up the next state if there is one
+		if (nextState)
+		{
+			theGSM->PushState(nextState);
 		}
 	}
 }

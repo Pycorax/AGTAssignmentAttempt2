@@ -14,8 +14,8 @@ public:
 	virtual void Init(const int width = 800, const int height = 600) = 0;
 	virtual void Cleanup();
 
-	virtual void Pause() = 0;
-	virtual void Resume() = 0;
+	virtual void Pause();
+	virtual void Resume();
 
 	virtual void HandleEvents(CGameStateManager* theGSM) = 0;
 	virtual void HandleEvents(CGameStateManager* theGSM, const unsigned char key, const bool status = true) = 0;

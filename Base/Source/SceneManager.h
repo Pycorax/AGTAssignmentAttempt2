@@ -74,6 +74,10 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	// For Pausing and Resuming
+	virtual void OnPause();
+	virtual void OnResume();
+
 	// Low level render tools
 	void PreRendering(Vector3 translate, bool enableLight);
 	void PostRendering(void);
@@ -98,7 +102,8 @@ public:
 
 	// GameStates to query this to check if scenes have ended
 	bool HasEnded(void) const;
-	CGameState* GetNextState(void) const;
+	// Note after retrieving the next state with this function, it will be removed so that the "NextState" status of this Scene will be reset. So do store it.
+	CGameState* GetNextState(void);
 
 protected:
 	unsigned m_vertexArrayID;
@@ -141,11 +146,15 @@ protected:
 	CProjectileManager* m_cProjectileManager;
 
 	void endState(void);
-	void changeState(CGameState* state);
+	// Setting killThisState to true will remove this current state-scene. E.g. of uses: SplashScreen
+	void changeState(CGameState* state, bool killThisState = false);
 
 private:
 	CGameState* m_nextState;
 	bool m_endScene;
+
+	void initGL();
+	void clearGL();
 };
 
 #endif

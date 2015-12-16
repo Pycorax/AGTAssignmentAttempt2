@@ -22,16 +22,6 @@ void InstructionState::Init(const int width, const int height)
 	scene->Init();
 }
 
-void InstructionState::Pause()
-{
-
-}
-
-void InstructionState::Resume()
-{
-
-}
-
 void InstructionState::HandleEvents(CGameStateManager* theGSM)
 {
 

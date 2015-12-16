@@ -55,7 +55,8 @@ void CGameStateManager::ChangeState(CGameState* state)
 void CGameStateManager::PushState(CGameState* state)
 {
 	// pause current state
-	if ( !StackOfStates.empty() ) {
+	if ( !StackOfStates.empty() ) 
+	{
 		StackOfStates.back()->Pause();
 	}
 
@@ -114,8 +115,18 @@ void CGameStateManager::HandleEvents(const double mouse_x, const double mouse_y,
 
 void CGameStateManager::Update(const double m_dElapsedTime) 
 {
-	// let the state update the theGSM
-	StackOfStates.back()->Update(this, m_dElapsedTime);
+	if (!StackOfStates.empty())
+	{
+		// let the state update the theGSM
+		StackOfStates.back()->Update(this, m_dElapsedTime);
+	}
+	
+	// Check again as the States may have been emptied during the update
+	if (StackOfStates.empty())
+	{
+		Quit();
+	}
+	
 #if GSM_DEBUG_MODE
 	cout << "CGameStateManager::Update\n" << endl;
 #endif
@@ -123,8 +134,11 @@ void CGameStateManager::Update(const double m_dElapsedTime)
 
 void CGameStateManager::Draw() 
 {
-	// let the state draw the screen
-	StackOfStates.back()->Draw(this);
+	if (!StackOfStates.empty())
+	{
+		// let the state draw the screen
+		StackOfStates.back()->Draw(this);
+	}
 #if GSM_DEBUG_MODE
 	cout << "CGameStateManager::Draw\n" << endl;
 #endif

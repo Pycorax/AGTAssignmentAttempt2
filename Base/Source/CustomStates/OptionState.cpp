@@ -19,16 +19,6 @@ void OptionState::Init(const int width, const int height)
 	scene->Init();
 }
 
-void OptionState::Pause()
-{
-
-}
-
-void OptionState::Resume()
-{
-
-}
-
 void OptionState::HandleEvents(CGameStateManager* theGSM)
 {
 

@@ -19,16 +19,6 @@ void CIntroState::Init(const int width, const int height)
 	scene->Init();
 }
 
-void CIntroState::Pause()
-{
-
-}
-
-void CIntroState::Resume()
-{
-
-}
-
 void CIntroState::HandleEvents(CGameStateManager* theGSM)
 {
 

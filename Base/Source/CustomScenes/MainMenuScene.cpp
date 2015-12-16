@@ -83,7 +83,7 @@ void MainMenuScene::Update(double dt)
 	{
 		changeState(HighScoreState::Instance());
 	}
-	else
+	else if(m_button[BT_QUIT].GetState() == UIButton::DOWN_STATE)
 	{
 		endState();
 	}

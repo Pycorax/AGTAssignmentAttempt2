@@ -21,20 +21,6 @@ void CMenuState::Init(const int width, const int height)
 	scene->Init();
 }
 
-void CMenuState::Pause()
-{
-#if GSM_DEBUG_MODE
-	cout << "CMenuState::Pause\n" << endl;
-#endif
-}
-
-void CMenuState::Resume()
-{
-#if GSM_DEBUG_MODE
-	cout << "CMenuState::Resume\n" << endl;
-#endif
-}
-
 void CMenuState::HandleEvents(CGameStateManager* theGSM)
 {
 #if GSM_DEBUG_MODE

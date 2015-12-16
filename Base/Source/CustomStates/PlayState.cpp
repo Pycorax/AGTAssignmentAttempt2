@@ -24,20 +24,6 @@ void CPlayState::Init(const int width, const int height)
 	scene->Init();
 }
 
-void CPlayState::Pause()
-{
-#if GSM_DEBUG_MODE
-	cout << "CPlayState::Pause\n" << endl;
-#endif
-}
-
-void CPlayState::Resume()
-{
-#if GSM_DEBUG_MODE
-	cout << "CPlayState::Resume\n" << endl;
-#endif
-}
-
 void CPlayState::HandleEvents(CGameStateManager* theGSM)
 {
 #if GSM_DEBUG_MODE

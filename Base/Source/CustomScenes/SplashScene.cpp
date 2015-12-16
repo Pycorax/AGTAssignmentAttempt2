@@ -81,7 +81,7 @@ void SplashScene::Update(double dt)
 	else
 	{
 		// End the scene
-		changeState(CMenuState::Instance());
+		changeState(CMenuState::Instance(), true);
 	}
 }
 
