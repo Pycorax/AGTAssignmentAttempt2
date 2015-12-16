@@ -10,6 +10,8 @@ using std::ostringstream;
 MenuScene::MenuScene(const int window_width, const int window_height) : CSceneManager(window_width, window_height)
 	, m_leftMouseState(UP_STATE)
 	, m_rawLeftClick(false)
+	, m_menuTitle(nullptr)
+	, m_defaultBG(nullptr)
 	, m_bg(nullptr)
 	, m_button(nullptr)
 	, m_buttonSize(0)
@@ -29,6 +31,13 @@ void MenuScene::Init()
 
 	// Set the bg col
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
+	// Set up the default background
+	m_defaultBG = MeshBuilder::GenerateQuad("bg", Color(0.1f, 0.1f, 0.1f), 1.0f);
+	m_defaultBG->textureID = LoadTGA("Image//BG.tga");
+
+	// Set the background to the default
+	m_bg = m_defaultBG;
 }
 
 void MenuScene::Update(double dt)
@@ -53,6 +62,12 @@ void MenuScene::Exit()
 		m_button = nullptr;
 	}
 
+	if (m_defaultBG)
+	{
+		delete m_defaultBG;
+		m_defaultBG = nullptr;
+	}
+
 	CSceneManager::Exit();
 }
 
@@ -69,9 +84,21 @@ bool MenuScene::isMouseState(MOUSE_STATE_TYPE mouseState)
 	return m_leftMouseState == mouseState;
 }
 
+void MenuScene::createTitle(Mesh* titleMesh)
+{
+	m_menuTitle = titleMesh;
+}
+
 void MenuScene::createBackground(Mesh* bgMesh)
 {
 	m_bg = bgMesh;
+
+	// Since a custom one was set, let's delete the one we have
+	if (m_defaultBG)
+	{
+		delete m_defaultBG;
+		m_defaultBG = nullptr;
+	}
 }
 
 void MenuScene::createButtonList(int sizeOfList)
@@ -153,6 +180,12 @@ void MenuScene::RenderGUI()
 	for (size_t bt = 0; bt < m_buttonSize; ++bt)
 	{
 		renderUIButton(m_button[bt]);
+	}
+
+	// Render the title
+	if (m_menuTitle)
+	{
+		Render2DMesh(m_menuTitle, false, 600, 150, m_window_width * 0.5f, m_window_height * 0.8f);
 	}
 
 	// Render the BG

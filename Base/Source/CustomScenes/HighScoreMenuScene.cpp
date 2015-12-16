@@ -33,6 +33,8 @@ void HighScoreMenuScene::Init()
 	}
 
 	// Load the meshes
+	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("title", Color(), 1.0f);
+	meshList[GEO_TITLE]->textureID = LoadTGA("Image//title_highScore.tga");
 	meshList[GEO_BT_BACK] = MeshBuilder::GenerateQuad("btn_back", Color(), 1.0f);
 	meshList[GEO_BT_BACK]->textureID = LoadTGA("Image//btn_back.tga");
 	meshList[GEO_BT_RESET] = MeshBuilder::GenerateQuad("btn_reset", Color(), 1.0f);
@@ -41,6 +43,9 @@ void HighScoreMenuScene::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
+
+	// Set the title
+	createTitle(meshList[GEO_TITLE]);
 
 	// Initialize the buttons
 	const Vector3 NORMAL_BUTTON_SIZE(250, 50);

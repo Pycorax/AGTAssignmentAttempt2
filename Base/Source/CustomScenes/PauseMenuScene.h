@@ -7,6 +7,7 @@ class PauseMenuScene : public MenuScene
 {
 	enum GEOMETRY_TYPE
 	{
+		GEO_TITLE,
 		GEO_BT_BACK,
 		GEO_BT_OPTIONS,
 		GEO_BT_QUIT,

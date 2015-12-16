@@ -30,6 +30,10 @@ class MenuScene : public CSceneManager
 	virtual void RenderGUI();
 
 protected:
+	// Menu Title
+	Mesh* m_menuTitle;
+	// Default Background
+	Mesh* m_defaultBG;
 	// Background
 	Mesh* m_bg;
 	// Buttons
@@ -50,7 +54,9 @@ protected:
 	// Input Checking
 	bool isMouseState(MOUSE_STATE_TYPE mouseState);
 
-	// Create
+	// Set Title of the Menu
+	void createTitle(Mesh* titleMesh);
+	// Set Custom BG
 	void createBackground(Mesh* bgMesh);
 	// Create Button List
 	void createButtonList(int sizeOfList);

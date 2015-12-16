@@ -34,6 +34,8 @@ void LevelMenuScene::Init()
 	}
 
 	// Load the meshes
+	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("title", Color(), 1.0f);
+	meshList[GEO_TITLE]->textureID = LoadTGA("Image//title_levelSelect.tga");
 	meshList[GEO_BT_BACK] = MeshBuilder::GenerateQuad("btn_back", Color(), 1.0f);
 	meshList[GEO_BT_BACK]->textureID = LoadTGA("Image//btn_back.tga");
 	meshList[GEO_BT_LEVEL] = MeshBuilder::GenerateQuad("btn_level", Color(), 1.0f);
@@ -42,6 +44,9 @@ void LevelMenuScene::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
+
+	// Set the title
+	createTitle(meshList[GEO_TITLE]);
 
 	// Initialize the buttons
 	const Vector3 NORMAL_BUTTON_SIZE(250, 50);
@@ -55,7 +60,7 @@ void LevelMenuScene::Init()
 	{
 		for (int row = 0; row < BUTTON_ROWS; ++row)
 		{
-			m_button[BT_LEVEL + (row * BUTTON_COLS) + col].Init(meshList[GEO_BT_LEVEL], Vector3(m_window_width * (0.3 + 0.4 * col), m_window_height * (0.7 - 0.15 * row)), NORMAL_BUTTON_SIZE);
+			m_button[BT_LEVEL + (row * BUTTON_COLS) + col].Init(meshList[GEO_BT_LEVEL], Vector3(m_window_width * (0.3 + 0.4 * col), m_window_height * (0.6 - 0.1 * row)), NORMAL_BUTTON_SIZE);
 		}
 	}
 }

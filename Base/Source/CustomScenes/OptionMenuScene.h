@@ -7,6 +7,7 @@ class OptionMenuScene : public MenuScene
 {
 	enum GEOMETRY_TYPE
 	{
+		GEO_TITLE,
 		GEO_BT_BACK,
 		GEO_BT_MUSIC_ON,
 		GEO_BT_MUSIC_OFF,
