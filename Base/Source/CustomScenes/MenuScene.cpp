@@ -10,6 +10,7 @@ using std::ostringstream;
 MenuScene::MenuScene(const int window_width, const int window_height) : CSceneManager(window_width, window_height)
 	, m_leftMouseState(UP_STATE)
 	, m_rawLeftClick(false)
+	, m_bg(nullptr)
 	, m_button(nullptr)
 	, m_buttonSize(0)
 {
@@ -66,6 +67,11 @@ void MenuScene::UpdateWeaponStatus(const unsigned char key)
 bool MenuScene::isMouseState(MOUSE_STATE_TYPE mouseState)
 {
 	return m_leftMouseState == mouseState;
+}
+
+void MenuScene::createBackground(Mesh* bgMesh)
+{
+	m_bg = bgMesh;
 }
 
 void MenuScene::createButtonList(int sizeOfList)
@@ -147,5 +153,11 @@ void MenuScene::RenderGUI()
 	for (size_t bt = 0; bt < m_buttonSize; ++bt)
 	{
 		renderUIButton(m_button[bt]);
+	}
+
+	// Render the BG
+	if (m_bg)
+	{
+		Render2DMesh(m_bg, false, m_window_width, m_window_height, m_window_width * 0.5f, m_window_height * 0.5f);
 	}
 }

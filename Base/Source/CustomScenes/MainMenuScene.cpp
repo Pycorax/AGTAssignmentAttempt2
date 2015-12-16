@@ -36,6 +36,7 @@ void MainMenuScene::Init()
 	}
 
 	// Load the meshes
+	meshList[GEO_BG] = MeshBuilder::GenerateQuad("bg", Color(0.1f, 0.1f, 0.1f), 1.0f);
 	meshList[GEO_BT_START] = MeshBuilder::GenerateQuad("btn_start", Color(), 1.0f);
 	meshList[GEO_BT_START]->textureID = LoadTGA("Image//btn_start.tga");
 	meshList[GEO_BT_OPTIONS] = MeshBuilder::GenerateQuad("btn_options", Color(), 1.0f);
@@ -50,6 +51,9 @@ void MainMenuScene::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
+
+	// Initialize the BG
+	createBackground(meshList[GEO_BG]);
 
 	// Initialize the buttons
 	const Vector3 NORMAL_BUTTON_SIZE(250, 50);

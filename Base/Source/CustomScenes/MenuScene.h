@@ -30,6 +30,8 @@ class MenuScene : public CSceneManager
 	virtual void RenderGUI();
 
 protected:
+	// Background
+	Mesh* m_bg;
 	// Buttons
 	UIButton* m_button;
 
@@ -48,6 +50,8 @@ protected:
 	// Input Checking
 	bool isMouseState(MOUSE_STATE_TYPE mouseState);
 
+	// Create
+	void createBackground(Mesh* bgMesh);
 	// Create Button List
 	void createButtonList(int sizeOfList);
 

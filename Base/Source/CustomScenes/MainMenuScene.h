@@ -7,6 +7,7 @@ class MainMenuScene : public MenuScene
 {
 	enum GEOMETRY_TYPE
 	{
+		GEO_BG,
 		GEO_BT_START,
 		GEO_BT_OPTIONS,
 		GEO_BT_INSTRUCTIONS,
