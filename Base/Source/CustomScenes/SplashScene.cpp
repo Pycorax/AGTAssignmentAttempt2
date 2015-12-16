@@ -76,7 +76,6 @@ void SplashScene::Update(double dt)
 	else if (m_timePause < s_m_END_TIME_PAUSE)
 	{
 		m_timePause += dt;
-		std::cout << m_timePause << std::endl;
 	}
 	else
 	{
