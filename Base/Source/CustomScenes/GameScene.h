@@ -7,6 +7,7 @@ class GameScene : public CSceneManager
 {
 	enum GEOMETRY_TYPE
 	{
+		GEO_YELLOW_CUBE,
 		GEO_RAY,
 		GEO_AXES,
 		GEO_CROSSHAIR,

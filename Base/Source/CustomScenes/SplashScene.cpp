@@ -58,7 +58,7 @@ void SplashScene::Init()
 	lights[0].power = 10.0f;
 
 	// Init the camera
-	camera.Init(Vector3(-5.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f));
+	camera.Init(Vector3(-5.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3::ZERO_VECTOR);
 }
 
 void SplashScene::Update(double dt)

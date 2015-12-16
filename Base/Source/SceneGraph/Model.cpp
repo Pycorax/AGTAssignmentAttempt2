@@ -12,8 +12,8 @@
 CModel::CModel(void)
 	: m_cModelMesh(NULL)
 {
-	vTopLeft = Vector3( 1.0f, 1.0f, 1.0f );
-	vBottomRight = Vector3( -1.0f, -1.0f, -1.0f );
+	vTopLeft = Vector3( 0.5f, 0.5f, 0.5f );
+	vBottomRight = Vector3( -0.5f, -0.5f, -0.5f );
 	red = 128;
 	green = 255;
 	blue = 0;

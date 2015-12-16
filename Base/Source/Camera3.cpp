@@ -4,7 +4,6 @@
 
 // The default camera speed
 static const float CAMERA_SPEED = 200.f;
-const float m_fTPVCameraOffset = 30.00f;	// Offset distance for the camera from the target
 
 /********************************************************************************
  Constructor
@@ -28,7 +27,7 @@ Camera3::~Camera3()
 /********************************************************************************
  Initialise the camera
  ********************************************************************************/
-void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
+void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up, Vector3 camOffset)
 {
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
@@ -55,6 +54,9 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 	// Maximum movement speed
 	CAMERA_ACCEL = 10.0f;
+
+	// For camera offsetting
+	m_camOffset = camOffset;
 }
 
 /********************************************************************************
@@ -143,8 +145,14 @@ void Camera3::Update(double dt)
  ********************************************************************************/
 void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection)
 {
-	position = newPosition - newDirection.Normalized() * m_fTPVCameraOffset;
-	target = newPosition;// + newDirection.Normalized() * m_fTPVCameraOffset;
+	// Get the direction to the left so that we can move that way
+	Vector3 left = newDirection.Cross(up);
+	left.y = 0.0f;
+	left.Normalize();
+
+	// Calculate the new position and target
+	position = newPosition - (m_camOffset.x * left) - (m_camOffset.z * newDirection) + m_camOffset.y * up;
+	target = position + newDirection;
 }
 
 /********************************************************************************

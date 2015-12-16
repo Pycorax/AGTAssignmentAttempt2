@@ -67,7 +67,7 @@ void CSceneManager::Init()
 {
 	initGL();
 
-	camera.Init(Vector3(0, 0, 30), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 30), Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(-15.0f, 15.0f, 30.0f));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
@@ -163,7 +163,7 @@ void CSceneManager::UpdateWeaponStatus(const unsigned char key)
 /********************************************************************************
  Start the rendering process by calling PreRendering()
  ********************************************************************************/
-void CSceneManager::`PreRendering(Mtx44 mtx, bool enableLight)
+void CSceneManager::PreRendering(Mtx44 mtx, bool enableLight)
 {
 	modelStack.PushMatrix();
 	modelStack.MultMatrix(mtx);

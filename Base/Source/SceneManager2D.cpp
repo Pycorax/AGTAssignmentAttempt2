@@ -93,7 +93,7 @@ void CSceneManager2D::Init()
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
 
 	// Initialise the camera
-	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(0, 0, 0));
 
 	// Create the meshes
 	for(int i = 0; i < NUM_GEOMETRY; ++i)

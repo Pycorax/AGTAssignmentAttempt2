@@ -32,6 +32,7 @@ void GameScene::Init()
 		meshList[i] = NULL;
 	}
 
+	meshList[GEO_YELLOW_CUBE] = MeshBuilder::GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
 	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", 10.0f);
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
@@ -83,14 +84,36 @@ void GameScene::Init()
 
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
+
+	// Populate SceneGraph
+	CTransform* tf2 = new CTransform(0, 10, 0);
+	tf2->SetScale(10, 10, 10);
 	CModel* newModel = new CModel();
 	newModel->Init();
-	cout << m_cSceneGraph->SetNode(new CTransform(0, 0, 0), newModel) << endl;
+	cout << m_cSceneGraph->SetNode(tf2, newModel) << endl;
+
+	/*CTransform* tf3 = new CTransform(0, 10, 0);
+	tf3->SetScale(10, 10, 10);
+	newModel = new CModel();
+	newModel->Init();
+	cout << m_cSceneGraph->AddChild(tf3, newModel) << endl;
+*/
+	newModel = new CModel();
+	newModel->Init();
+	cout << m_cSceneGraph->AddChild(new CTransform(0, 10, 0), newModel) << endl;
 
 	newModel = new CModel();
 	newModel->Init();
-	cout << m_cSceneGraph->AddChild(new CTransform(0, 1, 0), newModel) << endl;
+	cout << m_cSceneGraph->AddChild(new CTransform(10, 10, 0), newModel) << endl;
 
+	CTransform* tf = new CTransform(10, 10, 10);
+	tf->SetScale(10, 10, 10);
+
+	newModel = new CModel();
+	newModel->Init();
+	cout << m_cSceneGraph->AddChild(tf, newModel) << endl;
+
+	
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
 	m_cSpatialPartition->Init(100, 100, 3, 3);
@@ -120,7 +143,7 @@ void GameScene::Update(double dt)
 	CSceneManager::Update(dt);
 
 	m_cAvatar->Update(dt);
-	camera.UpdatePosition(m_cAvatar->GetPosition() + Vector3(0.0f, 15.0f, -10.0f), m_cAvatar->GetDirection());
+	camera.UpdatePosition(m_cAvatar->GetPosition() /*+ Vector3(0.0f, 15.0f, 0.0f)*/, m_cAvatar->GetDirection());
 	//camera.Update(dt);
 
 	// Update the spatial partition
@@ -266,23 +289,6 @@ Render the lights in this scene
 void GameScene::RenderFixedObjects()
 {
 	RenderMesh(meshList[GEO_AXES], false);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-20, 0, -20);
-	RenderMesh(meshList[GEO_OBJECT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 0, -20);
-	RenderMesh(meshList[GEO_OBJECT], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	//RenderText(meshList[GEO_TEXT], "Hello World", Color(0, 1, 0));
-	RenderText(meshList[GEO_TEXT], "DM2240 AGDEV", Color(0, 1, 0));
-	modelStack.PopMatrix();
-
 }
 
 
