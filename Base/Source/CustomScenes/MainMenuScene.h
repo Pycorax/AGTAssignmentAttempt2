@@ -11,6 +11,7 @@ class MainMenuScene : public MenuScene
 		GEO_BT_OPTIONS,
 		GEO_BT_INSTRUCTIONS,
 		GEO_BT_HIGH_SCORE,
+		GEO_BT_QUIT,
 		GEO_AXES,
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -22,6 +23,7 @@ class MainMenuScene : public MenuScene
 		BT_INSTRUCTIONS,
 		BT_HIGH_SCORE,
 		BT_OPTIONS,
+		BT_QUIT,
 		BT_TOTAL
 	};
 

@@ -89,9 +89,9 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM, const unsigned char key
 	//	}
 	//} while (m_iUserChoice == -1);
 #endif
-	if (key == 32)
+	if (key == 27)
 	{
-		//theGSM->ChangeState( CMenuState::Instance() );
+			
 	}
 	else
 	{
