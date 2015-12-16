@@ -146,6 +146,13 @@ bool Application::GetKeyboardUpdate()
 	{
 		theGSM->HandleEvents(32);
 	}
+
+	// Escape Key
+	if (IsKeyPressed(27))
+	{
+		theGSM->HandleEvents(27);
+	}
+
 	// Rotate camera
 	if (IsKeyPressed(VK_LEFT))
 	{

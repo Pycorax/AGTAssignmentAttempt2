@@ -1,10 +1,8 @@
-#include <iostream>
-using namespace std;
+#include "playstate.h"
 
 #include "../gamestate.h"
 #include "../GameStateManager.h"
-#include "playstate.h"
-#include "menustate.h"
+#include "PauseState.h"
 #include "..\CustomScenes\GameScene.h"
 
 CPlayState CPlayState::thePlayState;
@@ -70,7 +68,7 @@ void CPlayState::HandleEvents(CGameStateManager* theGSM, const unsigned char key
 #endif
 	if (key == 27)		// Escape key
 	{
-			
+		theGSM->PushState(PauseState::Instance());
 	}
 	else
 	{

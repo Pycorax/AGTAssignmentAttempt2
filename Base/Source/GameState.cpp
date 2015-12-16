@@ -37,7 +37,7 @@ void CGameState::Update(CGameStateManager* theGSM)
 	Update(theGSM, 0.16667);
 }
 
-void CGameState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
+void CGameState::Update(CGameStateManager* theGSM, const double m_dElapsedTime, string* tagReceiver)
 {
 	// Check if there is a scene
 	if (scene)
@@ -45,21 +45,34 @@ void CGameState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 		// Update the scene
 		scene->Update(m_dElapsedTime);
 
-		// If a new state is specified, load it.
-		// Store this so that if this current state is to be popped, we don't push this first and end up popping the new one instead of the old one
-		CGameState* nextState = scene->GetNextState();
+		// Retrieve the StateCommand
+		auto stateCommand = scene->GetNextState();
 
-		// Check if the scene has ended
-		if (scene->HasEnded())
+		// Check if a command was issued
+		if (stateCommand)
 		{
-			Cleanup();
-			theGSM->PopState();
-		}
+			// Check contents of the command
+			// -- Check if the state is suiciding
+			if (stateCommand->GetKilled())
+			{
+				Cleanup();
 
-		// Set up the next state if there is one
-		if (nextState)
-		{
-			theGSM->PushState(nextState);
+				// We must pop first, otherwise we will push and pop the new one instead
+				theGSM->PopState();
+			}
+
+			// -- Check the Next State
+			if (CGameState* newState = stateCommand->GetState())
+			{
+				// A state was provided so we add it onto the stack
+				theGSM->PushState(newState);
+			}
+
+			// Check if a tag receiver was provided, if so, pass it on to the tagReceiver for it to work with it
+			if (tagReceiver)
+			{
+				*tagReceiver = stateCommand->GetTag();
+			}
 		}
 	}
 }

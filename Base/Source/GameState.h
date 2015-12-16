@@ -22,7 +22,7 @@ public:
 	virtual void HandleEvents(CGameStateManager* theGSM, const double mouse_x, const double mouse_y,
 							  const int button_Left, const int button_Middle, const int button_Right) = 0;
 	virtual void Update(CGameStateManager* theGSM);
-	virtual void Update(CGameStateManager* theGSM, const double m_dElapsedTime);
+	virtual void Update(CGameStateManager* theGSM, const double m_dElapsedTime, string* tagReceiver = nullptr);
 	virtual void Draw(CGameStateManager* theGSM);
 
 	void ChangeState(CGameStateManager* theGSM, CGameState* state);

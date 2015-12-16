@@ -13,6 +13,7 @@
 #include "SpatialPartition/SpatialPartition.h"
 #include "Projectile/ProjectileManager.h"
 #include "gamestate.h"
+#include "StateCommand.h"
 
 const float SKYBOXSIZE = 1000.f;
 
@@ -103,7 +104,7 @@ public:
 	// GameStates to query this to check if scenes have ended
 	bool HasEnded(void) const;
 	// Note after retrieving the next state with this function, it will be removed so that the "NextState" status of this Scene will be reset. So do store it.
-	CGameState* GetNextState(void);
+	StateCommand* GetNextState(void);
 
 protected:
 	unsigned m_vertexArrayID;
@@ -150,7 +151,7 @@ protected:
 	void changeState(CGameState* state, bool killThisState = false);
 
 private:
-	CGameState* m_nextState;
+	StateCommand* m_nextState;
 	bool m_endScene;
 
 	void initGL();

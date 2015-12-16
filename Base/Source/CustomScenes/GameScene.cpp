@@ -182,6 +182,14 @@ void GameScene::Exit()
 }
 
 
+void GameScene::OnResume()
+{
+	CSceneManager::OnResume();
+
+	// Hide the Cursor
+	Application::SetCursorHidden();
+}
+
 /********************************************************************************
 Render mobile objects
 ********************************************************************************/

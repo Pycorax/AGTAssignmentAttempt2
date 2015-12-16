@@ -470,9 +470,9 @@ bool CSceneManager::HasEnded(void) const
 	return m_endScene;
 }
 
-CGameState* CSceneManager::GetNextState()
+StateCommand* CSceneManager::GetNextState()
 {
-	CGameState* stateToReturn = m_nextState;
+	StateCommand* stateToReturn = m_nextState;
 	m_nextState = nullptr;
 
 	return stateToReturn;
@@ -480,14 +480,12 @@ CGameState* CSceneManager::GetNextState()
 
 void CSceneManager::endState(void)
 {
-	m_endScene = true;
-	m_nextState = nullptr;
+	changeState(nullptr, true);
 }
 
 void CSceneManager::changeState(CGameState* state, bool killThisState)
 {
-	m_nextState = state;
-	m_endScene = killThisState;
+	m_nextState = new StateCommand(state, killThisState, "");
 }
 
 void CSceneManager::initGL()

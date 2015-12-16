@@ -183,6 +183,12 @@
     <ClCompile Include="Source\GameState.cpp">
       <Filter>Game State Management</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CustomScenes\PauseMenuScene.cpp">
+      <Filter>CustomScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomStates\PauseState.cpp">
+      <Filter>CustomStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -337,6 +343,18 @@
     </ClInclude>
     <ClInclude Include="Source\CustomStates\HighScoreState.h">
       <Filter>CustomStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\PauseMenuScene.h">
+      <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\PauseState.h">
+      <Filter>CustomStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StateCommand.h">
+      <Filter>Game State Management</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

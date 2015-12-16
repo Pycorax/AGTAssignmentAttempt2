@@ -37,6 +37,9 @@ class GameScene : public CSceneManager
 		NUM_GEOMETRY,
 	};
 
+	// For Pausing and Resuming
+	void OnResume();
+
 	// Render the main components of this scene
 	void RenderGUI();
 	void RenderMobileObjects();
