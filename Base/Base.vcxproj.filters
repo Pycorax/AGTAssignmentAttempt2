@@ -168,6 +168,18 @@
     <ClCompile Include="Source\CustomScenes\OptionMenuScene.cpp">
       <Filter>CustomScenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CustomScenes\InstructionMenuScene.cpp">
+      <Filter>CustomScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomStates\InstructionState.cpp">
+      <Filter>CustomStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomScenes\HighScoreMenuScene.cpp">
+      <Filter>CustomScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomStates\HighScoreState.cpp">
+      <Filter>CustomStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -310,6 +322,18 @@
     </ClInclude>
     <ClInclude Include="Source\CustomScenes\OptionMenuScene.h">
       <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\InstructionMenuScene.h">
+      <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\InstructionState.h">
+      <Filter>CustomStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\HighScoreMenuScene.h">
+      <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\HighScoreState.h">
+      <Filter>CustomStates</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

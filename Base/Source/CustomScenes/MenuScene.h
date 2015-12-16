@@ -32,7 +32,7 @@ protected:
 
 public:
 	MenuScene(const int window_width = 800, const int window_height = 600);
-	~MenuScene();
+	virtual ~MenuScene();
 
 	virtual void Init();
 	virtual void Update(double dt);
