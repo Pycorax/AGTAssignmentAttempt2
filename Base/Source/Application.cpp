@@ -12,6 +12,7 @@
 //Include the standard C++ headers
 #include <stdio.h>
 #include <stdlib.h>
+#include "CustomStates/playstate.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -286,7 +287,7 @@ void Application::Init()
 	// Initialise the GSM
 	theGSM = new CGameStateManager();
 	theGSM->Init( "DM2240 with Game State Management", m_window_width, m_window_height);
-	theGSM->ChangeState( CIntroState::Instance() );
+	theGSM->ChangeState( CPlayState::Instance() );
 }
 
 /********************************************************************************

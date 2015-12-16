@@ -80,7 +80,7 @@ public:
 	virtual void OnResume();
 
 	// Low level render tools
-	void PreRendering(Vector3 translate, bool enableLight);
+	void PreRendering(Mtx44 mtx, bool enableLight);
 	void PostRendering(void);
 
 	void RenderText(Mesh* mesh, std::string text, Color color);

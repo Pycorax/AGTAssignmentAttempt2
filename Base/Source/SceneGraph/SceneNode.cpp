@@ -75,7 +75,7 @@ void CSceneNode::Draw(CSceneManager* theSceneManager)
 		//theTransform->PreRendering();
 		float x,y,z;
 		theTransform->GetOffset(x,y,z);
-		theSceneManager->PreRendering(Vector3(x,y,z), false);
+		theSceneManager->PreRendering(theTransform->GetTransform(), false);
 		if (theModel)
 			theModel->Draw();
 		theSceneManager->PostRendering();
@@ -217,7 +217,7 @@ bool CSceneNode::GetTopLeft(const int m_iChildIndex, Vector3& Vector3_TopLeft)
 {
 	Vector3_TopLeft = Vector3( -999, -999, -999 );
 	CSceneNode* aChild = NULL;
-	for (unsigned i=0; i<theChildren.size(); i++)
+	for (unsigned i = 0; i < theChildren.size(); i++)
 	{
 		aChild = (CSceneNode*)theChildren[i];
 

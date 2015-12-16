@@ -163,10 +163,10 @@ void CSceneManager::UpdateWeaponStatus(const unsigned char key)
 /********************************************************************************
  Start the rendering process by calling PreRendering()
  ********************************************************************************/
-void CSceneManager::PreRendering(Vector3 translate, bool enableLight)
+void CSceneManager::`PreRendering(Mtx44 mtx, bool enableLight)
 {
 	modelStack.PushMatrix();
-	modelStack.Translate(translate.x,translate.y,translate.z);
+	modelStack.MultMatrix(mtx);
 
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 	

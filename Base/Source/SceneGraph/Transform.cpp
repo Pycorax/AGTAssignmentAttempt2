@@ -69,7 +69,10 @@ void CTransform::SetRotate( const float angle, const float rx, const float ry, c
 
 void CTransform::SetScale( const float sx, const float sy, const float sz  )
 {
-	Mtx.SetToScale( sx, sy, sz );
+	Mtx44 TempMtx;
+	TempMtx.SetToScale(sx, sy, sz);
+
+	Mtx = Mtx * TempMtx;
 }
 
 void CTransform::GetOffset( float& x, float& y, float& z )
