@@ -4,7 +4,7 @@
 #include "../LoadTGA.h"
 #include <sstream>
 #include "../Application.h"
-#include "../CustomStates/playState.h"
+#include "../CustomStates/LevelSelectState.h"
 #include "../CustomStates/OptionState.h"
 #include "../CustomStates/InstructionState.h"
 #include "../CustomStates/HighScoreState.h"
@@ -69,7 +69,7 @@ void MainMenuScene::Update(double dt)
 
 	if (m_button[BT_START].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance());
+		changeState(LevelSelectState::Instance());
 	}
 	else if (m_button[BT_OPTIONS].GetState() == UIButton::DOWN_STATE)
 	{

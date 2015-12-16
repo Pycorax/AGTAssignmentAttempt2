@@ -189,6 +189,12 @@
     <ClCompile Include="Source\CustomStates\PauseState.cpp">
       <Filter>CustomStates</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CustomScenes\LevelMenuScene.cpp">
+      <Filter>CustomScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomStates\LevelSelectState.cpp">
+      <Filter>CustomStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -355,6 +361,12 @@
     </ClInclude>
     <ClInclude Include="Source\StateCommand.h">
       <Filter>Game State Management</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\LevelMenuScene.h">
+      <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\LevelSelectState.h">
+      <Filter>CustomStates</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
