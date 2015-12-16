@@ -4,6 +4,7 @@
 #include "../LoadTGA.h"
 #include <sstream>
 #include "../Application.h"
+#include "../menustate.h"
 
 using std::ostringstream;
 
@@ -80,7 +81,7 @@ void SplashScene::Update(double dt)
 	else
 	{
 		// End the scene
-		endScene();
+		changeState(CMenuState::Instance());
 	}
 }
 

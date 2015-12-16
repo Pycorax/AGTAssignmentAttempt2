@@ -139,7 +139,10 @@ void CIntroState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 
 	if (scene->HasEnded())
 	{
-		theGSM->ChangeState(CMenuState::Instance());
+		if (scene->GetNextState() != nullptr)
+		{
+			theGSM->ChangeState(scene->GetNextState());
+		}
 	}
 }
 

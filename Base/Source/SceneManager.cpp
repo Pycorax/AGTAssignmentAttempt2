@@ -16,6 +16,7 @@ CSceneManager::CSceneManager(void)
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
 	, m_cProjectileManager(NULL)
+	, m_nextState(nullptr)
 	, m_endScene(false)
 {
 }
@@ -26,6 +27,7 @@ CSceneManager::CSceneManager(const int m_window_width, const int m_window_height
 	, m_cSceneGraph(NULL)
 	, m_cSpatialPartition(NULL)
 	, m_cProjectileManager(NULL)
+	, m_nextState(nullptr)
 	, m_endScene(false)
 {
 	this->m_window_width = m_window_width;
@@ -576,8 +578,19 @@ bool CSceneManager::HasEnded(void) const
 	return m_endScene;
 }
 
-void CSceneManager::endScene(void)
+CGameState* CSceneManager::GetNextState() const
 {
+	return m_nextState;
+}
+
+void CSceneManager::endState(void)
+{
+	m_endScene = true;
+}
+
+void CSceneManager::changeState(CGameState* state)
+{
+	m_nextState = state;
 	m_endScene = true;
 }
 

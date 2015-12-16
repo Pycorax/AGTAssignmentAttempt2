@@ -142,6 +142,14 @@ void CPlayState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 {
 	// Update the scene
 	scene->Update(m_dElapsedTime);
+
+	if (scene->HasEnded())
+	{
+		if (scene->GetNextState() != nullptr)
+		{
+			theGSM->ChangeState(scene->GetNextState());
+	}
+	}
 }
 
 void CPlayState::Draw(CGameStateManager* theGSM)

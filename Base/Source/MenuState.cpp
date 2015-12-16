@@ -144,7 +144,10 @@ void CMenuState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 
 	if (scene->HasEnded())
 	{
-		theGSM->ChangeState(CPlayState::Instance());
+		if (scene->GetNextState() != nullptr)
+		{
+			theGSM->ChangeState(scene->GetNextState());
+		}
 	}
 }
 

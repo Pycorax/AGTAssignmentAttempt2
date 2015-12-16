@@ -4,6 +4,7 @@
 #include "../LoadTGA.h"
 #include <sstream>
 #include "../Application.h"
+#include "../playState.h"
 
 using std::ostringstream;
 
@@ -53,7 +54,7 @@ void MainMenuScene::Update(double dt)
 
 	if (m_button[BT_START].GetState() == UIButton::DOWN_STATE)
 	{
-		endScene();
+		changeState(CPlayState::Instance());
 	}
 }
 

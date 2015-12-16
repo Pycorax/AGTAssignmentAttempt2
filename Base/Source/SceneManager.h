@@ -12,6 +12,7 @@
 #include "SceneGraph/SceneNode.h"	// Scene Graph
 #include "SpatialPartition/SpatialPartition.h"
 #include "Projectile/ProjectileManager.h"
+#include "gamestate.h"
 
 const float SKYBOXSIZE = 1000.f;
 
@@ -97,6 +98,7 @@ public:
 
 	// GameStates to query this to check if scenes have ended
 	bool HasEnded(void) const;
+	CGameState* GetNextState(void) const;
 
 protected:
 	unsigned m_vertexArrayID;
@@ -138,9 +140,11 @@ protected:
 	// Projectile
 	CProjectileManager* m_cProjectileManager;
 
-	void endScene(void);
+	void endState(void);
+	void changeState(CGameState* state);
 
 private:
+	CGameState* m_nextState;
 	bool m_endScene;
 };
 
