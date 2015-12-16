@@ -57,7 +57,7 @@ void HighScoreMenuScene::Update(double dt)
 
 	if (m_button[BT_BACK].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CMenuState::Instance());
+		endState();
 	}
 	if (m_button[BT_RESET].GetState() == UIButton::DOWN_STATE)
 	{

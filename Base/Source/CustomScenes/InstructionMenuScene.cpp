@@ -54,7 +54,7 @@ void InstructionMenuScene::Update(double dt)
 
 	if (m_button[BT_BACK].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CMenuState::Instance());
+		endState();
 	}
 }
 
