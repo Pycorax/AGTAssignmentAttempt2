@@ -4,6 +4,7 @@
 #include "../LoadTGA.h"
 #include "../LoadOBJ.h"
 #include <sstream>
+#include "../Application.h"
 
 using std::ostringstream;
 
@@ -22,6 +23,9 @@ GameScene::~GameScene()
 void GameScene::Init()
 {
 	CSceneManager::Init();
+
+	// Hide the Cursor
+	Application::SetCursorHidden();
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{

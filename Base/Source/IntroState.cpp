@@ -10,15 +10,6 @@ using namespace std;
 
 CIntroState CIntroState::theIntroState;
 
-void CIntroState::Init()
-{
-#if GSM_DEBUG_MODE
-	cout << "CIntroState::Init\n" << endl;
-#endif
-	scene = new SplashScene(800, 600);
-	scene->Init();
-}
-
 void CIntroState::Init(const int width, const int height)
 {
 #if GSM_DEBUG_MODE
@@ -148,7 +139,7 @@ void CIntroState::Update(CGameStateManager* theGSM, const double m_dElapsedTime)
 
 	if (scene->HasEnded())
 	{
-		theGSM->ChangeState(CPlayState::Instance());
+		theGSM->ChangeState(CMenuState::Instance());
 	}
 }
 

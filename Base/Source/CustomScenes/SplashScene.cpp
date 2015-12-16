@@ -3,12 +3,13 @@
 #include "../MeshBuilder.h"
 #include "../LoadTGA.h"
 #include <sstream>
+#include "../Application.h"
 
 using std::ostringstream;
 
 const float SplashScene::s_m_LIGHT_OFFSET = 50.0f;
-const float SplashScene::s_m_LIGHT_SPEED = 20.0f;
-const float SplashScene::s_m_END_TIME_PAUSE = 1.0f;
+const float SplashScene::s_m_LIGHT_SPEED = 200.0f;
+const float SplashScene::s_m_END_TIME_PAUSE = 0.1f;
 
 SplashScene::SplashScene() : CSceneManager()
 	, m_timePause(0.0f)
@@ -27,6 +28,9 @@ SplashScene::~SplashScene()
 void SplashScene::Init()
 {
 	CSceneManager::Init();
+
+	// Hide the Cursor
+	Application::SetCursorHidden();
 
 	// Set the bg col
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);

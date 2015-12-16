@@ -18,6 +18,10 @@ public:
 	bool GetMouseUpdate();
 	bool GetKeyboardUpdate();
 
+	// Cursor
+	static void SetCursorShown(void);
+	static void SetCursorHidden(void);
+
 	void Init();
 	void Run();
 	void Exit();
@@ -43,6 +47,12 @@ private:
 
 	// Game State Management
 	CGameStateManager* theGSM;
+
+	// Hiding Mouse
+	bool m_mouseHidden;
+
+	void setCursorShown(void);
+	void setCursorHidden(void);
 };
 
 #endif

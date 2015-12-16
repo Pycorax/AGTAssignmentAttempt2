@@ -9,17 +9,6 @@ using namespace std;
 
 CPlayState CPlayState::thePlayState;
 
-void CPlayState::Init()
-{
-#if GSM_DEBUG_MODE
-	cout << "CPlayState::Init\n" << endl;
-#endif
-	counter = 0;
-
-	scene = new CSceneManager(800, 600);
-	scene->Init();
-}
-
 void CPlayState::Init(const int width, const int height)
 {
 #if GSM_DEBUG_MODE

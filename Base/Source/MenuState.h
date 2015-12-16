@@ -1,12 +1,12 @@
 #pragma once
 
+// Inheritance Include
 #include "gamestate.h"
 
 class CMenuState : public CGameState
 {
 public:
-	void Init();
-	void Init(const int width, const int height);
+	void Init(const int width = 800, const int height = 600);
 	void Cleanup();
 
 	void Pause();

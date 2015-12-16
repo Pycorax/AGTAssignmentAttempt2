@@ -60,7 +60,7 @@ class CSceneManager : public Scene
 public:
 	CSceneManager(void);
 	CSceneManager(const int m_window_width, const int m_window_height);
-	~CSceneManager(void);
+	virtual ~CSceneManager(void);
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -80,6 +80,7 @@ public:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshIn2D(Mesh *mesh, bool enableLight, float size=1.0f, float x=0.0f, float y=0.0f, bool rotate=false);
+	void Render2DMesh(Mesh* mesh, const bool enableLight, const float sizex, const float sizey, const float x, const float y);
 	void RenderMesh(Mesh *mesh, bool enableLight);
 
 	void RenderLights(void);

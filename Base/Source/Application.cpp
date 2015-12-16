@@ -71,16 +71,19 @@ bool Application::GetMouseUpdate()
 	camera_yaw = (float) mouse_diff_x * 0.0174555555555556f;// * 3.142f / 180.0f;
 	camera_pitch = mouse_diff_y * 0.0174555555555556f;// 3.142f / 180.0f );
 
-	// Do a wraparound if the mouse cursor has gone out of the deadzone
-	if ((mouse_current_x < m_window_deadzone) || (mouse_current_x > m_window_width-m_window_deadzone))
+	if (m_mouseHidden)
 	{
-		mouse_current_x = m_window_width >> 1;
-		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
-	}
-	if ((mouse_current_y < m_window_deadzone) || (mouse_current_y > m_window_height-m_window_deadzone))
-	{
-		mouse_current_y = m_window_height >> 1;
-		glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
+		// Do a wraparound if the mouse cursor has gone out of the deadzone
+		if ((mouse_current_x < m_window_deadzone) || (mouse_current_x > m_window_width - m_window_deadzone))
+		{
+			mouse_current_x = m_window_width >> 1;
+			glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
+		}
+		if ((mouse_current_y < m_window_deadzone) || (mouse_current_y > m_window_height - m_window_deadzone))
+		{
+			mouse_current_y = m_window_height >> 1;
+			glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
+		}
 	}
 
 	// Store the current position as the last position
@@ -180,11 +183,26 @@ bool Application::GetKeyboardUpdate()
 	return true;
 }
 
+void Application::SetCursorShown()
+{
+	// Show the cursor
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	GetInstance().setCursorShown();
+}
+
+void Application::SetCursorHidden()
+{
+	// Hide the cursor
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	GetInstance().setCursorHidden();
+}
+
 /********************************************************************************
  Constructor
  ********************************************************************************/
 Application::Application()
 	: theGSM(NULL)
+	, m_mouseHidden(true)
 {
 }
 
@@ -251,7 +269,7 @@ void Application::Init()
 		//return -1;
 	}
 
-	// Hide the cursor
+	// Show the cursor
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// Set these 2 variables to zero
@@ -317,4 +335,18 @@ void Application::Exit()
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW
 	glfwTerminate();
+}
+
+void Application::setCursorShown()
+{
+	// Show the cursor
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	m_mouseHidden = false;
+}
+
+void Application::setCursorHidden()
+{
+	// Hide the cursor
+	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	m_mouseHidden = true;
 }

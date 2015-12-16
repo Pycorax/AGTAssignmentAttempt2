@@ -15,6 +15,7 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\CustomScenes\GameScene.cpp" />
+    <ClCompile Include="Source\CustomScenes\MenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\SplashScene.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\GameStateManager.cpp" />
@@ -47,6 +48,7 @@
     <ClCompile Include="Source\Strategy.cpp" />
     <ClCompile Include="Source\Strategy_Kill.cpp" />
     <ClCompile Include="Source\TreasureChest.cpp" />
+    <ClCompile Include="Source\UI\UIButton.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +56,7 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\CustomScenes\GameScene.h" />
+    <ClInclude Include="Source\CustomScenes\MenuScene.h" />
     <ClInclude Include="Source\CustomScenes\SplashScene.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GameState.h" />
@@ -90,6 +93,7 @@
     <ClInclude Include="Source\Strategy.h" />
     <ClInclude Include="Source\Strategy_Kill.h" />
     <ClInclude Include="Source\TreasureChest.h" />
+    <ClInclude Include="Source\UI\UIButton.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
   </ItemGroup>

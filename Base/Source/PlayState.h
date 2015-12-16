@@ -14,8 +14,7 @@
 class CPlayState : public CGameState
 {
 public:
-	void Init();
-	void Init(const int width, const int height);
+	void Init(const int width = 800, const int height = 600);
 	void Cleanup();
 
 	void Pause();
@@ -43,9 +42,4 @@ private:
 	//Declare variables to store the last and current mouse position
 	double mouse_last_x, mouse_last_y, mouse_diff_x, mouse_diff_y;
 	double camera_yaw, camera_pitch;
-
-	GLFWwindow* m_window;
-
-	// The handler for the scene
-	CSceneManager *scene;	// Use this for 3D gameplay
 };
