@@ -61,4 +61,6 @@ public:
 private:
 	Mesh* meshList[NUM_GEOMETRY];
 
+	int buildHuman();		// Generates a humanoid. Returns the sceneNode ID
+
 };

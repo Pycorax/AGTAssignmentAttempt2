@@ -143,8 +143,7 @@ void GameScene::Update(double dt)
 	CSceneManager::Update(dt);
 
 	m_cAvatar->Update(dt);
-	camera.UpdatePosition(m_cAvatar->GetPosition() /*+ Vector3(0.0f, 15.0f, 0.0f)*/, m_cAvatar->GetDirection());
-	//camera.Update(dt);
+	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection());
 
 	// Update the spatial partition
 	m_cSpatialPartition->Update(camera.position, (camera.target - camera.position).Normalize());
