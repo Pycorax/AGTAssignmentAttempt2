@@ -15,6 +15,7 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\CustomScenes\GameScene.cpp" />
+    <ClCompile Include="Source\CustomScenes\MainMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\MenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\SplashScene.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\CustomScenes\GameScene.h" />
+    <ClInclude Include="Source\CustomScenes\MainMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\MenuScene.h" />
     <ClInclude Include="Source\CustomScenes\SplashScene.h" />
     <ClInclude Include="Source\Enemy.h" />

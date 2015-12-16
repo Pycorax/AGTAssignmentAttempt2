@@ -10,6 +10,8 @@ using std::ostringstream;
 MenuScene::MenuScene(const int window_width, const int window_height) : CSceneManager(window_width, window_height)
 	, m_leftMouseState(UP_STATE)
 	, m_rawLeftClick(false)
+	, m_button(nullptr)
+	, m_buttonSize(0)
 {
 }
 
@@ -26,25 +28,6 @@ void MenuScene::Init()
 
 	// Set the bg col
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-
-	// Init the mesh list
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
-	{
-		meshList[i] = NULL;
-	}
-
-	// Load the meshes
-	meshList[GEO_BUTTON] = MeshBuilder::GenerateQuad("Button", Color(), 1.0f);
-	meshList[GEO_BUTTON]->textureID = LoadTGA("Image//btn_start.tga");
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-
-	// Initialize the buttons
-	const Vector3 NORMAL_BUTTON_SIZE(250, 50);
-	const Vector3 SCALE_BUTTON_SIZE(50, 50);
-	m_button[BT_START].Init(meshList[GEO_BUTTON], Vector3(m_window_width * 0.5, m_window_height * 0.5), NORMAL_BUTTON_SIZE);
 }
 
 void MenuScene::Update(double dt)
@@ -52,30 +35,21 @@ void MenuScene::Update(double dt)
 	CSceneManager::Update(dt);
 
 	mouseUpdate();
-
 	updateUIButtons();
-
-	if (m_button[BT_START].GetState() == UIButton::DOWN_STATE)
-	{
-		endScene();
-	}
 }
 
 void MenuScene::Render()
 {
 	CSceneManager::Render();
-
-	RenderMesh(meshList[GEO_AXES], false);
-
 	RenderGUI();
 }
 
 void MenuScene::Exit()
 {
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
+	if (m_button)
 	{
-		if (meshList[i])
-			delete meshList[i];
+		delete[] m_button;
+		m_button = nullptr;
 	}
 
 	CSceneManager::Exit();
@@ -87,6 +61,17 @@ void MenuScene::UpdateWeaponStatus(const unsigned char key)
 	{
 		m_rawLeftClick = true;
 	}
+}
+
+bool MenuScene::isMouseState(MOUSE_STATE_TYPE mouseState)
+{
+	return m_leftMouseState == mouseState;
+}
+
+void MenuScene::createButtonList(int sizeOfList)
+{
+	m_button = new UIButton[sizeOfList];
+	m_buttonSize = sizeOfList;
 }
 
 void MenuScene::mouseUpdate()
@@ -122,6 +107,8 @@ void MenuScene::mouseUpdate()
 				m_leftMouseState = UP_STATE;
 			}
 			break;
+		default:
+			break;
 	}
 
 	m_rawLeftClick = false;
@@ -129,7 +116,7 @@ void MenuScene::mouseUpdate()
 
 void MenuScene::updateUIButtons()
 {
-	for (size_t i = 0; i < BT_TOTAL; ++i)
+	for (size_t i = 0; i < m_buttonSize; ++i)
 	{
 		m_button[i].UpdateState(m_leftMouseState == CLICK_DOWN_STATE, m_window_height);
 	}
@@ -149,7 +136,7 @@ Render GUI
 void MenuScene::RenderGUI()
 {
 	// Render the buttons
-	for (size_t bt = 0; bt < BT_TOTAL; ++bt)
+	for (size_t bt = 0; bt < m_buttonSize; ++bt)
 	{
 		renderUIButton(m_button[bt]);
 	}

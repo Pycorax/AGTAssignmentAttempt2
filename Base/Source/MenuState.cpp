@@ -5,7 +5,7 @@ using namespace std;
 #include "playstate.h"
 #include "gamestate.h"
 #include "menustate.h"
-#include "CustomScenes/MenuScene.h"
+#include "CustomScenes/MainMenuScene.h"
 
 CMenuState CMenuState::theMenuState;
 
@@ -14,7 +14,7 @@ void CMenuState::Init(const int width, const int height)
 #if GSM_DEBUG_MODE
 	cout << "CMenuState::Init\n" << endl;
 #endif
-	scene = new MenuScene(width, height);
+	scene = new MainMenuScene(width, height);
 	scene->Init();
 }
 

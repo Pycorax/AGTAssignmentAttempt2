@@ -159,6 +159,9 @@
     <ClCompile Include="Source\UI\UIButton.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CustomScenes\MainMenuScene.cpp">
+      <Filter>CustomScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="Source\UI\UIButton.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\MainMenuScene.h">
+      <Filter>CustomScenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
