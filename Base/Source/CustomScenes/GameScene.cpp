@@ -9,12 +9,12 @@
 using std::ostringstream;
 
 GameScene::GameScene() : CSceneManager()
-	, mover(nullptr)
+	, m_movingBomber(nullptr)
 {
 }
 
 GameScene::GameScene(const int window_width, const int window_height) : CSceneManager(window_width, window_height)
-	, mover(nullptr)
+	, m_movingBomber(nullptr)
 {
 }
 
@@ -38,28 +38,8 @@ void GameScene::Init()
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
 
-	CModel* newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
+	CModel* newModel = new CModel(nullptr);
 	cout << m_cSceneGraph->SetNode(new CTransform(), newModel) << endl;
-
-	newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
-	cout << m_cSceneGraph->AddChild(new CTransform(125, 10, 0), newModel) << endl;
-
-	newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
-	cout << m_cSceneGraph->AddChild(new CTransform(125, 10, 125), newModel) << endl;
-
-#pragma region Auto Switching Grid Showcase
-
-	CTransform* tf = new CTransform(100, 10, 10);
-	tf->SetScale(10, 10, 10);
-
-	int store = 0;
-
-	newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
-	store = m_cSceneGraph->AddChild(tf, newModel);
-	cout << store << endl;
-	mover = m_cSceneGraph->GetNode(store);
-	
-#pragma endregion
 
 	bomberInit();
 
@@ -73,8 +53,6 @@ void GameScene::Init()
 			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("GridMesh", Color(1.0f / i, 1.0f / j, 1.0f / (i*j)), 50.0f));
 		}
 	}
-
-	//m_cSpatialPartition->PrintSelf();
 
 	// Add the pointers to the scene graph to the spatial partition
 	m_cSpatialPartition->AddObject(m_cSceneGraph);
@@ -138,13 +116,24 @@ void GameScene::Update(double dt)
 	}
 
 	// Update mobile objects
-	mover->ApplyTranslate(0.0f, 0.0f, 5.0f * dt);
-	static float moved = 0.0f;
-	moved += 5.0f * dt;
-	if (mover->GetTranslate().z > 250)
+	static bool forward = true;
+	if (forward)
 	{
-		mover->ApplyTranslate(0.0f, 0.0f, -moved);
-		moved = 0.0f;
+		m_movingBomber->GetSceneGraph()->ApplyTranslate(0.0f, 0.0f, 5.0f * dt);
+
+		if (m_movingBomber->GetSceneGraph()->GetTranslate().z > 225)
+		{
+			forward = false;
+		}
+	}
+	else
+	{
+		m_movingBomber->GetSceneGraph()->ApplyTranslate(0.0f, 0.0f, -5.0f * dt);
+
+		if (m_movingBomber->GetSceneGraph()->GetTranslate().z < 25)
+		{
+			forward = true;
+		}
 	}
 }
 
@@ -273,6 +262,11 @@ void GameScene::bomberInit()
 	bomber = new Bomber;
 	bomber->Init(Vector3(200, 0, 103), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
 	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+
+	// Moving Bomber
+	m_movingBomber = new Bomber;
+	m_movingBomber->Init(Vector3(25, 0, 25), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(m_movingBomber->GetSceneGraph());
 }
 
 
@@ -359,7 +353,7 @@ Render the lights in this scene
 ********************************************************************************/
 void GameScene::RenderFixedObjects()
 {
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 }
 
 

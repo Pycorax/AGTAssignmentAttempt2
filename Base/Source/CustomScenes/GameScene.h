@@ -41,11 +41,11 @@ private:
 private:
 	Mesh* meshList[NUM_GEOMETRY];
 
-	// To Show that mobile objects spatial partitioning work
-	CSceneNode* mover;
-
 	// A list of bombers for players to shoot at
 	vector<Bomber*> m_bomberList;
+
+	// The moving bomber
+	Bomber* m_movingBomber;
 
 protected:
 	// For Pausing and Resuming
