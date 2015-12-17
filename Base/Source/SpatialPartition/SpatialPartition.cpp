@@ -158,6 +158,7 @@ void CSpatialPartition::AddObject(CSceneNode* theObject)
     if ((index_topleft>=0) && (index_topleft<xNumOfGrid*yNumOfGrid))
     {
         theGrid[ index_topleft ].AddObject( theObject );
+		theObject->SetGridID(index_topleft);
     }
 
     // if part of the object is in another grid, then add it in as well.
@@ -166,8 +167,12 @@ void CSpatialPartition::AddObject(CSceneNode* theObject)
         if (index_topleft != index_bottomright)
         {
             theGrid[ index_bottomright ].AddObject( theObject );
+			theObject->SetSecondaryGridID(index_bottomright);
         }
     }
+
+	// Tell the node that I'm your parent
+	theObject->SetSpatialPartition(this);
 
 	// Rinse and repeat for each child node
 	vector<CNode*> children = theObject->GetChildren();
@@ -178,6 +183,28 @@ void CSpatialPartition::AddObject(CSceneNode* theObject)
 		if (sChild)
 		{
 			AddObject(sChild);
+		}
+	}
+}
+
+/********************************************************************************
+Add an existing object model
+********************************************************************************/
+void CSpatialPartition::RemoveObject(CSceneNode * theObject)
+{
+	if (theObject)
+	{
+		int gridID = theObject->GetGridID();
+		int secondaryGridID = theObject->GetSecondaryGridID();
+
+		if (gridID >= 0)
+		{
+			theGrid[gridID].RemoveObject(theObject);
+		}
+
+		if (secondaryGridID >= 0)
+		{
+			theGrid[secondaryGridID].RemoveObject(theObject);
 		}
 	}
 }

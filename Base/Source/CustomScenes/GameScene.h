@@ -60,4 +60,5 @@ public:
 
 private:
 	Mesh* meshList[NUM_GEOMETRY];
+	CSceneNode* mover;
 };

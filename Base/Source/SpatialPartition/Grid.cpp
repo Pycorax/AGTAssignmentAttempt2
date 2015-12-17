@@ -50,6 +50,18 @@ void CGrid::AddObject(CSceneNode* theObject)
 	ListOfObjects.push_back( theObject );
 }
 
+void CGrid::RemoveObject(CSceneNode * theObject)
+{
+	for (auto list = ListOfObjects.begin(); list != ListOfObjects.end(); ++list)
+	{
+		if (*list == theObject)
+		{
+			ListOfObjects.erase(list);
+			break;
+		}
+	}
+}
+
 /********************************************************************************
  Get list of objects in this grid
  ********************************************************************************/

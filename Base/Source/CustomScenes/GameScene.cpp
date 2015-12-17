@@ -9,10 +9,12 @@
 using std::ostringstream;
 
 GameScene::GameScene() : CSceneManager()
+	, mover(nullptr)
 {
 }
 
 GameScene::GameScene(const int window_width, const int window_height) : CSceneManager(window_width, window_height)
+	, mover(nullptr)
 {
 }
 
@@ -121,10 +123,13 @@ void GameScene::Init()
 	CTransform* tf = new CTransform(100, 10, 10);
 	tf->SetScale(10, 10, 10);
 
+	int store = 0;
+
 	newModel = new CModel();
 	newModel->Init();
-	cout << m_cSceneGraph->AddChild(tf, newModel) << endl;
-
+	store = m_cSceneGraph->AddChild(tf, newModel);
+	cout << store << endl;
+	mover = m_cSceneGraph->GetNode(store);
 	
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
@@ -190,6 +195,15 @@ void GameScene::Update(double dt)
 		}
 	}
 
+	// Update mobile objects
+	mover->ApplyTranslate(0.0f, 0.0f, 5.0f * dt);
+	static float moved = 0.0f;
+	moved += 5.0f * dt;
+	if (mover->GetTranslate().z > 250)
+	{
+		mover->ApplyTranslate(0.0f, 0.0f, -moved);
+		moved = 0.0f;
+	}
 }
 
 void GameScene::Render()

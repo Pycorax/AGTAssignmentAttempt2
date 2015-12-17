@@ -9,6 +9,8 @@ CSceneNode::CSceneNode(void)
 , theChildren( NULL )
 , theTransform ( NULL )
 , sceneNodeID (-1)
+, gridID(-1)
+, spatialPartition(nullptr)
 {
 }
 
@@ -165,10 +167,38 @@ vector<CNode*> CSceneNode::GetChildren(void) const
 	return theChildren;
 }
 
+Vector3 CSceneNode::GetTranslate(void) const
+{
+	Mtx44 tf = theTransform->GetTransform();
+
+	return Vector3(tf.a[12], tf.a[13], tf.a[14]);
+}
+
+Vector3 CSceneNode::GetScale(void) const
+{
+	Mtx44 tf = theTransform->GetTransform();
+
+	return Vector3(tf.a[0], tf.a[5], tf.a[10]);
+}
+
 void CSceneNode::ApplyTranslate( const float dx, const float dy, const float dz )
 {
 	if (theTransform)
-		theTransform->SetTranslate( dx, dy, dz );
+	{
+		// Remove it first
+		if (spatialPartition)
+		{
+			spatialPartition->RemoveObject(this);
+		}
+
+		theTransform->SetTranslate(dx, dy, dz);
+
+		// Update the Grid positioning after u change position
+		if (spatialPartition)
+		{
+			spatialPartition->AddObject(this);
+		}
+	}	
 }
 
 
@@ -370,6 +400,31 @@ bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end,
 	}
 
 	return false;
+}
+
+void CSceneNode::SetGridID(int gridID)
+{
+	this->gridID = gridID;
+}
+
+void CSceneNode::SetSecondaryGridID(int gridID)
+{
+	secondaryGridID = gridID;
+}
+
+int CSceneNode::GetGridID(void)
+{
+	return gridID;
+}
+
+int CSceneNode::GetSecondaryGridID(void)
+{
+	return secondaryGridID;
+}
+
+void CSceneNode::SetSpatialPartition(CSpatialPartition * partition)
+{
+	spatialPartition = partition;
 }
 
 int CSceneNode::getIntersection(float fDst1, float fDst2, Vector3 P1, Vector3 P2, Vector3 & Hit)

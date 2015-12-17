@@ -8,6 +8,7 @@
 using namespace std;
 
 class CSceneManager;
+class CSpatialPartition;
 
 class CSceneNode :
 	public CNode
@@ -18,6 +19,9 @@ private:
 	CModel* theModel;
 	CTransform* theTransform;
 	int sceneNodeID;
+	int gridID;
+	int secondaryGridID;
+	CSpatialPartition* spatialPartition;		// Pointer to the spatial partition system that houses this object
 
 public:
 	CSceneNode(void);
@@ -40,6 +44,10 @@ public:
 	int GetSceneNodeID(void);
 	CSceneNode* GetNode(const int sceneNodeID);
 	vector<CNode*> GetChildren(void) const;
+
+	// Get Transforms
+	Vector3 GetTranslate(void) const;
+	Vector3 GetScale(void) const;
 
 	// Apply transformation to this Node and its children
 	void ApplyTranslate( const float dx, const float dy, const float dz );
@@ -67,6 +75,13 @@ public:
 	bool CheckForCollision(Vector3 position);
 	// Check two positions for collision with objects in any of the grids
 	bool CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit);
+
+	// For Spatial Partitioning
+	void SetGridID(int gridID);
+	void SetSecondaryGridID(int gridID);
+	int GetGridID(void);
+	int GetSecondaryGridID(void);
+	void SetSpatialPartition(CSpatialPartition* partition);
 
 private:
 	int getIntersection(float fDst1, float fDst2, Vector3 P1, Vector3 P2, Vector3 &Hit);
