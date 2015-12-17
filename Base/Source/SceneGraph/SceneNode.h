@@ -80,7 +80,7 @@ public:
 	void SetColorForChild(const int m_iChildIndex, const float red, const float green, const float blue);
 
 	// Check a position for collision with objects in any of the grids
-	bool CheckForCollision(Vector3 position);
+	CSceneNode* CheckForCollision(Vector3 position);
 	// Check two positions for collision with objects in any of the grids
 	bool CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit);
 

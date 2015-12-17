@@ -21,7 +21,7 @@ public:
 	// Add a new object to this grid
 	void AddObject(CSceneNode* theObject);
 	// Remove an object from this grid
-	void RemoveObject(CSceneNode* theObject);
+	bool RemoveObject(CSceneNode* theObject);
 	// Get list of objects in this grid
 	vector<CSceneNode*> GetListOfObject(void);
 	// Delete object from this grid

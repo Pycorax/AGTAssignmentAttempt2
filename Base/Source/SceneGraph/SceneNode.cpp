@@ -10,6 +10,7 @@ CSceneNode::CSceneNode(void)
 , theTransform ( NULL )
 , sceneNodeID (-1)
 , gridID(-1)
+, secondaryGridID(-1)
 , spatialPartition(nullptr)
 , active(true)
 {
@@ -242,6 +243,8 @@ void CSceneNode::ApplyScale(const float sx, const float sy, const float sz)
 // Note: DO NOT USE WITH ROTATION
 void CSceneNode::SetTranslate(const float dx, const float dy, const float dz)
 {
+	spatialPartition->RemoveObject(this);
+
 	if (theTransform)
 	{
 		// Store the scale
@@ -256,6 +259,8 @@ void CSceneNode::SetTranslate(const float dx, const float dy, const float dz)
 		// Reapply the Scale
 		theTransform->SetScale(scale.x, scale.y, scale.z);
 	}
+
+	spatialPartition->AddObject(this);
 }
 
 void CSceneNode::ResetTransform(void)
@@ -355,11 +360,11 @@ void CSceneNode::SetColorForChild(const int m_iChildIndex, const float red, cons
 /********************************************************************************
  Check a position for collision with objects in any of the grids
  ********************************************************************************/
-bool CSceneNode::CheckForCollision(Vector3 position)
+CSceneNode* CSceneNode::CheckForCollision(Vector3 position)
 {
 	if (!active)
 	{
-		return false;
+		return nullptr;
 	}
 
 	for (auto node = theChildren.begin(); node != theChildren.end(); ++node)
@@ -371,9 +376,9 @@ bool CSceneNode::CheckForCollision(Vector3 position)
 			// Calculate the relative position of the "position"
 			Vector3 relativePos = theTransform->GetTransform().GetInverse() * position;
 
-			if (sNode->CheckForCollision(relativePos))
+			if (CSceneNode* node = sNode->CheckForCollision(relativePos))
 			{
-				return true;
+				return node;
 			}
 		}
 	}
@@ -384,9 +389,9 @@ bool CSceneNode::CheckForCollision(Vector3 position)
 	if ( ((ObjectTopLeft.x > position.x) && (ObjectTopLeft.y > position.y) && (ObjectTopLeft.z > position.z)) &&
 			((ObjectBottomRight.x < position.x) && (ObjectBottomRight.y < position.y) && (ObjectBottomRight.z < position.z)) )
 	{
-		return true;
+		return this;
 	}
-	return false;
+	return nullptr;
 }
 
 /********************************************************************************

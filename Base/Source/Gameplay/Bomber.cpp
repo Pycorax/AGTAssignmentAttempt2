@@ -82,7 +82,11 @@ void Bomber::Update(double dt, Vector3 target)
 
 void Bomber::Spawn(Vector3 startPos, float speed)
 {
-	m_sceneGraph->SetTranslate(startPos.x, startPos.y, startPos.z);
+	// m_sceneGraph->SetTranslate(startPos.x, startPos.y, startPos.z);
+	// Caclulate the delta
+	Vector3 deltaDist = startPos - m_sceneGraph->GetTranslate();
+	// Go towards this point
+	//m_sceneGraph->ApplyTranslate(deltaDist.x, deltaDist.y, deltaDist.z);
 	m_speed = speed;
 	m_state = LS_CHASE;
 	m_sceneGraph->Activate();

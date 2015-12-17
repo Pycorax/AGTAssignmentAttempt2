@@ -160,6 +160,11 @@ void CSpatialPartition::AddObject(CSceneNode* theObject)
         theGrid[ index_topleft ].AddObject( theObject );
 		theObject->SetGridID(index_topleft);
     }
+	else
+	{
+		int i = 1;
+		i-=1;
+	}
 
     // if part of the object is in another grid, then add it in as well.
     if ((index_bottomright>=0) && (index_bottomright<xNumOfGrid*yNumOfGrid))
@@ -199,12 +204,26 @@ void CSpatialPartition::RemoveObject(CSceneNode * theObject)
 
 		if (gridID >= 0)
 		{
-			theGrid[gridID].RemoveObject(theObject);
+			if (theGrid[gridID].RemoveObject(theObject))
+			{
+				gridID = -1;
+			}
+			else
+			{
+				cout << "Fail" << endl;
+			}
 		}
 
 		if (secondaryGridID >= 0)
 		{
-			theGrid[secondaryGridID].RemoveObject(theObject);
+			if (theGrid[secondaryGridID].RemoveObject(theObject))
+			{
+				secondaryGridID = -1;
+			}
+			else
+			{
+				cout << "Fail2" << endl;
+			}
 		}
 	}
 }
@@ -234,7 +253,7 @@ float CSpatialPartition::CalculateDistanceSquare(Vector3 thePosition, Vector3 di
 /********************************************************************************
  Check a position for collision with objects in any of the grids
  ********************************************************************************/
-bool CSpatialPartition::CheckForCollision(Vector3 position)
+CSceneNode* CSpatialPartition::CheckForCollision(Vector3 position)
 {
     int GridIndex_x = ((int) position.x / (xGridSize));
     int GridIndex_z = ((int) position.z / (yGridSize));
@@ -250,14 +269,14 @@ bool CSpatialPartition::CheckForCollision(Vector3 position)
         Vector3 ObjectTopLeft, ObjectBottomRight;
         for (int i=0; i<(int)theListOfObjects.size(); i++)
         {
-			if (theListOfObjects[i]->CheckForCollision(position))
+			if (CSceneNode* node = theListOfObjects[i]->CheckForCollision(position))
 			{
-				return true;
+				return node;
 			}
         }
     }
 
-    return false;
+    return nullptr;
 }
 
  bool CSpatialPartition::CheckForCollision(Vector3 position_start, Vector3 position_end)

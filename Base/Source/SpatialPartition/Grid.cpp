@@ -9,6 +9,7 @@ CGrid::CGrid(void)
 	, index_y(0)
 	, xSize(1)
 	, ySize(1)
+	, ListOfObjects(NULL)
 	, theGridMesh(NULL)
 	, m_bDisplayed(true)
 {
@@ -49,19 +50,23 @@ void CGrid::AddObject(CSceneNode* theObject)
 	ListOfObjects.push_back( theObject );
 }
 
-void CGrid::RemoveObject(CSceneNode * theObject)
+bool CGrid::RemoveObject(CSceneNode * theObject)
 {
 	if (theObject)
 	{
+		//cout << ListOfObjects.size() << endl;
+
 		for (auto list = ListOfObjects.begin(); list != ListOfObjects.end(); ++list)
 		{
 			if (*list == theObject)
 			{
 				ListOfObjects.erase(list);
-				break;
+				return true;
 			}
 		}
 	}
+
+	return false;
 }
 
 /********************************************************************************

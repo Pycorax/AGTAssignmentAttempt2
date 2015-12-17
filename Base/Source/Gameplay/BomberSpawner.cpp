@@ -25,7 +25,7 @@ void BomberSpawner::Init(int maxEnemies, Mesh * hatMesh, Mesh * headMesh, Mesh *
 	for (size_t i = 0; i < maxEnemies; ++i)
 	{
 		Bomber* newEnemy = new Bomber;
-		newEnemy->Init(Vector3::ZERO_VECTOR, hatMesh, headMesh, bodyMesh);
+		newEnemy->Init(Vector3(25, 0, 25), hatMesh, headMesh, bodyMesh);
 		newEnemy->Kill();
 
 		m_enemyList.push_back(newEnemy);
@@ -92,8 +92,7 @@ void BomberSpawner::Spawn(void)
 		float spawnSpeed = Math::RandFloatMinMax(m_minSpeed, m_maxSpeed);
 
 		// Spawn It
-		Bomber* enemy = getDeadEnemy();
-		enemy->Spawn(spawnPos, spawnSpeed);
+		newEnemy->Spawn(spawnPos, spawnSpeed);
 	}
 	// Else don't do anything if can't find anything to spawn
 }

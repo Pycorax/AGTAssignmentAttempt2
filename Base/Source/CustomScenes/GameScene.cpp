@@ -75,13 +75,13 @@ void GameScene::Init()
 	}
 	// Define spawn zones
 	// -- Left
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(250.0f, 0.0f, 0.0f), Vector3(260.0f, 0.0f, 250.0f)));
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(200.0f, 0.0f, 10.0f), Vector3(230.0f, 0.0f, 230.0f)));
 	// -- Right
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(-10.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 250.0f)));
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(10.0f, 0.0f, 10.0f), Vector3(10.0f, 0.0f, 230.0f)));
 	// -- Up
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(0.0f, 0.0f, 250.0f), Vector3(250.0f, 0.0f, 260.0f)));
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(10.0f, 0.0f, 200.0f), Vector3(230.0f, 0.0f, 230.0f)));
 	// -- Down
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(0.0f, 0.0f, -10.0f), Vector3(250.0f, 0.0f, 0.0f)));
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(10.0f, 0.0f, 10.0f), Vector3(230.0f, 0.0f, 30.0f)));
 
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
@@ -118,7 +118,7 @@ void GameScene::Update(double dt)
 	m_enemySpawner.Update(dt, m_cAvatar->GetPosition());
 
 	// Update the spatial partition
-	m_cSpatialPartition->Update(camera.position, (camera.target - camera.position).Normalize());
+	//m_cSpatialPartition->Update(camera.position, (camera.target - camera.position).Normalize());
 
 	// Update the Projectile Manager
 	m_cProjectileManager->Update(dt);
@@ -136,8 +136,13 @@ void GameScene::Update(double dt)
 			if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_DISCRETE)
 			{
 				// Destroy the projectile after collision
-				if (m_cSpatialPartition->CheckForCollision(ProjectilePosition) == true)
+				if (CSceneNode* node = m_cSpatialPartition->CheckForCollision(ProjectilePosition))
+				{
+					// Remove the projectile
 					m_cProjectileManager->RemoveProjectile(i);
+					// React accordingly to the collided item
+					node->Deactivate();
+				}
 			}
 			else if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_RAY)
 			{
@@ -348,11 +353,13 @@ void GameScene::RenderGround()
 		modelStack.PushMatrix();
 		modelStack.Translate(m_cSpatialPartition->GetGridSizeX() * 0.5f, -m_cSpatialPartition->GetGridSizeY() * 0.5f, 1);
 
-		//cout << "Rendering..." << endl;
+		 cout << "Rendering..." << endl;
 		for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
 		{
 			for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
 			{
+				cout << m_cSpatialPartition->GetGridItemSize(i, j) << endl;
+
 				// Only render it if there is something in it
 				if (m_cSpatialPartition->GetGridItemSize(i, j) <= 0)
 				{
@@ -366,7 +373,7 @@ void GameScene::RenderGround()
 				modelStack.PopMatrix();
 			}
 		}
-		//cout << "Rendering ENDS" << endl;
+		cout << "Rendering ENDS" << endl;
 		modelStack.PopMatrix();
 	}
 	{
