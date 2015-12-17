@@ -165,11 +165,6 @@ void CSpatialPartition::AddObject(CSceneNode* theObject)
         theGrid[ index_topleft ].AddObject( theObject );
 		theObject->SetGridID(index_topleft);
     }
-	else
-	{
-		int i = 1;
-		i-=1;
-	}
 
     // if part of the object is in another grid, then add it in as well.
     if ((index_bottomright>=0) && (index_bottomright<xNumOfGrid*yNumOfGrid))

@@ -13,6 +13,7 @@ CSceneNode::CSceneNode(void)
 , secondaryGridID(-1)
 , spatialPartition(nullptr)
 , active(true)
+, type(NT_NORMAL)
 {
 }
 
@@ -575,6 +576,16 @@ void CSceneNode::Deactivate()
 
 	// Remove from the List
 	spatialPartition->RemoveObject(this);
+}
+
+CSceneNode::NODE_TYPE CSceneNode::GetType() const
+{
+	return type;
+}
+
+void CSceneNode::SetType(NODE_TYPE type)
+{
+	this->type = type;
 }
 
 int CSceneNode::getIntersection(float fDst1, float fDst2, Vector3 P1, Vector3 P2, Vector3 & Hit)

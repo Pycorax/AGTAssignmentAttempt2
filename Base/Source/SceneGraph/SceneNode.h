@@ -13,6 +13,14 @@ class CSpatialPartition;
 class CSceneNode :
 	public CNode
 {
+public:
+	enum NODE_TYPE
+	{
+		NT_NORMAL,
+		NT_BOMBER,
+		NT_TOTAL
+	};
+
 private:
 	vector<CNode*> theChildren;
 
@@ -24,6 +32,8 @@ private:
 	CSpatialPartition* spatialPartition;		// Pointer to the spatial partition system that houses this object
 
 	bool active;
+
+	NODE_TYPE type;
 
 public:
 	CSceneNode(void);
@@ -95,6 +105,10 @@ public:
 	bool GetActive();
 	void Activate();
 	void Deactivate();
+
+	// Type
+	NODE_TYPE GetType() const;
+	void SetType(NODE_TYPE type);
 
 private:
 	int getIntersection(float fDst1, float fDst2, Vector3 P1, Vector3 P2, Vector3 &Hit);

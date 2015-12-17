@@ -183,11 +183,11 @@ void GameScene::UpdateWeaponStatus(const unsigned char key)
 	if (key == WA_FIRE)
 	{
 		// Add a bullet object which starts at the camera position and moves in the camera's direction
-		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 300.0f);
+		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 200.0f);
 	}
 	else if (key == WA_FIRE_SECONDARY)
 	{
-		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 300.0f);
+		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 200.0f);
 	}
 }
 
@@ -243,8 +243,30 @@ void GameScene::meshInit()
 void GameScene::bomberInit()
 {
 	// Adding Bombers to the Scene
-	Bomber* bomber = new Bomber;
-	bomber->Init(Vector3(52, 0, 52), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	Bomber* bomber;
+
+	bomber = new Bomber;
+	bomber->Init(Vector3(118, 0, 25), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+
+	bomber = new Bomber;
+	bomber->Init(Vector3(125, 0, 142), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+
+	bomber = new Bomber;
+	bomber->Init(Vector3(115, 0, 83), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+
+	bomber = new Bomber;
+	bomber->Init(Vector3(155, 0, 223), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+
+	bomber = new Bomber;
+	bomber->Init(Vector3(185, 0, 184), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+
+	bomber = new Bomber;
+	bomber->Init(Vector3(200, 0, 103), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
 	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
 }
 
@@ -309,8 +331,8 @@ void GameScene::RenderMobileObjects()
 			else if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_RAY)
 			{
 				glLineWidth(5.0f);
-				modelStack.Rotate(m_cProjectileManager->theListOfProjectiles[i]->GetRotationZ(), 0, 0, 1);
-				modelStack.Rotate(m_cProjectileManager->theListOfProjectiles[i]->GetRotationY(), 0, 1, 0);
+				modelStack.Rotate(m_cProjectileManager->theListOfProjectiles[i]->GetRotationZ(), 0, 1, 0);
+				modelStack.Rotate(-m_cProjectileManager->theListOfProjectiles[i]->GetRotationY(), 0, 0, 1);
 				RenderMesh(meshList[GEO_RAY], false);
 				glLineWidth(1.0f);
 			}
