@@ -9,8 +9,8 @@
 using std::ostringstream;
 
 const float SplashScene::s_m_LIGHT_OFFSET = 50.0f;
-const float SplashScene::s_m_LIGHT_SPEED = 200.0f;
-const float SplashScene::s_m_END_TIME_PAUSE = 0.1f;
+const float SplashScene::s_m_LIGHT_SPEED = 20.0f;
+const float SplashScene::s_m_END_TIME_PAUSE = 0.0f;
 
 SplashScene::SplashScene() : CSceneManager()
 	, m_timePause(0.0f)
@@ -119,7 +119,7 @@ Render the lights[0]s in this scene
 void SplashScene::RenderFixedObjects()
 {
 #ifdef _DEBUG
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 #endif
 	
 	// Render the Logo
