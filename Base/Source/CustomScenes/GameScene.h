@@ -32,8 +32,7 @@ private:
 		GEO_FRONT,
 		GEO_BACK,
 		// -- Floor
-		GEO_GRASS_DARKGREEN,
-		GEO_GRASS_LIGHTGREEN,
+		GEO_GROUND,
 		// -- Text
 		GEO_TEXT,
 		NUM_GEOMETRY,

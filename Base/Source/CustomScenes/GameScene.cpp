@@ -247,10 +247,8 @@ void GameScene::meshInit()
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 
 	// Load the ground mesh and texture
-	meshList[GEO_GRASS_DARKGREEN] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_DARKGREEN]->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
+	meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
+	meshList[GEO_GROUND]->textureID = LoadTGA("Image//floor.tga");
 }
 
 
@@ -378,23 +376,10 @@ void GameScene::RenderGround()
 	}
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, -2);
-		modelStack.Rotate(-90, 0, 0, 1);
-		modelStack.Scale(100.0f, 100.0f, 100.0f);
-
-		for (int x = 0; x<10; x++)
-		{
-			for (int z = 0; z<10; z++)
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(x - 5.0f, z - 5.0f, 0.0f);
-				if (((x * 9 + z) % 2) == 0)
-					RenderMesh(meshList[GEO_GRASS_DARKGREEN], false);
-				else
-					RenderMesh(meshList[GEO_GRASS_LIGHTGREEN], false);
-				modelStack.PopMatrix();
-			}
-		}
+		modelStack.Translate(125, -125, 0);
+		//modelStack.Rotate(-90, 0, 0, 1);
+		modelStack.Scale(250.0f, 250.0f, 1.0f);
+		RenderMesh(meshList[GEO_GROUND], false);
 		modelStack.PopMatrix();
 	}
 	
