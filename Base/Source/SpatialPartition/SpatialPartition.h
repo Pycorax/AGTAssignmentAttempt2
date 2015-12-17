@@ -21,6 +21,11 @@ public:
 	int GetyNumOfGrid(void);
 	// Get a particular grid
 	CGrid GetGrid(const int xIndex, const int yIndex);
+	// Get a particular grid's num of items
+	int GetGridItemSize(const int xIndex, const int yIndex) const;
+	// Get a grid's size
+	float GetGridSizeX(void);
+	float GetGridSizeY(void);
 	// Get a particular grid's Mesh
 	Mesh* GetGridMesh(const int xIndex, const int yIndex);
 
@@ -48,13 +53,13 @@ public:
 	void PrintSelf();
 
 	// Variables
-	CGrid* theGrid;
-	int xSize;
-	int ySize;
-	int xGridSize;
-	int yGridSize;
-	int xNumOfGrid;
-	int yNumOfGrid;
+	CGrid* theGrid;	// Array of grids
+	int xSize;		// Total horizontal size of grids
+	int ySize;		// Total vertical size of grids
+	int xGridSize;	// "horizontal" size of grids
+	int yGridSize;	// "vertical" size of grids
+	int xNumOfGrid;	// Number of horizontal grids
+	int yNumOfGrid;	// Number of "vertical" grids
 
 private:
 	// Find the index of a grid which is nearest to a position

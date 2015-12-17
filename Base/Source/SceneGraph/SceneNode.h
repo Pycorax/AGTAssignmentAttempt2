@@ -39,6 +39,7 @@ public:
 	// Get methods
 	int GetSceneNodeID(void);
 	CSceneNode* GetNode(const int sceneNodeID);
+	vector<CNode*> GetChildren(void) const;
 
 	// Apply transformation to this Node and its children
 	void ApplyTranslate( const float dx, const float dy, const float dz );

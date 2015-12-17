@@ -86,7 +86,7 @@ void GameScene::Init()
 	m_cSceneGraph = new CSceneNode();
 
 	// Populate SceneGraph
-	CTransform* tf2 = new CTransform(0, 10, 0);
+	CTransform* tf2 = new CTransform(0, 10, 100);
 	tf2->SetScale(10, 10, 10);
 	CModel* newModel = new CModel();
 	newModel->Init();
@@ -98,15 +98,27 @@ void GameScene::Init()
 	newModel->Init();
 	cout << m_cSceneGraph->AddChild(tf3, newModel) << endl;
 */
-	newModel = new CModel();
+	/*newModel = new CModel();
 	newModel->Init();
 	cout << m_cSceneGraph->AddChild(new CTransform(0, 10, 0), newModel) << endl;
 
 	newModel = new CModel();
 	newModel->Init();
 	cout << m_cSceneGraph->AddChild(new CTransform(10, 10, 0), newModel) << endl;
+*/
+	newModel = new CModel();
+	newModel->Init();
+	cout << m_cSceneGraph->AddChild(new CTransform(125, 10, 0), newModel) << endl;
 
-	CTransform* tf = new CTransform(10, 10, 10);
+	newModel = new CModel();
+	newModel->Init();
+	cout << m_cSceneGraph->AddChild(new CTransform(125, 10, 125), newModel) << endl;
+
+	/*newModel = new CModel();
+	newModel->Init();
+	cout << m_cSceneGraph->AddChild(new CTransform(10, 10, 100), newModel) << endl;*/
+
+	CTransform* tf = new CTransform(100, 10, 10);
 	tf->SetScale(10, 10, 10);
 
 	newModel = new CModel();
@@ -116,12 +128,12 @@ void GameScene::Init()
 	
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
-	m_cSpatialPartition->Init(100, 100, 3, 3);
+	m_cSpatialPartition->Init(50, 50, 5, 5);
 	for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
 	{
 		for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
 		{
-			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("GridMesh", Color(1.0f / i, 1.0f / j, 1.0f / (i*j)), 100.0f));
+			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("GridMesh", Color(1.0f / i, 1.0f / j, 1.0f / (i*j)), 50.0f));
 		}
 	}
 
@@ -233,6 +245,10 @@ void GameScene::RenderGUI()
 	ss << "Projectiles: " << m_cProjectileManager->NumOfActiveProjectile;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
 
+	ss.str("");
+	ss << "Position: " << m_cAvatar->GetPosition();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 36);
+
 	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 }
 
@@ -320,23 +336,22 @@ void GameScene::RenderGround()
 	// Render the Spatial Partitions
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -9);
+	modelStack.Translate(m_cSpatialPartition->GetGridSizeX() * 0.5f, -m_cSpatialPartition->GetGridSizeY() * 0.5f, -9);
 
 	//cout << "Rendering..." << endl;
 	for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
 	{
 		for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
 		{
+			// Only render it if there is something in it
+			if (m_cSpatialPartition->GetGridItemSize(i, j) <= 0)
+			{
+				continue;
+			}
+
 			modelStack.PushMatrix();
 			modelStack.Translate(m_cSpatialPartition->xGridSize*i, -m_cSpatialPartition->yGridSize*j, 0.0f);
 			Mesh* t = m_cSpatialPartition->GetGridMesh(i, j);
-			//if (t != NULL)
-			//{
-			//	cout << "Grid[" << i << ", " << j << "]" << endl;
-			//	cout << "\tTranslating: " << m_cSpatialPartition->xGridSize*i << ", " << m_cSpatialPartition->yGridSize*j << "]" << endl;
-			//}
-			//else
-			//	cout << "NOT RENDERED: Grid[" << i << ", " << j << "]" << endl;
 			RenderMesh(t, false);
 			modelStack.PopMatrix();
 		}

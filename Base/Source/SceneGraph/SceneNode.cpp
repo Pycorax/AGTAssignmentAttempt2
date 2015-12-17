@@ -160,6 +160,11 @@ CSceneNode* CSceneNode::GetNode(const int sceneNodeID)
 	return theTarget;
 }
 
+vector<CNode*> CSceneNode::GetChildren(void) const
+{
+	return theChildren;
+}
+
 void CSceneNode::ApplyTranslate( const float dx, const float dy, const float dz )
 {
 	if (theTransform)
