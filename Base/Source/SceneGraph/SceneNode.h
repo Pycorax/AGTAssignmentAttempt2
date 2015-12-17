@@ -53,6 +53,7 @@ public:
 	// Apply transformation to this Node and its children
 	void ApplyTranslate( const float dx, const float dy, const float dz );
 	void ApplyRotate( const float angle, const float rx, const float ry, const float rz );
+	void ApplyScale(const float sx, const float sy, const float sz);
 
 	// Get top left corner of the group
 	Vector3 GetTopLeft(void);

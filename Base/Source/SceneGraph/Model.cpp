@@ -9,8 +9,8 @@
 #include <stdio.h>
 #include "..\MeshBuilder.h"
 
-CModel::CModel(void)
-	: m_cModelMesh(NULL)
+CModel::CModel(Mesh* mesh)
+	: m_cModelMesh(mesh)
 {
 	vTopLeft = Vector3( 0.5f, 0.5f, 0.5f );
 	vBottomRight = Vector3( -0.5f, -0.5f, -0.5f );
@@ -21,17 +21,12 @@ CModel::CModel(void)
 
 CModel::~CModel(void)
 {
-	if (m_cModelMesh != NULL)
-	{
-		delete m_cModelMesh;
-		m_cModelMesh = NULL;
-	}
+
 }
 
-void CModel::Init(void)
+void CModel::SetMesh(Mesh* mesh)
 {
-	m_cModelMesh = MeshBuilder::GenerateCube("cube", Color(1, 0, 0));
-	//m_cModelMesh = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
+	m_cModelMesh = mesh;
 }
 
 void CModel::Draw(bool m_bLight)

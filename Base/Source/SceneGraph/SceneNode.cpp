@@ -220,6 +220,14 @@ void CSceneNode::ApplyRotate( const float angle, const float rx, const float ry,
 	}
 }
 
+void CSceneNode::ApplyScale(const float sx, const float sy, const float sz)
+{
+	if (theTransform)
+	{
+		theTransform->SetScale(sx, sy, sz);
+	}
+}
+
 
 // Get top left corner of the group
 Vector3 CSceneNode::GetTopLeft(void)
@@ -311,6 +319,22 @@ void CSceneNode::SetColorForChild(const int m_iChildIndex, const float red, cons
  ********************************************************************************/
 bool CSceneNode::CheckForCollision(Vector3 position)
 {
+	for (auto node = theChildren.begin(); node != theChildren.end(); ++node)
+	{
+		CSceneNode* sNode = dynamic_cast<CSceneNode*>(*node);
+
+		if (sNode)
+		{
+			// Calculate the relative position of the "position"
+			Vector3 relativePos = theTransform->GetTransform().GetInverse() * position;
+
+			if (sNode->CheckForCollision(relativePos))
+			{
+				return true;
+			}
+		}
+	}
+
 	Vector3 ObjectTopLeft     = GetTopLeft();
 	Vector3 ObjectBottomRight = GetBottomRight();
 
@@ -327,6 +351,24 @@ Check a position for collision with objects in any of the grids
 ********************************************************************************/
 bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit)
 {
+	for (auto node = theChildren.begin(); node != theChildren.end(); ++node)
+	{
+		CSceneNode* sNode = dynamic_cast<CSceneNode*>(*node);
+
+		if (sNode)
+		{
+			// Calculate the relative position of the "position"
+			Mtx44 inverseTransform = theTransform->GetTransform().GetInverse();
+			Vector3 relativePosStart = inverseTransform * position_start;
+			Vector3 relativePosEnd = inverseTransform * position_end;
+
+			if (sNode->CheckForCollision(relativePosStart, relativePosEnd, Hit))
+			{
+				return true;
+			}
+		}
+	}
+
 	Vector3 ObjectTopLeft = GetTopLeft();
 	Vector3 ObjectBottomRight = GetBottomRight();
 

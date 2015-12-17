@@ -250,7 +250,10 @@ bool CSpatialPartition::CheckForCollision(Vector3 position)
         Vector3 ObjectTopLeft, ObjectBottomRight;
         for (int i=0; i<(int)theListOfObjects.size(); i++)
         {
-            return theListOfObjects[i]->CheckForCollision(position);
+			if (theListOfObjects[i]->CheckForCollision(position))
+			{
+				return true;
+			}
         }
     }
 

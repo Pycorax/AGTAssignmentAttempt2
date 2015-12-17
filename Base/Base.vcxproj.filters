@@ -40,6 +40,9 @@
     <Filter Include="CustomStates">
       <UniqueIdentifier>{f5dfae81-40d9-43ab-9c13-e77c0f0be851}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gameplay">
+      <UniqueIdentifier>{d1fa7bc5-3c29-447b-8d35-90fc621aab04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -194,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="Source\CustomStates\LevelSelectState.cpp">
       <Filter>CustomStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\Human.cpp">
+      <Filter>Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +373,9 @@
     </ClInclude>
     <ClInclude Include="Source\CustomStates\LevelSelectState.h">
       <Filter>CustomStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\Human.h">
+      <Filter>Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

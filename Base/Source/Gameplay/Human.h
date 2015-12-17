@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SceneGraph\SceneNode.h"
+#include "..\SceneGraph\SceneNode.h"
 
 class Human
 {
@@ -17,5 +17,8 @@ public:
 	Human();
 	virtual ~Human();
 
-	void Init(CTransform* rootPosition);
+	void Init(CTransform* rootPosition, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);
+	void SetPosition(Vector3 pos);
+
+	CSceneNode* GetSceneGraph(void);
 };

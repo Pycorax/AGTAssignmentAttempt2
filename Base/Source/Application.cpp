@@ -288,6 +288,7 @@ void Application::Init()
 	theGSM = new CGameStateManager();
 	theGSM->Init( "DM2240 with Game State Management", m_window_width, m_window_height);
 	theGSM->ChangeState( CPlayState::Instance() );
+	//theGSM->ChangeState(CIntroState::Instance());
 }
 
 /********************************************************************************

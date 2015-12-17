@@ -5,6 +5,7 @@
 #include "../LoadOBJ.h"
 #include <sstream>
 #include "../Application.h"
+#include "../Gameplay/Human.h"
 
 using std::ostringstream;
 
@@ -37,23 +38,27 @@ void GameScene::Init()
 	meshList[GEO_YELLOW_CUBE] = MeshBuilder::GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
 	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", 10.0f);
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
+	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair", 1.0f, 1.0f, 1.0f, 0.1f);
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_OBJECT] = MeshBuilder::GenerateOBJ("OBJ1", "OBJ//chair.obj");//MeshBuilder::GenerateCube("cube", 1);
-	meshList[GEO_OBJECT]->textureID = LoadTGA("Image//chair.tga");
-	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 1.f);
-	//meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", 1, 1, 1);
-	//meshList[GEO_TORUS] = MeshBuilder::GenerateCylinder("torus", 36, 36, 5, 1);
 	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
+	// Player
+	meshList[GEO_PLAYER] = MeshBuilder::GenerateCube("player", Color(1.0f, 0.6f, 0.0f), 1.0f);
+
+	// Human
+	meshList[GEO_HUMAN_HAT] = MeshBuilder::GenerateCone("humanHat", Color(0.0f, 0.0f, 0.0f), 36, 1.f, 1.f);
+	meshList[GEO_HUMAN_HEAD] = MeshBuilder::GenerateSphere("humanHead", Color(0.968f, 0.937f, 0.619f), 12, 12, 1.0f);
+	meshList[GEO_HUMAN_BODY] = MeshBuilder::GenerateCone("humanBody", Color(0.282f, 0.568f, 0.803f), 36, 1.f, 1.f);
+
+	// Sky Box
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
 	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
@@ -73,64 +78,40 @@ void GameScene::Init()
 	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
 
-	// Load the texture for minimap
-	m_cMinimap = new CMinimap();
-	m_cMinimap->SetBackground(MeshBuilder::GenerateMinimap("MINIMAP", Color(1, 1, 1), 1.f));
-	m_cMinimap->GetBackground()->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	m_cMinimap->SetBorder(MeshBuilder::GenerateMinimapBorder("MINIMAPBORDER", Color(1, 1, 0), 1.f));
-	m_cMinimap->SetAvatar(MeshBuilder::GenerateMinimapAvatar("MINIMAPAVATAR", Color(1, 1, 0), 1.f));
-
 	// Initialise and load a model into it
 	m_cAvatar = new CPlayInfo3PV();
-	m_cAvatar->SetModel(MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f));
+	m_cAvatar->SetModel(meshList[GEO_PLAYER]);
 
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
 
-	// Populate SceneGraph
-	CTransform* tf2 = new CTransform(0, 10, 100);
-	tf2->SetScale(10, 10, 10);
-	CModel* newModel = new CModel();
-	newModel->Init();
-	cout << m_cSceneGraph->SetNode(tf2, newModel) << endl;
+	CModel* newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
+	cout << m_cSceneGraph->SetNode(new CTransform(), newModel) << endl;
 
-	/*CTransform* tf3 = new CTransform(0, 10, 0);
-	tf3->SetScale(10, 10, 10);
-	newModel = new CModel();
-	newModel->Init();
-	cout << m_cSceneGraph->AddChild(tf3, newModel) << endl;
-*/
-	/*newModel = new CModel();
-	newModel->Init();
-	cout << m_cSceneGraph->AddChild(new CTransform(0, 10, 0), newModel) << endl;
-
-	newModel = new CModel();
-	newModel->Init();
-	cout << m_cSceneGraph->AddChild(new CTransform(10, 10, 0), newModel) << endl;
-*/
-	newModel = new CModel();
-	newModel->Init();
+	newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
 	cout << m_cSceneGraph->AddChild(new CTransform(125, 10, 0), newModel) << endl;
 
-	newModel = new CModel();
-	newModel->Init();
+	newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
 	cout << m_cSceneGraph->AddChild(new CTransform(125, 10, 125), newModel) << endl;
 
-	/*newModel = new CModel();
-	newModel->Init();
-	cout << m_cSceneGraph->AddChild(new CTransform(10, 10, 100), newModel) << endl;*/
+#pragma region Auto Switching Grid Showcase
 
 	CTransform* tf = new CTransform(100, 10, 10);
 	tf->SetScale(10, 10, 10);
 
 	int store = 0;
 
-	newModel = new CModel();
-	newModel->Init();
+	newModel = new CModel(meshList[GEO_YELLOW_CUBE]);
 	store = m_cSceneGraph->AddChild(tf, newModel);
 	cout << store << endl;
 	mover = m_cSceneGraph->GetNode(store);
 	
+#pragma endregion
+
+	Human aHuman;
+	aHuman.Init(new CTransform(70.0f, 0.0f, 10.0f), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(aHuman.GetSceneGraph());
+
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
 	m_cSpatialPartition->Init(50, 50, 5, 5);
@@ -246,12 +227,6 @@ void GameScene::RenderGUI()
 	// Render the crosshair
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 
-	// Render the crosshair
-	// Note that Ortho is set to this size -> 	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
-	RenderMeshIn2D(m_cMinimap->GetAvatar(), false, 20.0f, 68, -48, true);
-	RenderMeshIn2D(m_cMinimap->GetBorder(), false, 20.0f, 68, -48);
-	RenderMeshIn2D(m_cMinimap->GetBackground(), false, 20.0f, 68, -48);
-
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
@@ -307,7 +282,9 @@ void GameScene::RenderMobileObjects()
 
 	// Render the Avatar
 	modelStack.PushMatrix();
-	modelStack.Translate(m_cAvatar->GetPos_x(), m_cAvatar->GetPos_y(), m_cAvatar->GetPos_z());
+	modelStack.Translate(m_cAvatar->GetPos_x(), m_cAvatar->GetPos_y() + 4.0f, m_cAvatar->GetPos_z());
+	modelStack.Rotate(m_cAvatar->GetYRotation(), 0, 1, 0);
+	modelStack.Scale(5.0f, 8.0f, 5.0f);
 	RenderMesh(m_cAvatar->theAvatarMesh, false);
 	modelStack.PopMatrix();
 }
@@ -328,50 +305,55 @@ void GameScene::RenderGround()
 {
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(0, 0, -10);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Scale(100.0f, 100.0f, 100.0f);
-
-	for (int x = 0; x<10; x++)
 	{
-		for (int z = 0; z<10; z++)
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(x - 5.0f, z - 5.0f, 0.0f);
-			if (((x * 9 + z) % 2) == 0)
-				RenderMesh(meshList[GEO_GRASS_DARKGREEN], false);
-			else
-				RenderMesh(meshList[GEO_GRASS_LIGHTGREEN], false);
-			modelStack.PopMatrix();
-		}
-	}
-	modelStack.PopMatrix();
+		// Render Spatial Partitioning Grids
+		modelStack.PushMatrix();
+		modelStack.Translate(m_cSpatialPartition->GetGridSizeX() * 0.5f, -m_cSpatialPartition->GetGridSizeY() * 0.5f, 1);
 
-	// Render the Spatial Partitions
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Translate(m_cSpatialPartition->GetGridSizeX() * 0.5f, -m_cSpatialPartition->GetGridSizeY() * 0.5f, -9);
-
-	//cout << "Rendering..." << endl;
-	for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
-	{
-		for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
+		//cout << "Rendering..." << endl;
+		for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
 		{
-			// Only render it if there is something in it
-			if (m_cSpatialPartition->GetGridItemSize(i, j) <= 0)
+			for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
 			{
-				continue;
-			}
+				// Only render it if there is something in it
+				if (m_cSpatialPartition->GetGridItemSize(i, j) <= 0)
+				{
+					continue;
+				}
 
-			modelStack.PushMatrix();
-			modelStack.Translate(m_cSpatialPartition->xGridSize*i, -m_cSpatialPartition->yGridSize*j, 0.0f);
-			Mesh* t = m_cSpatialPartition->GetGridMesh(i, j);
-			RenderMesh(t, false);
-			modelStack.PopMatrix();
+				modelStack.PushMatrix();
+				modelStack.Translate(m_cSpatialPartition->xGridSize*i, -m_cSpatialPartition->yGridSize*j, 0.0f);
+				Mesh* t = m_cSpatialPartition->GetGridMesh(i, j);
+				RenderMesh(t, false);
+				modelStack.PopMatrix();
+			}
 		}
+		//cout << "Rendering ENDS" << endl;
+		modelStack.PopMatrix();
 	}
-	//cout << "Rendering ENDS" << endl;
-	modelStack.PopMatrix();
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, -2);
+		modelStack.Rotate(-90, 0, 0, 1);
+		modelStack.Scale(100.0f, 100.0f, 100.0f);
+
+		for (int x = 0; x<10; x++)
+		{
+			for (int z = 0; z<10; z++)
+			{
+				modelStack.PushMatrix();
+				modelStack.Translate(x - 5.0f, z - 5.0f, 0.0f);
+				if (((x * 9 + z) % 2) == 0)
+					RenderMesh(meshList[GEO_GRASS_DARKGREEN], false);
+				else
+					RenderMesh(meshList[GEO_GRASS_LIGHTGREEN], false);
+				modelStack.PopMatrix();
+			}
+		}
+		modelStack.PopMatrix();
+	}
+	
+	modelStack.PopMatrix();	
 }
 
 /********************************************************************************

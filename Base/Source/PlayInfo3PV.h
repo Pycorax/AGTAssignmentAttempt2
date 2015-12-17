@@ -62,6 +62,8 @@ public:
 	Vector3 GetPosition();
 	// Get direction of the player
 	Vector3 GetDirection();
+	// Get Y-rotation of player
+	float GetYRotation(void) const;
 	// Get Jumpspeed of the player
 	float GetJumpspeed(void);
 

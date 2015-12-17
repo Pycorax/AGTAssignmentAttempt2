@@ -17,11 +17,6 @@ CPlayInfo3PV::CPlayInfo3PV(void)
 
 CPlayInfo3PV::~CPlayInfo3PV(void)
 {
-	if (theAvatarMesh)
-	{
-		delete theAvatarMesh;
-		theAvatarMesh = NULL;
-	}
 }
 
 // Initialise this class instance
@@ -172,6 +167,11 @@ Vector3 CPlayInfo3PV::GetPosition()
 Vector3 CPlayInfo3PV::GetDirection()
 {
 	return curDirection;
+}
+
+float CPlayInfo3PV::GetYRotation(void) const
+{
+	return m_rotationY;
 }
 
 // Get Jumpspeed of the player

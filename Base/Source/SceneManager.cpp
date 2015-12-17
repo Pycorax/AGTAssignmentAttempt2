@@ -67,7 +67,7 @@ void CSceneManager::Init()
 {
 	initGL();
 
-	camera.Init(Vector3(0, 0, 30), Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(-15.0f, 15.0f, 30.0f));
+	camera.Init(Vector3(0, 0, 30), Vector3(0, 0, 0), Vector3(0, 1, 0), Vector3(-15.0f, 12.0f, 30.0f));
 
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
 	Mtx44 perspective;
