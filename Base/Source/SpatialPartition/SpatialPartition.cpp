@@ -236,8 +236,8 @@ float CSpatialPartition::CalculateDistanceSquare(Vector3 thePosition, Vector3 di
  ********************************************************************************/
 bool CSpatialPartition::CheckForCollision(Vector3 position)
 {
-    int GridIndex_x = ((int) position.x / (xSize*xNumOfGrid));
-    int GridIndex_z = ((int) position.x / (ySize*yNumOfGrid));
+    int GridIndex_x = ((int) position.x / (xGridSize));
+    int GridIndex_z = ((int) position.z / (yGridSize));
 
     // Calculate the index of each position
     int GridIndex = GridIndex_x*yNumOfGrid + GridIndex_z;
@@ -259,8 +259,8 @@ bool CSpatialPartition::CheckForCollision(Vector3 position)
 
  bool CSpatialPartition::CheckForCollision(Vector3 position_start, Vector3 position_end)
  {
-     int GridIndex_x = ((int)position_start.x / (xSize*xNumOfGrid));
-     int GridIndex_z = ((int)position_start.x / (ySize*yNumOfGrid));
+     int GridIndex_x = ((int)position_start.x / (xGridSize));
+     int GridIndex_z = ((int)position_start.z / (yGridSize));
 
      // Calculate the index of each position
      int GridIndex = GridIndex_x*yNumOfGrid + GridIndex_z;
@@ -274,7 +274,11 @@ bool CSpatialPartition::CheckForCollision(Vector3 position)
          for (int i = 0; i<(int)theListOfObjects.size(); i++)
          {
              Vector3 hits(0.0f, 0.0f, 0.0f);
-             return theListOfObjects[i]->CheckForCollision(position_start, position_end, hits);
+
+			 if (theListOfObjects[i]->CheckForCollision(position_start, position_end, hits))
+			 {
+				 return true;
+			 }
          }
      }
 
