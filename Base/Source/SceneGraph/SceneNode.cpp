@@ -539,11 +539,15 @@ bool CSceneNode::GetActive()
 void CSceneNode::Activate()
 {
 	active = true;
+	// Add back to the List
+	spatialPartition->AddObject(this);
 }
 
 void CSceneNode::Deactivate()
 {
 	active = false;
+	// Remove from the List
+	spatialPartition->RemoveObject(this);
 }
 
 int CSceneNode::getIntersection(float fDst1, float fDst2, Vector3 P1, Vector3 P2, Vector3 & Hit)

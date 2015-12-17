@@ -110,6 +110,11 @@ CGrid CSpatialPartition::GetGrid(const int xIndex, const int yIndex)
      return theGrid[xIndex*yNumOfGrid + yIndex].ListOfObjects.size();
  }
 
+ int CSpatialPartition::GetGridActiveItemCount(const int xIndex, const int yIndex) const
+ {
+	 return theGrid[xIndex*yNumOfGrid + yIndex].GetNumActiveObjects();
+ }
+
  float CSpatialPartition::GetGridSizeX(void)
  {
 	 return xGridSize;

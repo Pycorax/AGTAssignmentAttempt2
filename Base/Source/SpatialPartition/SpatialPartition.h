@@ -23,6 +23,7 @@ public:
 	CGrid GetGrid(const int xIndex, const int yIndex);
 	// Get a particular grid's num of items
 	int GetGridItemSize(const int xIndex, const int yIndex) const;
+	int GetGridActiveItemCount(const int xIndex, const int yIndex) const;
 	// Get a grid's size
 	float GetGridSizeX(void);
 	float GetGridSizeY(void);

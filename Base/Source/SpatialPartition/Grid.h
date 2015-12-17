@@ -24,6 +24,7 @@ public:
 	bool RemoveObject(CSceneNode* theObject);
 	// Get list of objects in this grid
 	vector<CSceneNode*> GetListOfObject(void);
+	int GetNumActiveObjects(void) const;
 	// Delete object from this grid
 	void DeleteObjects(void);
 

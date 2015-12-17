@@ -76,6 +76,23 @@ vector<CSceneNode*> CGrid::GetListOfObject(void)
 {
 	return ListOfObjects;
 }
+/********************************************************************************
+Get number of active objects in this grid
+********************************************************************************/
+ int CGrid::GetNumActiveObjects(void) const
+ {
+	 int total = 0;
+
+	 for (auto list = ListOfObjects.begin(); list != ListOfObjects.end(); ++list)
+	 {
+		 if ((*list)->GetActive())
+		 {
+			 ++total;
+		 }
+	 }
+
+	 return total;
+ }
 
 /********************************************************************************
 RenderScene

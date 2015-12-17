@@ -61,27 +61,7 @@ void GameScene::Init()
 	
 #pragma endregion
 
-	// Init Enemies
-#ifdef _DEBUG
-	m_enemySpawner.Init(10, meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-#else
-	m_enemySpawner.Init(50, meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-#endif
-	vector<CSceneNode*> enemies = m_enemySpawner.GetSceneNodes();
-	// Add these into the scene graph
-	for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
-	{
-		m_cSceneGraph->AddChild(*enemy);
-	}
-	// Define spawn zones
-	// -- Left
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(200.0f, 0.0f, 10.0f), Vector3(230.0f, 0.0f, 230.0f)));
-	// -- Right
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(10.0f, 0.0f, 10.0f), Vector3(10.0f, 0.0f, 230.0f)));
-	// -- Up
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(10.0f, 0.0f, 200.0f), Vector3(230.0f, 0.0f, 230.0f)));
-	// -- Down
-	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(10.0f, 0.0f, 10.0f), Vector3(230.0f, 0.0f, 30.0f)));
+	bomberInit();
 
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
@@ -113,9 +93,6 @@ void GameScene::Update(double dt)
 
 	m_cAvatar->Update(dt);
 	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection());
-
-	// Update Enemies
-	m_enemySpawner.Update(dt, m_cAvatar->GetPosition());
 
 	// Update the spatial partition
 	//m_cSpatialPartition->Update(camera.position, (camera.target - camera.position).Normalize());
@@ -180,10 +157,22 @@ void GameScene::Render()
 
 void GameScene::Exit()
 {
+	// Clear Meshes
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		if (meshList[i])
 			delete meshList[i];
+	}
+
+	// Clear Bombers
+	while (!m_bomberList.empty())
+	{
+		if (m_bomberList.back())
+		{
+			delete m_bomberList.back();
+		}
+
+		m_bomberList.pop_back();
 	}
 
 	CSceneManager::Exit();
@@ -194,11 +183,11 @@ void GameScene::UpdateWeaponStatus(const unsigned char key)
 	if (key == WA_FIRE)
 	{
 		// Add a bullet object which starts at the camera position and moves in the camera's direction
-		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 100.0f);
+		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 500.0f);
 	}
 	else if (key == WA_FIRE_SECONDARY)
 	{
-		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 200.0f);
+		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 1000.0f);
 	}
 }
 
@@ -249,6 +238,14 @@ void GameScene::meshInit()
 	// Load the ground mesh and texture
 	meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
 	meshList[GEO_GROUND]->textureID = LoadTGA("Image//floor.tga");
+}
+
+void GameScene::bomberInit()
+{
+	// Adding Bombers to the Scene
+	Bomber* bomber = new Bomber;
+	bomber->Init(Vector3(52, 0, 52), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
 }
 
 
@@ -359,7 +356,7 @@ void GameScene::RenderGround()
 				cout << m_cSpatialPartition->GetGridItemSize(i, j) << endl;
 
 				// Only render it if there is something in it
-				if (m_cSpatialPartition->GetGridItemSize(i, j) <= 0)
+				if (m_cSpatialPartition->GetGridActiveItemCount(i, j) <= 0)
 				{
 					continue;
 				}

@@ -44,8 +44,8 @@ private:
 	// To Show that mobile objects spatial partitioning work
 	CSceneNode* mover;
 
-	// Enemy Spawner
-	BomberSpawner m_enemySpawner;
+	// A list of bombers for players to shoot at
+	vector<Bomber*> m_bomberList;
 
 protected:
 	// For Pausing and Resuming
@@ -72,4 +72,5 @@ public:
 
 private:
 	void meshInit();
+	void bomberInit();
 };
