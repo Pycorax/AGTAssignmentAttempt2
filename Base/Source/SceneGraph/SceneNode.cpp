@@ -398,7 +398,7 @@ CSceneNode* CSceneNode::CheckForCollision(Vector3 position)
 /********************************************************************************
 Check a position for collision with objects in any of the grids
 ********************************************************************************/
-bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit)
+CSceneNode* CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit)
 {
 	if (!active)
 	{
@@ -416,9 +416,9 @@ bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end,
 			Vector3 relativePosStart = inverseTransform * position_start;
 			Vector3 relativePosEnd = inverseTransform * position_end;
 
-			if (sNode->CheckForCollision(relativePosStart, relativePosEnd, Hit))
+			if (CSceneNode* node = sNode->CheckForCollision(relativePosStart, relativePosEnd, Hit))
 			{
-				return true;
+				return this;
 			}
 		}
 	}
@@ -428,32 +428,32 @@ bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end,
 
 	if (position_end.x < ObjectBottomRight.x && position_start.x < ObjectBottomRight.x)
 	{
-		return false;
+		return nullptr;
 	}
 
 	if (position_end.x > ObjectTopLeft.x && position_start.x > ObjectTopLeft.x)
 	{
-		return false;
+		return nullptr;
 	}
 
 	if (position_end.y < ObjectBottomRight.y && position_start.y < ObjectBottomRight.y)
 	{
-		return false;
+		return nullptr;
 	}
 
 	if (position_end.y > ObjectTopLeft.y && position_start.y > ObjectTopLeft.y)
 	{
-		return false;
+		return nullptr;
 	}
 
 	if (position_end.x < ObjectBottomRight.x && position_start.x < ObjectBottomRight.x)
 	{
-		return false;
+		return nullptr;
 	}
 
 	if (position_end.x > ObjectTopLeft.x && position_start.x > ObjectTopLeft.x)
 	{
-		return false;
+		return nullptr;
 	}
 
 	if (position_start.x > ObjectBottomRight.x && position_start.x < ObjectTopLeft.x &&
@@ -461,7 +461,7 @@ bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end,
 		position_start.z > ObjectBottomRight.z && position_start.z < ObjectTopLeft.z)
 	{
 		Hit = position_start;
-		return true;
+		return this;
 	}
 
 	if (
@@ -501,10 +501,10 @@ bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end,
 			)
 		)
 	{
-		return true;
+		return this;
 	}
 
-	return false;
+	return nullptr;
 }
 
 void CSceneNode::SetGridID(int gridID)

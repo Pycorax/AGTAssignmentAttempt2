@@ -279,7 +279,7 @@ CSceneNode* CSpatialPartition::CheckForCollision(Vector3 position)
     return nullptr;
 }
 
- bool CSpatialPartition::CheckForCollision(Vector3 position_start, Vector3 position_end)
+ CSceneNode* CSpatialPartition::CheckForCollision(Vector3 position_start, Vector3 position_end)
  {
      int GridIndex_x = ((int)position_start.x / (xGridSize));
      int GridIndex_z = ((int)position_start.z / (yGridSize));
@@ -297,14 +297,14 @@ CSceneNode* CSpatialPartition::CheckForCollision(Vector3 position)
          {
              Vector3 hits(0.0f, 0.0f, 0.0f);
 
-			 if (theListOfObjects[i]->CheckForCollision(position_start, position_end, hits))
+			 if (CSceneNode* node = theListOfObjects[i]->CheckForCollision(position_start, position_end, hits))
 			 {
-				 return true;
+				 return node;
 			 }
          }
      }
 
-     return false;
+     return nullptr;
  }
 
 /********************************************************************************

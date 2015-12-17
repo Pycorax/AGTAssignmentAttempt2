@@ -92,7 +92,7 @@ public:
 	// Check a position for collision with objects in any of the grids
 	CSceneNode* CheckForCollision(Vector3 position);
 	// Check two positions for collision with objects in any of the grids
-	bool CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit);
+	CSceneNode* CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit);
 
 	// For Spatial Partitioning
 	void SetGridID(int gridID);

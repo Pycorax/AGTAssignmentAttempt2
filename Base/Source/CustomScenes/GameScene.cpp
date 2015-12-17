@@ -126,8 +126,13 @@ void GameScene::Update(double dt)
 				ProjectilePosition_End = ProjectilePosition + m_cProjectileManager->theListOfProjectiles[i]->GetDirection() * m_cProjectileManager->theListOfProjectiles[i]->GetLength();
 
 				// Destroy the ray projectile after collision
-				if (m_cSpatialPartition->CheckForCollision(ProjectilePosition, ProjectilePosition_End) == true)
+				if (CSceneNode* node = m_cSpatialPartition->CheckForCollision(ProjectilePosition, ProjectilePosition_End))
+				{
+					// Remove the projectile
 					m_cProjectileManager->RemoveProjectile(i);
+					// React accordingly to the collided item
+					node->Deactivate();
+				}
 			}
 		}
 	}
