@@ -248,7 +248,7 @@ void Application::Init()
 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "Y2S2_Framework", NULL, NULL);
+	m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2240 Assignment 1", NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -286,9 +286,9 @@ void Application::Init()
 
 	// Initialise the GSM
 	theGSM = new CGameStateManager();
-	theGSM->Init( "DM2240 with Game State Management", m_window_width, m_window_height);
-	theGSM->ChangeState( CPlayState::Instance() );
-	//theGSM->ChangeState(CIntroState::Instance());
+	theGSM->Init( "DM2240 Assignment 1", m_window_width, m_window_height);
+	//theGSM->ChangeState( CPlayState::Instance() );
+	theGSM->ChangeState(CIntroState::Instance());
 }
 
 /********************************************************************************

@@ -78,7 +78,7 @@ void GameScene::Update(double dt)
 	// Update the Projectile Manager
 	m_cProjectileManager->Update(dt);
 
-	// Check for collisions fpr Projectiles
+	// Check for collisions for Projectiles
 	// Render the projectiles
 	Vector3 ProjectilePosition;
 	Vector3 ProjectilePosition_End;
