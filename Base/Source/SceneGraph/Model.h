@@ -15,10 +15,10 @@ private:
 	Mesh* m_cModelMesh;
 
 public:
-	CModel(void);
+	CModel(Mesh* mesh = nullptr);
 	~CModel(void);
 
-	void Init(void);
+	void SetMesh(Mesh* mesh);
 	void Draw(bool m_bLight = false);
 	void SetColor(const float red, const float green, const float blue);
 

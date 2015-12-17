@@ -190,19 +190,6 @@ void CSceneManager::PreRendering(Mtx44 mtx, bool enableLight)
 	{	
 		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
 	}
-	//if(mesh->textureID > 0)
-	//{
-	//	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-	//	glActiveTexture(GL_TEXTURE0);
-	//	glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-	//	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	//}
-	//else
-	//{
-	//	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-	//}
-
-	modelStack.PopMatrix();
 }
 
 /********************************************************************************
@@ -210,10 +197,8 @@ void CSceneManager::PreRendering(Mtx44 mtx, bool enableLight)
  ********************************************************************************/
 void CSceneManager::PostRendering(void)
 {
-	//if(m_cModelMesh->textureID > 0)
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	glBindTexture(GL_TEXTURE_2D, 0);
+	modelStack.PopMatrix();
 }
 
 /********************************************************************************

@@ -54,7 +54,9 @@ void CSceneNode::Draw(void)
 	{
 		theTransform->PreRendering();
 		if (theModel)
+		{
 			theModel->Draw();
+		}
 
 		if (theChildren.size() != 0)
 		{
@@ -74,13 +76,12 @@ void CSceneNode::Draw(CSceneManager* theSceneManager)
 {
 	if (theTransform)
 	{
-		//theTransform->PreRendering();
-		float x,y,z;
-		theTransform->GetOffset(x,y,z);
 		theSceneManager->PreRendering(theTransform->GetTransform(), false);
+
 		if (theModel)
+		{
 			theModel->Draw();
-		theSceneManager->PostRendering();
+		}
 
 		if (theChildren.size() != 0)
 		{
@@ -92,7 +93,7 @@ void CSceneNode::Draw(CSceneManager* theSceneManager)
 			}
 		}
 
-		theTransform->PostRendering();
+		theSceneManager->PostRendering();
 	}
 }
 
@@ -120,7 +121,7 @@ int CSceneNode::AddChild(CTransform* aNewTransform, CModel* aNewModel)
 {
 	CSceneNode* aNewNode = new CSceneNode();
 	aNewNode->SetNode( aNewTransform, aNewModel );
-	aNewNode->SetSceneNodeID( sceneNodeID*10 + (theChildren.size()+1) );
+	aNewNode->SetSceneNodeID( sceneNodeID*100 + (theChildren.size()+1) );
 	theChildren.push_back( aNewNode );
 
 	return aNewNode->GetSceneNodeID();
@@ -133,6 +134,14 @@ int CSceneNode::AddChild(const int sceneNodeID, CTransform* aNewTransform, CMode
 	theChildren.push_back( aNewNode );
 
 	return aNewNode->GetSceneNodeID();
+}
+
+int CSceneNode::AddChild(CSceneNode * newNode)
+{
+	newNode->SetSceneNodeID(sceneNodeID * 100 + (theChildren.size() + 1));
+	theChildren.push_back(newNode);
+
+	return newNode->GetSceneNodeID();
 }
 
 int CSceneNode::GetSceneNodeID(void)

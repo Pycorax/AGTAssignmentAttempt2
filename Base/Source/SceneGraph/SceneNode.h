@@ -39,6 +39,7 @@ public:
 
 	int AddChild(CTransform* aNewTransform, CModel* aNewModel);
 	int AddChild(const int sceneNodeID, CTransform* aNewTransform, CModel* aNewModel);
+	int AddChild(CSceneNode* newNode);
 
 	// Get methods
 	int GetSceneNodeID(void);
