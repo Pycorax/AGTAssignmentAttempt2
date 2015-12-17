@@ -13,7 +13,7 @@
 class MeshBuilder
 {
 public:
-	static Mesh* GenerateRay(const std::string &meshName, const float length = 1.0f);
+	static Mesh* GenerateRay(const std::string &meshName, Color color, const float length = 1.0f);
 	static Mesh* GenerateAxes(const std::string &meshName, float lengthX=0.0f, float lengthY=0.0f, float lengthZ=0.0f);
 	static Mesh* GenerateCrossHair(const std::string &meshName, float colour_r=1.0f, float colour_g=1.0f, float colour_b=0.0f, float length=1.0f);
 	static Mesh* GenerateQuad(const std::string &meshName, Color color, float length = 1.f);

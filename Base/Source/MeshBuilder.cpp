@@ -16,15 +16,14 @@ Generate the vertices of a ray.
 \return Pointer to mesh storing VBO/IBO of reference axes
 */
 /******************************************************************************/
-Mesh * MeshBuilder::GenerateRay(const std::string & meshName, const float length)
+Mesh * MeshBuilder::GenerateRay(const std::string & meshName, Color color, const float length)
 {
 	Vertex v;
 	std::vector<Vertex> vertex_buffer_data;
 	v.pos.Set(0, 0, 0);
-	v.color.Set(1, 1, 0);
+	v.color = color;
 	vertex_buffer_data.push_back(v);
 	v.pos.Set(0, 0, length);
-	v.color.Set(1, 1, 0);
 	vertex_buffer_data.push_back(v);
 
 	std::vector<GLuint> index_buffer_data;

@@ -199,7 +199,7 @@ void GameScene::meshInit()
 	}
 
 	meshList[GEO_YELLOW_CUBE] = MeshBuilder::GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
-	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", 10.0f);
+	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", Color(1.0f, 0.0f, 0.0f), 10.0f);
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair", 1.0f, 1.0f, 1.0f, 0.1f);
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
@@ -330,7 +330,7 @@ void GameScene::RenderMobileObjects()
 			}
 			else if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_RAY)
 			{
-				glLineWidth(5.0f);
+				glLineWidth(8.0f);
 				modelStack.Rotate(m_cProjectileManager->theListOfProjectiles[i]->GetRotationZ(), 0, 1, 0);
 				modelStack.Rotate(-m_cProjectileManager->theListOfProjectiles[i]->GetRotationY(), 0, 0, 1);
 				RenderMesh(meshList[GEO_RAY], false);
