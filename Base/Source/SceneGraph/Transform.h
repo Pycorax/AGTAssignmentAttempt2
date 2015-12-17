@@ -19,6 +19,7 @@ public:
 	void Draw(void);
 	void PostRendering();
 
+	void Reset();
 	void SetTranslate( const float dx, const float dy, const float dz  );
 	void SetRotate( const float angle, const float rx, const float ry, const float rz  );
 	void SetRotate2( const float angle, const float rx, const float ry, const float rz, 

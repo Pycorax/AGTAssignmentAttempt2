@@ -149,15 +149,7 @@ void CSceneManager::UpdateAvatarStatus(const unsigned char key, const bool statu
  ********************************************************************************/
 void CSceneManager::UpdateWeaponStatus(const unsigned char key)
 {
-	if (key == WA_FIRE)
-	{
-		// Add a bullet object which starts at the camera position and moves in the camera's direction
-		m_cProjectileManager->AddProjectile( camera.position, (camera.target - camera.position).Normalize(), 50.0f );
-	}
-	else if (key == WA_FIRE_SECONDARY)
-	{
-		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 50.0f);
-	}
+	
 }
 
 /********************************************************************************

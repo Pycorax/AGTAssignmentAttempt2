@@ -32,7 +32,8 @@
     <ClCompile Include="Source\CustomStates\PauseState.cpp" />
     <ClCompile Include="Source\CustomStates\PlayState.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
-    <ClCompile Include="Source\Gameplay\Human.cpp" />
+    <ClCompile Include="Source\Gameplay\Bomber.cpp" />
+    <ClCompile Include="Source\Gameplay\BomberSpawner.cpp" />
     <ClCompile Include="Source\GameState.cpp" />
     <ClCompile Include="Source\GameStateManager.cpp" />
     <ClCompile Include="Source\Goodies.cpp" />
@@ -87,7 +88,8 @@
     <ClInclude Include="Source\CustomStates\PauseState.h" />
     <ClInclude Include="Source\CustomStates\PlayState.h" />
     <ClInclude Include="Source\Enemy.h" />
-    <ClInclude Include="Source\Gameplay\Human.h" />
+    <ClInclude Include="Source\Gameplay\Bomber.h" />
+    <ClInclude Include="Source\Gameplay\BomberSpawner.h" />
     <ClInclude Include="Source\GameState.h" />
     <ClInclude Include="Source\GameStateManager.h" />
     <ClInclude Include="Source\Geometry.h" />

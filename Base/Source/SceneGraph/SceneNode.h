@@ -23,6 +23,8 @@ private:
 	int secondaryGridID;
 	CSpatialPartition* spatialPartition;		// Pointer to the spatial partition system that houses this object
 
+	bool active;
+
 public:
 	CSceneNode(void);
 	CSceneNode(const int sceneNodeID);
@@ -55,6 +57,10 @@ public:
 	void ApplyRotate( const float angle, const float rx, const float ry, const float rz );
 	void ApplyScale(const float sx, const float sy, const float sz);
 
+	// Direct Sets of Transformations
+	void SetTranslate(const float dx, const float dy, const float dz);
+	void ResetTransform(void);
+
 	// Get top left corner of the group
 	Vector3 GetTopLeft(void);
 	// Get bottom right corner of the group
@@ -84,6 +90,11 @@ public:
 	int GetGridID(void);
 	int GetSecondaryGridID(void);
 	void SetSpatialPartition(CSpatialPartition* partition);
+
+	// Active
+	bool GetActive();
+	void Activate();
+	void Deactivate();
 
 private:
 	int getIntersection(float fDst1, float fDst2, Vector3 P1, Vector3 P2, Vector3 &Hit);

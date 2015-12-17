@@ -38,6 +38,11 @@ void CTransform::PostRendering()
 	glPopMatrix();
 }
 
+void CTransform::Reset()
+{
+	Mtx.SetToIdentity();
+}
+
 void CTransform::SetTranslate( const float dx, const float dy, const float dz  )
 {
 	Mtx44 TempMtx;

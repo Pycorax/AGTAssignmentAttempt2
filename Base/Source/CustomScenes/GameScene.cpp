@@ -5,7 +5,6 @@
 #include "../LoadOBJ.h"
 #include <sstream>
 #include "../Application.h"
-#include "../Gameplay/Human.h"
 
 using std::ostringstream;
 
@@ -30,53 +29,7 @@ void GameScene::Init()
 	// Hide the Cursor
 	Application::SetCursorHidden();
 
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
-	{
-		meshList[i] = NULL;
-	}
-
-	meshList[GEO_YELLOW_CUBE] = MeshBuilder::GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
-	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", 10.0f);
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair", 1.0f, 1.0f, 1.0f, 0.1f);
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 1.f);
-	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
-	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
-	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
-
-	// Player
-	meshList[GEO_PLAYER] = MeshBuilder::GenerateCube("player", Color(1.0f, 0.6f, 0.0f), 1.0f);
-
-	// Human
-	meshList[GEO_HUMAN_HAT] = MeshBuilder::GenerateCone("humanHat", Color(0.0f, 0.0f, 0.0f), 36, 1.f, 1.f);
-	meshList[GEO_HUMAN_HEAD] = MeshBuilder::GenerateSphere("humanHead", Color(0.968f, 0.937f, 0.619f), 12, 12, 1.0f);
-	meshList[GEO_HUMAN_BODY] = MeshBuilder::GenerateCone("humanBody", Color(0.282f, 0.568f, 0.803f), 36, 1.f, 1.f);
-
-	// Sky Box
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-
-	// Load the ground mesh and texture
-	meshList[GEO_GRASS_DARKGREEN] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_DARKGREEN]->textureID = LoadTGA("Image//grass_darkgreen.tga");
-	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
+	meshInit();
 
 	// Initialise and load a model into it
 	m_cAvatar = new CPlayInfo3PV();
@@ -108,9 +61,27 @@ void GameScene::Init()
 	
 #pragma endregion
 
-	Human aHuman;
-	aHuman.Init(new CTransform(70.0f, 0.0f, 10.0f), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(aHuman.GetSceneGraph());
+	// Init Enemies
+#ifdef _DEBUG
+	m_enemySpawner.Init(10, meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+#else
+	m_enemySpawner.Init(50, meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+#endif
+	vector<CSceneNode*> enemies = m_enemySpawner.GetSceneNodes();
+	// Add these into the scene graph
+	for (auto enemy = enemies.begin(); enemy != enemies.end(); ++enemy)
+	{
+		m_cSceneGraph->AddChild(*enemy);
+	}
+	// Define spawn zones
+	// -- Left
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(250.0f, 0.0f, 0.0f), Vector3(260.0f, 0.0f, 250.0f)));
+	// -- Right
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(-10.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 250.0f)));
+	// -- Up
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(0.0f, 0.0f, 250.0f), Vector3(250.0f, 0.0f, 260.0f)));
+	// -- Down
+	m_enemySpawner.AddSpawnPoint(SpawnBounds(Vector3(0.0f, 0.0f, -10.0f), Vector3(250.0f, 0.0f, 0.0f)));
 
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
@@ -142,6 +113,9 @@ void GameScene::Update(double dt)
 
 	m_cAvatar->Update(dt);
 	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection());
+
+	// Update Enemies
+	m_enemySpawner.Update(dt, m_cAvatar->GetPosition());
 
 	// Update the spatial partition
 	m_cSpatialPartition->Update(camera.position, (camera.target - camera.position).Normalize());
@@ -208,6 +182,70 @@ void GameScene::Exit()
 	}
 
 	CSceneManager::Exit();
+}
+
+void GameScene::UpdateWeaponStatus(const unsigned char key)
+{
+	if (key == WA_FIRE)
+	{
+		// Add a bullet object which starts at the camera position and moves in the camera's direction
+		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 100.0f);
+	}
+	else if (key == WA_FIRE_SECONDARY)
+	{
+		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 200.0f);
+	}
+}
+
+void GameScene::meshInit()
+{
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
+	{
+		meshList[i] = NULL;
+	}
+
+	meshList[GEO_YELLOW_CUBE] = MeshBuilder::GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
+	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", 10.0f);
+	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
+	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair", 1.0f, 1.0f, 1.0f, 0.1f);
+	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
+	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
+	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
+	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.1f);
+	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
+	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
+	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
+
+	// Player
+	meshList[GEO_PLAYER] = MeshBuilder::GenerateCube("player", Color(1.0f, 0.6f, 0.0f), 1.0f);
+
+	// Human
+	meshList[GEO_HUMAN_HAT] = MeshBuilder::GenerateCone("humanHat", Color(0.0f, 0.0f, 0.0f), 36, 1.f, 1.f);
+	meshList[GEO_HUMAN_HEAD] = MeshBuilder::GenerateSphere("humanHead", Color(0.968f, 0.937f, 0.619f), 12, 12, 1.0f);
+	meshList[GEO_HUMAN_BODY] = MeshBuilder::GenerateCone("humanBody", Color(0.282f, 0.568f, 0.803f), 36, 1.f, 1.f);
+
+	// Sky Box
+	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
+	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
+	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
+	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
+	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
+	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
+
+	// Load the ground mesh and texture
+	meshList[GEO_GRASS_DARKGREEN] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
+	meshList[GEO_GRASS_DARKGREEN]->textureID = LoadTGA("Image//grass_darkgreen.tga");
+	meshList[GEO_GRASS_LIGHTGREEN] = MeshBuilder::GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
+	meshList[GEO_GRASS_LIGHTGREEN]->textureID = LoadTGA("Image//grass_lightgreen.tga");
 }
 
 

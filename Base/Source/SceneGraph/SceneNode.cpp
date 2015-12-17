@@ -11,6 +11,7 @@ CSceneNode::CSceneNode(void)
 , sceneNodeID (-1)
 , gridID(-1)
 , spatialPartition(nullptr)
+, active(true)
 {
 }
 
@@ -50,6 +51,11 @@ CSceneNode::~CSceneNode(void)
 
 void CSceneNode::Draw(void)
 {
+	if (!active)
+	{
+		return;
+	}
+
 	if (theTransform)
 	{
 		theTransform->PreRendering();
@@ -74,6 +80,11 @@ void CSceneNode::Draw(void)
 
 void CSceneNode::Draw(CSceneManager* theSceneManager)
 {
+	if (!active)
+	{
+		return;
+	}
+
 	if (theTransform)
 	{
 		theSceneManager->PreRendering(theTransform->GetTransform(), false);
@@ -228,6 +239,33 @@ void CSceneNode::ApplyScale(const float sx, const float sy, const float sz)
 	}
 }
 
+// Note: DO NOT USE WITH ROTATION
+void CSceneNode::SetTranslate(const float dx, const float dy, const float dz)
+{
+	if (theTransform)
+	{
+		// Store the scale
+		Vector3 scale(theTransform->GetTransform().a[0], theTransform->GetTransform().a[5], theTransform->GetTransform().a[10]);
+
+		// Reset the Mtx44 to discard the translation
+		theTransform->Reset();
+
+		// Apply the translation
+		theTransform->SetTranslate(dx, dy, dz);
+
+		// Reapply the Scale
+		theTransform->SetScale(scale.x, scale.y, scale.z);
+	}
+}
+
+void CSceneNode::ResetTransform(void)
+{
+	if (theTransform)
+	{
+		theTransform->Reset();
+	}
+}
+
 
 // Get top left corner of the group
 Vector3 CSceneNode::GetTopLeft(void)
@@ -319,6 +357,11 @@ void CSceneNode::SetColorForChild(const int m_iChildIndex, const float red, cons
  ********************************************************************************/
 bool CSceneNode::CheckForCollision(Vector3 position)
 {
+	if (!active)
+	{
+		return false;
+	}
+
 	for (auto node = theChildren.begin(); node != theChildren.end(); ++node)
 	{
 		CSceneNode* sNode = dynamic_cast<CSceneNode*>(*node);
@@ -351,6 +394,11 @@ Check a position for collision with objects in any of the grids
 ********************************************************************************/
 bool CSceneNode::CheckForCollision(Vector3 position_start, Vector3 position_end, Vector3 &Hit)
 {
+	if (!active)
+	{
+		return false;
+	}
+
 	for (auto node = theChildren.begin(); node != theChildren.end(); ++node)
 	{
 		CSceneNode* sNode = dynamic_cast<CSceneNode*>(*node);
@@ -476,6 +524,21 @@ int CSceneNode::GetSecondaryGridID(void)
 void CSceneNode::SetSpatialPartition(CSpatialPartition * partition)
 {
 	spatialPartition = partition;
+}
+
+bool CSceneNode::GetActive()
+{
+	return active;
+}
+
+void CSceneNode::Activate()
+{
+	active = true;
+}
+
+void CSceneNode::Deactivate()
+{
+	active = false;
 }
 
 int CSceneNode::getIntersection(float fDst1, float fDst2, Vector3 P1, Vector3 P2, Vector3 & Hit)

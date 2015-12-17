@@ -2,9 +2,11 @@
 
 // Inheritance Include
 #include "../SceneManager.h"
+#include "../Gameplay/BomberSpawner.h"
 
 class GameScene : public CSceneManager
 {
+private:
 	enum GEOMETRY_TYPE
 	{
 		GEO_YELLOW_CUBE,
@@ -37,6 +39,16 @@ class GameScene : public CSceneManager
 		NUM_GEOMETRY,
 	};
 
+private:
+	Mesh* meshList[NUM_GEOMETRY];
+
+	// To Show that mobile objects spatial partitioning work
+	CSceneNode* mover;
+
+	// Enemy Spawner
+	BomberSpawner m_enemySpawner;
+
+protected:
 	// For Pausing and Resuming
 	void OnResume();
 
@@ -57,7 +69,8 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
+	virtual void UpdateWeaponStatus(const unsigned char key);
+
 private:
-	Mesh* meshList[NUM_GEOMETRY];
-	CSceneNode* mover;
+	void meshInit();
 };

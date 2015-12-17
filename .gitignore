@@ -9,3 +9,6 @@ Base/Debug/
 *.user
 *.opensdf
 *.exe
+Base/Release/
+Common/Release/
+Release/Common.lib

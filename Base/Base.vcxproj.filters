@@ -198,7 +198,10 @@
     <ClCompile Include="Source\CustomStates\LevelSelectState.cpp">
       <Filter>CustomStates</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Gameplay\Human.cpp">
+    <ClCompile Include="Source\Gameplay\Bomber.cpp">
+      <Filter>Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\BomberSpawner.cpp">
       <Filter>Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
@@ -374,7 +377,10 @@
     <ClInclude Include="Source\CustomStates\LevelSelectState.h">
       <Filter>CustomStates</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Gameplay\Human.h">
+    <ClInclude Include="Source\Gameplay\Bomber.h">
+      <Filter>Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\BomberSpawner.h">
       <Filter>Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
