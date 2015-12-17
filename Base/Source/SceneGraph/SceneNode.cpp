@@ -538,6 +538,19 @@ bool CSceneNode::GetActive()
 
 void CSceneNode::Activate()
 {
+	// Do for all children
+	for (auto node = theChildren.begin(); node != theChildren.end(); ++node)
+	{
+		CSceneNode* sNode = dynamic_cast<CSceneNode*>(*node);
+
+		if (sNode)
+		{
+			sNode->Activate();
+		}
+
+	}
+
+	// Set active to true
 	active = true;
 	// Add back to the List
 	spatialPartition->AddObject(this);
@@ -545,7 +558,21 @@ void CSceneNode::Activate()
 
 void CSceneNode::Deactivate()
 {
+	// Do for all children
+	for (auto node = theChildren.begin(); node != theChildren.end(); ++node)
+	{
+		CSceneNode* sNode = dynamic_cast<CSceneNode*>(*node);
+
+		if (sNode)
+		{
+			sNode->Deactivate();
+		}
+
+	}
+
+	// Set active to false
 	active = false;
+
 	// Remove from the List
 	spatialPartition->RemoveObject(this);
 }

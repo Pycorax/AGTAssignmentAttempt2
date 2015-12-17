@@ -183,11 +183,11 @@ void GameScene::UpdateWeaponStatus(const unsigned char key)
 	if (key == WA_FIRE)
 	{
 		// Add a bullet object which starts at the camera position and moves in the camera's direction
-		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 500.0f);
+		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 300.0f);
 	}
 	else if (key == WA_FIRE_SECONDARY)
 	{
-		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 1000.0f);
+		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 300.0f);
 	}
 }
 
