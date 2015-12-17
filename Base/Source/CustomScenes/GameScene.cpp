@@ -349,7 +349,7 @@ void GameScene::RenderMobileObjects()
 	modelStack.PushMatrix();
 	modelStack.Translate(m_cAvatar->GetPos_x(), m_cAvatar->GetPos_y() + 4.0f, m_cAvatar->GetPos_z());
 	modelStack.Rotate(m_cAvatar->GetYRotation(), 0, 1, 0);
-	modelStack.Scale(5.0f, 8.0f, 5.0f);
+	modelStack.Scale(m_cAvatar->GetScale().x, m_cAvatar->GetScale().y, m_cAvatar->GetScale().z);
 	RenderMesh(m_cAvatar->theAvatarMesh, false);
 	modelStack.PopMatrix();
 }

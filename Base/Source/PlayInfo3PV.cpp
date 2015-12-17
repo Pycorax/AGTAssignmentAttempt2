@@ -12,6 +12,7 @@ CPlayInfo3PV::CPlayInfo3PV(void)
 	, m_rotationY(0.0f)
 	, m_movementSpeed(200.0f)
 	, m_pitch(0.0f)
+	, curScale(Vector3(5, 8, 5))
 {
 	Init();
 }
@@ -171,6 +172,11 @@ Vector3 CPlayInfo3PV::GetDirection()
 	return curDirection;
 }
 
+Vector3 CPlayInfo3PV::GetScale() const
+{
+	return curScale;
+}
+
 float CPlayInfo3PV::GetYRotation(void) const
 {
 	return m_rotationY;
@@ -303,6 +309,25 @@ void CPlayInfo3PV::Update(double dt)
 		Yaw(dt);
 	if (Application::camera_pitch != 0)
 		Pitch(dt);
+
+	// Constrain Player
+	if (curPosition.x < curScale.x * 0.5f)
+	{
+		curPosition.x = curScale.x * 0.5f;
+	}
+	else if (curPosition.x > 250.0f - curScale.x * 0.5f)
+	{
+		curPosition.x = 250.0f - curScale.x * 0.5f;
+	}
+
+	if (curPosition.z < curScale.z * 0.5f)
+	{
+		curPosition.z = curScale.z * 0.5f;
+	}
+	else if (curPosition.z > 250.0f - curScale.z * 0.5f)
+	{
+		curPosition.z = 250.0f - curScale.z * 0.5f;
+	}
 }
 
 /********************************************************************************

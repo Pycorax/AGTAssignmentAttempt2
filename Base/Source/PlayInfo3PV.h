@@ -62,6 +62,8 @@ public:
 	Vector3 GetPosition();
 	// Get direction of the player
 	Vector3 GetDirection();
+	// Get Current Scale
+	Vector3 GetScale() const;
 	// Get Y-rotation of player
 	float GetYRotation(void) const;
 	// Get Jumpspeed of the player
@@ -99,6 +101,7 @@ private:
 	// Hero's information
 	Vector3 curPosition;
 	Vector3 curDirection;
+	Vector3 curScale;
 	float m_rotationY;
 	Vector3 curUp;
 	int jumpspeed;
