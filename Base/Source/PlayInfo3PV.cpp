@@ -4,12 +4,14 @@
 #include "Mtx44.h"
 
 const float CPlayInfo3PV::DIRECTION_SPEED = 100.0f;
+const float CPlayInfo3PV::MAX_PITCH = 60.0f;
 
 CPlayInfo3PV::CPlayInfo3PV(void)
 	: theAvatarMesh(NULL)
 	, jumpspeed(0)
 	, m_rotationY(0.0f)
 	, m_movementSpeed(200.0f)
+	, m_pitch(0.0f)
 {
 	Init();
 }
@@ -274,7 +276,7 @@ void CPlayInfo3PV::Update(double dt)
 	}
 	if (myKeys[VK_DOWN] == true)
 	{
-		LookUp(-dt);
+		LookDown(-dt);
 	}
 	if (myKeys[VK_LEFT] == true)
 	{
@@ -348,6 +350,13 @@ void CPlayInfo3PV::LookUp(const double dt)
 {
 	//float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
 	float pitch = (float)(DIRECTION_SPEED * (float)dt);
+
+	if (m_pitch + pitch > MAX_PITCH)
+	{
+		m_pitch = MAX_PITCH;
+		return;
+	}
+
 	Vector3 view = (curDirection).Normalized();
 	Vector3 right = view.Cross(curUp);
 	right.y = 0;
@@ -356,6 +365,7 @@ void CPlayInfo3PV::LookUp(const double dt)
 	Mtx44 rotation;
 	rotation.SetToRotation(pitch, right.x, right.y, right.z);
 	curDirection = rotation * view;
+	m_pitch += pitch;
 }
 /********************************************************************************
 LookDown
@@ -364,6 +374,13 @@ void CPlayInfo3PV::LookDown(const double dt)
 {
 	//float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
 	float pitch = (float)(DIRECTION_SPEED * (float)dt);
+
+	if (m_pitch - pitch < -MAX_PITCH)
+	{
+		m_pitch = -MAX_PITCH;
+		return;
+	}
+
 	Vector3 view = (curDirection).Normalized();
 	Vector3 right = view.Cross(curUp);
 	right.y = 0;
@@ -372,6 +389,7 @@ void CPlayInfo3PV::LookDown(const double dt)
 	Mtx44 rotation;
 	rotation.SetToRotation(pitch, right.x, right.y, right.z);
 	curDirection = rotation * view;
+	m_pitch += pitch;
 }
 
 /********************************************************************************

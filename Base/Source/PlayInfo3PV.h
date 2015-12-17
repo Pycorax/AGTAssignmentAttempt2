@@ -103,6 +103,9 @@ private:
 	Vector3 curUp;
 	int jumpspeed;
 
+	static const float MAX_PITCH;
+	float m_pitch;
+
 	bool myKeys[255];
 };
 
