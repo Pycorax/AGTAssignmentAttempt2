@@ -296,7 +296,7 @@ void CSceneManager::RenderTextOnScreen(Mesh* mesh, std::string text, Color color
 void CSceneManager::RenderMeshIn2D(Mesh *mesh, bool enableLight, float size, float x, float y, bool rotate)
 {
 	Mtx44 ortho;
-	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	ortho.SetToOrtho(-m_window_width * 0.1f, m_window_width * 0.1f, -m_window_height * 0.1f, m_window_height * 0.1f, -10, 10);
 	projectionStack.PushMatrix();
 		projectionStack.LoadMatrix(ortho);
 		viewStack.PushMatrix();
