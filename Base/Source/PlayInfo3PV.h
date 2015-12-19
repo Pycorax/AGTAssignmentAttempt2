@@ -60,6 +60,8 @@ public:
 	Vector3 GetPosition();
 	// Get direction of the player
 	Vector3 GetDirection();
+	// Get the up direction of the player
+	Vector3 GetUpDir();
 	// Get Current Scale
 	Vector3 GetScale() const;
 	// Get Y-rotation of player

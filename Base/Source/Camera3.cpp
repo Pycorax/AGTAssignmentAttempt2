@@ -147,7 +147,7 @@ void Camera3::Update(double dt)
  Update the camera for Third Person View
  Vector3 newPosition is the new position which the camera is to be based on
  ********************************************************************************/
-void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, bool moved, double dt)
+void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, Vector3 up, bool moved, double dt)
 {
 	if (moved)
 	{
@@ -173,9 +173,10 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, bool mov
 	left.y = 0.0f;
 	left.Normalize();
 
-	// Calculate the new position and target
+	// Calculate the new position and target and up
 	position = newPosition - (m_currentCamOffset.x * left) - (m_currentCamOffset.z * newDirection) + m_currentCamOffset.y * up;
 	target = position + newDirection;
+	this->up = up;
 }
 
 /********************************************************************************

@@ -24,7 +24,7 @@ public:
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up, Vector3 camOffset, float offsetSpeed = 30.0f);
 	virtual void Update(double dt);
 	// For Third Person Camera
-	virtual void UpdatePosition(Vector3 position, Vector3 newDirection, bool moved, double dt);
+	virtual void UpdatePosition(Vector3 position, Vector3 newDirection, Vector3 up, bool moved, double dt);
 	// Update Camera status
 	virtual void UpdateStatus(const unsigned char key, const bool status = true);
 	virtual void Reset();

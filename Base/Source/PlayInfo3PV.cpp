@@ -173,6 +173,11 @@ Vector3 CPlayInfo3PV::GetDirection()
 	return curDirection;
 }
 
+Vector3 CPlayInfo3PV::GetUpDir()
+{
+	return curUp;
+}
+
 Vector3 CPlayInfo3PV::GetScale() const
 {
 	return curScale;
