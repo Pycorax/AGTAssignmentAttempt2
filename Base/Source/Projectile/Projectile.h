@@ -36,6 +36,8 @@ public:
 	float GetRotationZ(void) const;
 	// Get the length of the projectile
 	float GetLength(void) const; 
+	// Get the speed of the projectile
+	float GetSpeed(void) const;
 	// Get the projectile type
 	int GetType(void) const;
 	// Set the position of the projectile

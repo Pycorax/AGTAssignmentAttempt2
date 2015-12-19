@@ -89,6 +89,11 @@ float CProjectile::GetRotationZ(void) const
 	 return theLength;
  }
 
+ float CProjectile::GetSpeed(void) const
+ {
+	 return speed;
+ }
+
  int CProjectile::GetType(void) const
  {
 	 return theType;

@@ -82,6 +82,7 @@ void GameScene::Update(double dt)
 	// Check for collisions for Projectiles
 	// Render the projectiles
 	Vector3 ProjectilePosition;
+	Vector3 ProjectilePosition_PrevDTDist;
 	Vector3 ProjectilePosition_End;
 	for (int i = 0; i<m_cProjectileManager->GetMaxNumberOfProjectiles(); i++)
 	{
@@ -102,10 +103,14 @@ void GameScene::Update(double dt)
 			}
 			else if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_RAY)
 			{
-				ProjectilePosition_End = ProjectilePosition + m_cProjectileManager->theListOfProjectiles[i]->GetDirection() * m_cProjectileManager->theListOfProjectiles[i]->GetLength();
+				// Calculate the start pos of the previous distance missed by the previous DT
+				ProjectilePosition_PrevDTDist = m_cProjectileManager->theListOfProjectiles[i]->GetDirection() * m_cProjectileManager->theListOfProjectiles[i]->GetSpeed() *dt;
+
+				// Calculate the end pos of the ray
+				ProjectilePosition_End = ProjectilePosition + m_cProjectileManager->theListOfProjectiles[i]->GetDirection() * m_cProjectileManager->theListOfProjectiles[i]->GetLength();				
 
 				// Destroy the ray projectile after collision
-				if (CSceneNode* node = m_cSpatialPartition->CheckForCollision(ProjectilePosition, ProjectilePosition_End))
+				if (CSceneNode* node = m_cSpatialPartition->CheckForCollision(ProjectilePosition - ProjectilePosition_PrevDTDist, ProjectilePosition_End))
 				{
 					// Remove the projectile
 					m_cProjectileManager->RemoveProjectile(i);
@@ -182,7 +187,7 @@ void GameScene::UpdateWeaponStatus(const unsigned char key)
 	}
 	else if (key == WA_FIRE_SECONDARY)
 	{
-		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 200.0f);
+		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 1200.0f);
 	}
 }
 
