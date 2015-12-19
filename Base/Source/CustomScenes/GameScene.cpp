@@ -70,6 +70,7 @@ void GameScene::Update(double dt)
 	CSceneManager::Update(dt);
 
 	m_cAvatar->Update(dt);
+	m_cAvatar->ConstrainHero(0, m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), 0, m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid(), dt);
 	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection());
 
 	// Update the spatial partition

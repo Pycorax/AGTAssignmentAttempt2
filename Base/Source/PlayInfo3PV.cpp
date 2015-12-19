@@ -207,22 +207,26 @@ void CPlayInfo3PV::UpdateFreeFall()
 
 // Constrain the position of the Hero to within the border
 void CPlayInfo3PV::ConstrainHero(const int leftBorder, const int rightBorder, 
-								  const int topBorder, const int bottomBorder, 
+								  const int frontBorder, const int backBorder, 
 								  float timeDiff)
 {
-	if (curPosition.x < leftBorder)
+	if (curPosition.x < leftBorder + curScale.x * 0.5f)
 	{
-		curPosition.x = leftBorder;
+		curPosition.x = leftBorder + curScale.x * 0.5f;
 	}
-	else if (curPosition.x > rightBorder)
+	else if (curPosition.x > rightBorder - curScale.x * 0.5f)
 	{
-		curPosition.x = rightBorder;
+		curPosition.x = rightBorder - curScale.x * 0.5f;
 	}
 
-	if (curPosition.y < topBorder)
-		curPosition.y = topBorder;
-	else if (curPosition.y > bottomBorder)
-		curPosition.y = bottomBorder;
+	if (curPosition.z < frontBorder + curScale.z * 0.5f)
+	{
+		curPosition.z = frontBorder + curScale.z * 0.5f;
+	}
+	else if (curPosition.z > backBorder - curScale.z * 0.5f)
+	{
+		curPosition.z = backBorder - curScale.z * 0.5f;
+	}
 }
 
 
@@ -311,23 +315,7 @@ void CPlayInfo3PV::Update(double dt)
 		Pitch(dt);
 
 	// Constrain Player
-	if (curPosition.x < curScale.x * 0.5f)
-	{
-		curPosition.x = curScale.x * 0.5f;
-	}
-	else if (curPosition.x > 250.0f - curScale.x * 0.5f)
-	{
-		curPosition.x = 250.0f - curScale.x * 0.5f;
-	}
-
-	if (curPosition.z < curScale.z * 0.5f)
-	{
-		curPosition.z = curScale.z * 0.5f;
-	}
-	else if (curPosition.z > 250.0f - curScale.z * 0.5f)
-	{
-		curPosition.z = 250.0f - curScale.z * 0.5f;
-	}
+	
 }
 
 /********************************************************************************

@@ -83,7 +83,7 @@ public:
 
 	// Constrain the position of the Hero to within the border
 	void ConstrainHero(const int leftBorder, const int rightBorder, 
-					   const int topBorder, const int bottomBorder, 
+					   const int frontBorder, const int backBorder,
 					   float timeDiff);
 
 	// Avatar's Mesh
