@@ -13,6 +13,7 @@ CPlayInfo3PV::CPlayInfo3PV(void)
 	, m_movementSpeed(200.0f)
 	, m_pitch(0.0f)
 	, curScale(Vector3(5, 8, 5))
+	, m_movedForward(false)
 {
 	Init();
 }
@@ -188,6 +189,11 @@ float CPlayInfo3PV::GetJumpspeed(void)
 	return jumpspeed;
 }
 
+bool CPlayInfo3PV::GetMovedForward() const
+{
+	return m_movedForward;
+}
+
 // Update Jump Upwards
 void CPlayInfo3PV::UpdateJumpUpwards()
 {
@@ -243,9 +249,15 @@ void CPlayInfo3PV::UpdateMovement(const unsigned char key, const bool status)
  ********************************************************************************/
 void CPlayInfo3PV::Update(double dt)
 {
+	// Reset movement flag each update
+	m_movedForward = false;
+
 	// WASD movement
 	if ( myKeys['w'] == true)
 	{
+		// We had moved forwards!
+		m_movedForward = true;
+
 		MoveFrontBack( false, dt );
 	}
 	if (myKeys['s'] == true)

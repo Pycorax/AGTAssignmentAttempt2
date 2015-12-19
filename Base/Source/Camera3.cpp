@@ -14,6 +14,7 @@ Camera3::Camera3()
 	, MoveVel_A(0)
 	, MoveVel_D(0)
 	, CAMERA_ACCEL(0)
+	, m_offsetSpeed(0)
 {
 }
 
@@ -27,7 +28,7 @@ Camera3::~Camera3()
 /********************************************************************************
  Initialise the camera
  ********************************************************************************/
-void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up, Vector3 camOffset)
+void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up, Vector3 camOffset, float offsetSpeed)
 {
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
@@ -57,6 +58,9 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up,
 
 	// For camera offsetting
 	m_camOffset = camOffset;
+	m_currentCamOffset = camOffset;
+	m_currentCamOffset.x = 0.0f;			// Discard the X as we want the player to always be centered by default
+	m_offsetSpeed = offsetSpeed;
 }
 
 /********************************************************************************
@@ -143,15 +147,34 @@ void Camera3::Update(double dt)
  Update the camera for Third Person View
  Vector3 newPosition is the new position which the camera is to be based on
  ********************************************************************************/
-void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection)
+void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, bool moved, double dt)
 {
+	if (moved)
+	{
+		m_currentCamOffset.x -= m_offsetSpeed * dt;
+
+		if (m_currentCamOffset.x < m_camOffset.x)
+		{
+			m_currentCamOffset.x = m_camOffset.x;
+		}
+	}
+	else
+	{
+		m_currentCamOffset.x += m_offsetSpeed * dt;
+
+		if (m_currentCamOffset.x > 0.0f)
+		{
+			m_currentCamOffset.x = 0.0f;
+		}
+	}
+
 	// Get the direction to the left so that we can move that way
 	Vector3 left = newDirection.Cross(up);
 	left.y = 0.0f;
 	left.Normalize();
 
 	// Calculate the new position and target
-	position = newPosition - (m_camOffset.x * left) - (m_camOffset.z * newDirection) + m_camOffset.y * up;
+	position = newPosition - (m_currentCamOffset.x * left) - (m_currentCamOffset.z * newDirection) + m_currentCamOffset.y * up;
 	target = position + newDirection;
 }
 

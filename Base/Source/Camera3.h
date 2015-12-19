@@ -10,6 +10,10 @@ public:
 	Vector3 defaultTarget;
 	Vector3 defaultUp;
 	Vector3 m_camOffset;
+	
+	// For doing dynamic camera movement based on the target's movement status
+	Vector3 m_currentCamOffset;
+	float m_offsetSpeed;
 
 	enum CAM_TYPE { LAND_CAM, 
 					AIR_CAM,
@@ -17,10 +21,10 @@ public:
 
 	Camera3();
 	~Camera3();
-	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up, Vector3 camOffset);
+	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up, Vector3 camOffset, float offsetSpeed = 30.0f);
 	virtual void Update(double dt);
 	// For Third Person Camera
-	virtual void UpdatePosition(Vector3 position, Vector3 newDirection);
+	virtual void UpdatePosition(Vector3 position, Vector3 newDirection, bool moved, double dt);
 	// Update Camera status
 	virtual void UpdateStatus(const unsigned char key, const bool status = true);
 	virtual void Reset();

@@ -4,12 +4,10 @@
 
 class CPlayInfo3PV
 {
+	// Turning speed
 	static const float DIRECTION_SPEED;
-
-	// Stores the movement direction for a frame. to be cleared each frame
-	Vector3 m_deltaMovement;
-	// Movement Speed
-	float m_movementSpeed;
+	// Maximum pitch allowance
+	static const float MAX_PITCH;
 
 public:
 	CPlayInfo3PV(void);
@@ -68,6 +66,8 @@ public:
 	float GetYRotation(void) const;
 	// Get Jumpspeed of the player
 	float GetJumpspeed(void);
+	// Check if the player had moved in the last frame
+	bool GetMovedForward() const;
 
 	// Update Jump Upwards
 	void UpdateJumpUpwards();
@@ -106,7 +106,14 @@ private:
 	Vector3 curUp;
 	int jumpspeed;
 
-	static const float MAX_PITCH;
+	// Stores the movement direction for a frame. to be cleared each frame
+	Vector3 m_deltaMovement;
+	// Movement Speed
+	float m_movementSpeed;
+	// Stores if there was movement in the last frame. Allows other objects to respond to this.
+	bool m_movedForward;
+
+	// Stores the current pitching angle for limiting the pitch
 	float m_pitch;
 
 	bool myKeys[255];
