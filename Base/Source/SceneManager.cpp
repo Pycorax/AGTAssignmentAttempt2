@@ -123,8 +123,6 @@ void CSceneManager::Update(double dt)
 	if(Application::IsKeyPressed('P'))
 		lights[0].position.y += (float)(10.f * dt);
 
-	rotateAngle -= Application::camera_yaw;// += (float)(10 * dt);
-
 	fps = (float)(1.f / dt);
 }
 

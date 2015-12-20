@@ -208,10 +208,6 @@ void CSpatialPartition::RemoveObject(CSceneNode * theObject)
 			{
 				gridID = -1;
 			}
-			else
-			{
-				cout << "Fail" << endl;
-			}
 		}
 
 		if (secondaryGridID >= 0)
@@ -219,10 +215,6 @@ void CSpatialPartition::RemoveObject(CSceneNode * theObject)
 			if (theGrid[secondaryGridID].RemoveObject(theObject))
 			{
 				secondaryGridID = -1;
-			}
-			else
-			{
-				cout << "Fail2" << endl;
 			}
 		}
 	}

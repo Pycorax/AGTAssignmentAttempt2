@@ -378,13 +378,14 @@ LookUp
 ********************************************************************************/
 void CPlayInfo3PV::LookUp(const double dt)
 {
-	//float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
 	float pitch = (float)(DIRECTION_SPEED * (float)dt);
 
-	if (m_pitch + pitch > MAX_PITCH)
+	cout << m_pitch + pitch << " ---- UP" << endl;
+
+	if ((m_pitch + pitch) > MAX_PITCH)
 	{
-		m_pitch = MAX_PITCH;
-		return;
+		pitch = MAX_PITCH - m_pitch;
+		cout << "LOCKED UP at " << m_pitch + pitch << endl;
 	}
 
 	Vector3 view = (curDirection).Normalized();
@@ -402,13 +403,14 @@ LookDown
 ********************************************************************************/
 void CPlayInfo3PV::LookDown(const double dt)
 {
-	//float pitch = (float)(-CAMERA_SPEED * Application::camera_pitch * (float)dt);
 	float pitch = (float)(DIRECTION_SPEED * (float)dt);
 
-	if (m_pitch - pitch < -MAX_PITCH)
+	cout << m_pitch + pitch << " ---- DOWN" << endl;
+
+	if ((m_pitch + pitch) < -MAX_PITCH)
 	{
-		m_pitch = -MAX_PITCH;
-		return;
+		pitch = -MAX_PITCH - m_pitch;
+		cout << "LOCKED DOWN at " << m_pitch  + pitch << endl;
 	}
 
 	Vector3 view = (curDirection).Normalized();
@@ -428,9 +430,9 @@ Pitch. You can add in a deadzone here.
 void CPlayInfo3PV::Pitch(const double dt)
 {
 	if (Application::camera_pitch > 0.0)
-		LookUp(-Application::camera_pitch * dt);
-	else if (Application::camera_pitch < 0.0)
 		LookDown(-Application::camera_pitch * dt);
+	else if (Application::camera_pitch < 0.0)
+		LookUp(-Application::camera_pitch * dt);
 }
 /********************************************************************************
 Yaw. You can add in a deadzone here.

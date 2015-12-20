@@ -21,8 +21,9 @@ class LevelMenuScene : public MenuScene
 	enum BUTTON_TYPE
 	{
 		BT_BACK,
-		BT_LEVEL,
-		BT_LEVEL_4_3 = BT_LEVEL + BUTTON_ROWS * BUTTON_COLS - 1,	// Create 12 Level buttons
+		BT_LEVEL_DEMO,
+		BT_LEVEL_SURVIVAL,
+		//BT_LEVEL_4_3 = BT_LEVEL + BUTTON_ROWS * BUTTON_COLS - 1,	// Create 12 Level buttons
 		BT_TOTAL
 	};
 

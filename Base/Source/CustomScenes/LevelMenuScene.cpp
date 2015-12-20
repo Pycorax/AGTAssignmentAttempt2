@@ -54,15 +54,16 @@ void LevelMenuScene::Init()
 
 	createButtonList(BT_TOTAL);
 	m_button[BT_BACK].Init(meshList[GEO_BT_BACK], Vector3(m_window_width * 0.3, m_window_height * 0.1), NORMAL_BUTTON_SIZE);
+	m_button[BT_LEVEL_DEMO].Init(meshList[GEO_BT_LEVEL], Vector3(m_window_width * 0.3, m_window_height * 0.6), NORMAL_BUTTON_SIZE);
+	m_button[BT_LEVEL_SURVIVAL].Init(meshList[GEO_BT_LEVEL], Vector3(m_window_width * 0.3, m_window_height * 0.5), NORMAL_BUTTON_SIZE);
 
-	// Make every level button do the same thing
-	for (int col = 0; col < BUTTON_COLS; ++col)
+	/*for (int col = 0; col < BUTTON_COLS; ++col)
 	{
 		for (int row = 0; row < BUTTON_ROWS; ++row)
 		{
 			m_button[BT_LEVEL + (row * BUTTON_COLS) + col].Init(meshList[GEO_BT_LEVEL], Vector3(m_window_width * (0.3 + 0.4 * col), m_window_height * (0.6 - 0.1 * row)), NORMAL_BUTTON_SIZE);
 		}
-	}
+	}*/
 }
 
 void LevelMenuScene::Update(double dt)
@@ -74,13 +75,24 @@ void LevelMenuScene::Update(double dt)
 		endState();
 	}
 
-	for (size_t i = 0; i < BUTTON_COLS * BUTTON_ROWS; ++i)
+	if (m_button[BT_LEVEL_DEMO].GetState() == UIButton::DOWN_STATE)
+	{
+		changeState(CPlayState::Instance(), true, "demo");
+	}
+
+	if (m_button[BT_LEVEL_SURVIVAL].GetState() == UIButton::DOWN_STATE)
+	{
+		changeState(CPlayState::Instance(), true, "survival");
+	}
+
+	// Make every level button do the same thing
+	/*for (size_t i = 0; i < BUTTON_COLS * BUTTON_ROWS; ++i)
 	{
 		if (m_button[BT_LEVEL+  i].GetState() == UIButton::DOWN_STATE)
 		{
 			changeState(CPlayState::Instance(), true);
 		}
-	}
+	}*/
 }
 
 void LevelMenuScene::Render()
