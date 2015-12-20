@@ -69,7 +69,7 @@ void SplashScene::Update(double dt)
 	{
 		lights[0].position.z += s_m_LIGHT_SPEED * 2 * dt;
 	}
-	else if (lights[0].position.z < s_m_LIGHT_SPEED)
+	else if (lights[0].position.z < s_m_LIGHT_OFFSET)
 	{
 		lights[0].position.z += s_m_LIGHT_SPEED * dt;
 		lights[0].power -= s_m_LIGHT_SPEED * dt;
