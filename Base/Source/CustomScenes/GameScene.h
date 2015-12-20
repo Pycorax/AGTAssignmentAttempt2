@@ -6,7 +6,11 @@
 
 class GameScene : public CSceneManager
 {
-private:
+private:	// Static Constants
+	static const int MAX_LIVES = 3;
+	static const float INVULN_TIME;
+
+private:	// Enums
 	enum GEOMETRY_TYPE
 	{
 		GEO_YELLOW_CUBE,
@@ -38,7 +42,8 @@ private:
 		NUM_GEOMETRY,
 	};
 
-private:
+private:	// Variables
+	// Mesh Resources
 	Mesh* meshList[NUM_GEOMETRY];
 
 	// A list of bombers for players to shoot at
@@ -46,6 +51,12 @@ private:
 
 	// The moving bomber
 	Bomber* m_movingBomber;
+
+	// Number of Lives
+	int m_lives;
+
+	// Invulnerability Timer
+	float m_invulnTime;
 
 protected:
 	// For Pausing and Resuming
@@ -73,5 +84,13 @@ public:
 private:
 	void meshInit();
 	void bomberDemoInit();
+
+	// Survival Mode
+	// -- Bomber Functions
 	void bomberSurvivalInit(unsigned left, unsigned right, unsigned top, unsigned bot);
+	int getNumBombersAlive(void);
+	// -- Player Functions
+	void killPlayer(void);
+	// -- Update Functions
+	void checkEndState(double dt);
 };

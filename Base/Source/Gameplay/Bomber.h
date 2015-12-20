@@ -28,7 +28,7 @@ public:
 	virtual ~Bomber();
 
 	void Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);
-	void Update(double dt, Vector3 target);
+	bool Update(double dt, Vector3 target);
 
 	// Life Time
 	void Spawn(Vector3 startPos, float speed);

@@ -37,13 +37,13 @@ void Bomber::Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMes
 	m_head->SetType(CSceneNode::NT_BOMBER);
 }
 
-void Bomber::Update(double dt, Vector3 target)
+bool Bomber::Update(double dt, Vector3 target)
 {
 	static const float BOOM_RADIUS = 2.0f;
 
 	if (GetActive() == false)
 	{
-		return;
+		return false;
 	}
 
 	switch (m_state)
@@ -74,11 +74,14 @@ void Bomber::Update(double dt, Vector3 target)
 
 		case LS_BOOM:
 		{
-
+			Deactivate();
+			return true;
 		}
 		break;
 
 	}
+
+	return false;
 }
 
 void Bomber::Spawn(Vector3 startPos, float speed)

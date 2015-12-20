@@ -8,8 +8,12 @@
 
 using std::ostringstream;
 
+const float GameScene::INVULN_TIME = 5.0f;
+
 GameScene::GameScene() : CSceneManager()
 	, m_movingBomber(nullptr)
+	, m_invulnTime(0.0f)
+	, m_lives(MAX_LIVES)
 {
 }
 
@@ -29,8 +33,15 @@ void GameScene::Init()
 	// Hide the Cursor
 	Application::SetCursorHidden();
 
+	// Init the meshes
 	meshInit();
 
+	// Enable lighting
+	bLightEnabled = true;
+
+	/*
+	 * Gameplay Init
+	 */
 	// Initialise and load a model into it
 	m_cAvatar = new CPlayInfo3PV();
 	m_cAvatar->SetModel(meshList[GEO_PLAYER]);
@@ -61,9 +72,8 @@ void GameScene::Init()
 	// Create the projectile manager
 	m_cProjectileManager = new CProjectileManager();
 
-	rotateAngle = 0;
-
-	bLightEnabled = true;
+	// Give the player the max number of lives
+	m_lives = MAX_LIVES;
 }
 
 void GameScene::Update(double dt)
@@ -77,9 +87,13 @@ void GameScene::Update(double dt)
 	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), m_cAvatar->GetUpDir(), m_cAvatar->GetMovedForward(), dt);
 
 	// Enemies
+	bool gotHit = false;
 	for (auto bomb = m_bomberList.begin(); bomb != m_bomberList.end(); ++bomb)
 	{
-		//(*bomb)->Update(dt, m_cAvatar->GetPosition());
+		if ((*bomb)->Update(dt, m_cAvatar->GetPosition()))
+		{
+			gotHit = true;
+		}
 	}
 
 	// Update the Projectile Manager
@@ -127,26 +141,20 @@ void GameScene::Update(double dt)
 		}
 	}
 
-	// Update mobile objects
-	//static bool forward = true;
-	//if (forward)
-	//{
-	//	m_movingBomber->ApplyTranslate(0.0f, 0.0f, 5.0f * dt);
+	// Update invulnerability timer
+	if (m_invulnTime > 0.0f)
+	{
+		m_invulnTime -= dt;
+	}
 
-	//	if (m_movingBomber->GetTranslate().z > 225)
-	//	{
-	//		forward = false;
-	//	}
-	//}
-	//else
-	//{
-	//	m_movingBomber->ApplyTranslate(0.0f, 0.0f, -5.0f * dt);
+	// React to getting hit
+	if (gotHit && m_invulnTime <= 0.0f)
+	{
+		killPlayer();
+	}
 
-	//	if (m_movingBomber->GetTranslate().z < 25)
-	//	{
-	//		forward = true;
-	//	}
-	//}
+	// Check conditions for going to the end state
+	checkEndState(dt);
 }
 
 void GameScene::Render()
@@ -323,6 +331,44 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	}
 }
 
+int GameScene::getNumBombersAlive(void)
+{
+	int count = 0;
+
+	for (auto bomb = m_bomberList.begin(); bomb != m_bomberList.end(); ++bomb)
+	{
+		if ((*bomb)->GetActive())
+		{
+			++count;
+		}
+	}
+
+	return count;
+}
+
+void GameScene::killPlayer(void)
+{
+	// Remove a life
+	--m_lives;
+	// Start invuln so that the player can get his bearings
+	m_invulnTime = INVULN_TIME;
+}
+
+void GameScene::checkEndState(double dt)
+{
+	// Check if game end
+	if (getNumBombersAlive() == 0)
+	{
+		// Go to the win state
+	}
+
+	// Check if no health
+	if (m_lives <= 0)
+	{
+		// Go to lost state
+	}
+}
+
 
 void GameScene::OnResume()
 {
@@ -370,7 +416,7 @@ void GameScene::RenderMobileObjects()
 
 	// Render the projectiles
 	Vector3 ProjectilePosition;
-	for (int i = 0; i<m_cProjectileManager->GetMaxNumberOfProjectiles(); i++)
+	for (int i = 0; i < m_cProjectileManager->GetMaxNumberOfProjectiles(); i++)
 	{
 		if (m_cProjectileManager->IsActive(i))
 		{
