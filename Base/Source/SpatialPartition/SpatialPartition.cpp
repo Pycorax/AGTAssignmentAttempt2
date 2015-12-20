@@ -217,6 +217,18 @@ void CSpatialPartition::RemoveObject(CSceneNode * theObject)
 				secondaryGridID = -1;
 			}
 		}
+
+		// Rinse and repeat for each child node
+		vector<CNode*> children = theObject->GetChildren();
+		for (auto child = children.begin(); child != children.end(); ++child)
+		{
+			CSceneNode* sChild = dynamic_cast<CSceneNode*>(*child);
+
+			if (sChild)
+			{
+				RemoveObject(sChild);
+			}
+		}
 	}
 }
 

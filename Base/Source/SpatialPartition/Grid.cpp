@@ -50,12 +50,13 @@ void CGrid::AddObject(CSceneNode* theObject)
 	ListOfObjects.push_back( theObject );
 }
 
+/********************************************************************************
+Remove objects fromt his grid
+********************************************************************************/
 bool CGrid::RemoveObject(CSceneNode * theObject)
 {
 	if (theObject)
 	{
-		//cout << ListOfObjects.size() << endl;
-
 		for (auto list = ListOfObjects.begin(); list != ListOfObjects.end(); ++list)
 		{
 			if (*list == theObject)
