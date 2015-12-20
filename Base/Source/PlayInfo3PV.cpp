@@ -380,12 +380,11 @@ void CPlayInfo3PV::LookUp(const double dt)
 {
 	float pitch = (float)(DIRECTION_SPEED * (float)dt);
 
-	cout << m_pitch + pitch << " ---- UP" << endl;
-
+	// Check if the pitch is within pitching limits
 	if ((m_pitch + pitch) > MAX_PITCH)
 	{
+		// Set the pitch to the maximum we can pitch without over-pitching
 		pitch = MAX_PITCH - m_pitch;
-		cout << "LOCKED UP at " << m_pitch + pitch << endl;
 	}
 
 	Vector3 view = (curDirection).Normalized();
@@ -405,12 +404,11 @@ void CPlayInfo3PV::LookDown(const double dt)
 {
 	float pitch = (float)(DIRECTION_SPEED * (float)dt);
 
-	cout << m_pitch + pitch << " ---- DOWN" << endl;
-
+	// Check if the pitch is within pitching limits
 	if ((m_pitch + pitch) < -MAX_PITCH)
 	{
+		// Set the pitch to the maximum we can pitch without over-pitching
 		pitch = -MAX_PITCH - m_pitch;
-		cout << "LOCKED DOWN at " << m_pitch  + pitch << endl;
 	}
 
 	Vector3 view = (curDirection).Normalized();

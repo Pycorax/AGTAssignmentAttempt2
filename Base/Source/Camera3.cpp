@@ -173,7 +173,7 @@ void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, Vector3 
 	left.y = 0.0f;
 	left.Normalize();
 
-	// Calculate the new position and target and up
+	// Calculate the new position and target and update the up
 	position = newPosition - (m_currentCamOffset.x * left) - (m_currentCamOffset.z * newDirection) + m_currentCamOffset.y * up;
 	target = position + newDirection;
 	this->up = up;

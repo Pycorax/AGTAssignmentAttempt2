@@ -1,8 +1,9 @@
 #pragma once
 
+// Inheritance Include
 #include "..\SceneGraph\SceneNode.h"
 
-class Bomber
+class Bomber : public CSceneNode
 {
 public:
 	enum LIFE_STATE
@@ -13,9 +14,6 @@ public:
 	};
 
 private:
-	// SceneGraph for this Character
-	CSceneNode* m_sceneGraph;
-
 	// Body Parts
 	CSceneNode* m_hat;
 	CSceneNode* m_head;
@@ -34,11 +32,4 @@ public:
 
 	// Life Time
 	void Spawn(Vector3 startPos, float speed);
-	void Kill(void);
-
-	// Check Status
-	bool GetActive(void);
-
-	// Get the graph for putting into the main scene graph
-	CSceneNode* GetSceneGraph(void);
 };

@@ -41,8 +41,6 @@ void GameScene::Init()
 	CModel* newModel = new CModel(nullptr);
 	cout << m_cSceneGraph->SetNode(new CTransform(), newModel) << endl;
 
-	bomberInit();
-
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
 	m_cSpatialPartition->Init(50, 50, 5, 5);
@@ -53,6 +51,9 @@ void GameScene::Init()
 			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("GridMesh", Color(1.0f / i, 1.0f / j, 1.0f / (i*j)), 50.0f));
 		}
 	}
+
+	//bomberDemoInit();
+	bomberSurvivalInit(1, 1, 1, 1);
 
 	// Add the pointers to the scene graph to the spatial partition
 	m_cSpatialPartition->AddObject(m_cSceneGraph);
@@ -69,18 +70,23 @@ void GameScene::Update(double dt)
 {
 	CSceneManager::Update(dt);
 
+	// Update the Player
 	m_cAvatar->Update(dt);
 	m_cAvatar->ConstrainHero(0, m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), 0, m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid(), dt);
+	// Update the Camera
 	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), m_cAvatar->GetUpDir(), m_cAvatar->GetMovedForward(), dt);
 
-	// Update the spatial partition
-	//m_cSpatialPartition->Update(camera.position, (camera.target - camera.position).Normalize());
+	// Enemies
+	for (auto bomb = m_bomberList.begin(); bomb != m_bomberList.end(); ++bomb)
+	{
+		(*bomb)->Update(dt, m_cAvatar->GetPosition());
+	}
 
 	// Update the Projectile Manager
 	m_cProjectileManager->Update(dt);
 
 	// Check for collisions for Projectiles
-	// Render the projectiles
+	// Update the projectiles
 	Vector3 ProjectilePosition;
 	Vector3 ProjectilePosition_PrevDTDist;
 	Vector3 ProjectilePosition_End;
@@ -122,25 +128,25 @@ void GameScene::Update(double dt)
 	}
 
 	// Update mobile objects
-	static bool forward = true;
-	if (forward)
-	{
-		m_movingBomber->GetSceneGraph()->ApplyTranslate(0.0f, 0.0f, 5.0f * dt);
+	//static bool forward = true;
+	//if (forward)
+	//{
+	//	m_movingBomber->ApplyTranslate(0.0f, 0.0f, 5.0f * dt);
 
-		if (m_movingBomber->GetSceneGraph()->GetTranslate().z > 225)
-		{
-			forward = false;
-		}
-	}
-	else
-	{
-		m_movingBomber->GetSceneGraph()->ApplyTranslate(0.0f, 0.0f, -5.0f * dt);
+	//	if (m_movingBomber->GetTranslate().z > 225)
+	//	{
+	//		forward = false;
+	//	}
+	//}
+	//else
+	//{
+	//	m_movingBomber->ApplyTranslate(0.0f, 0.0f, -5.0f * dt);
 
-		if (m_movingBomber->GetSceneGraph()->GetTranslate().z < 25)
-		{
-			forward = true;
-		}
-	}
+	//	if (m_movingBomber->GetTranslate().z < 25)
+	//	{
+	//		forward = true;
+	//	}
+	//}
 }
 
 void GameScene::Render()
@@ -240,39 +246,82 @@ void GameScene::meshInit()
 	meshList[GEO_GROUND]->textureID = LoadTGA("Image//floor.tga");
 }
 
-void GameScene::bomberInit()
+void GameScene::bomberDemoInit()
 {
 	// Adding Bombers to the Scene
 	Bomber* bomber;
 
 	bomber = new Bomber;
 	bomber->Init(Vector3(118, 0, 25), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
 	bomber->Init(Vector3(125, 0, 142), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
 	bomber->Init(Vector3(115, 0, 83), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
 	bomber->Init(Vector3(155, 0, 223), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
 	bomber->Init(Vector3(185, 0, 184), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
 	bomber->Init(Vector3(200, 0, 103), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(bomber->GetSceneGraph());
+	m_cSceneGraph->AddChild(bomber);
 
 	// Moving Bomber
 	m_movingBomber = new Bomber;
-	m_movingBomber->Init(Vector3(25, 0, 25), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
-	m_cSceneGraph->AddChild(m_movingBomber->GetSceneGraph());
+	m_movingBomber->Init(Vector3(25, 0, 225), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+	m_cSceneGraph->AddChild(m_movingBomber);
+}
+
+void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, unsigned bot)
+{
+	float worldWidth = m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid();
+	float worldHeight = m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid();
+	Bomber* bomber = nullptr;
+
+	// Adding Bombers to the left side of the Scene
+	for (size_t bots = 0; bots < left; ++bots)
+	{
+		bomber = new Bomber;
+		bomber->Init(Vector3(Math::RandFloatMinMax(25.0f, 225.0f), 0, 25), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		m_cSceneGraph->AddChild(bomber);
+		m_bomberList.push_back(bomber);
+	}
+
+	// Adding Bombers to the right side of the Scene
+	for (size_t bots = 0; bots < right; ++bots)
+	{
+		bomber = new Bomber;
+		bomber->Init(Vector3(Math::RandFloatMinMax(25.0f, 225.0f), 0, 225), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		m_cSceneGraph->AddChild(bomber);
+		m_bomberList.push_back(bomber);
+	}
+
+	// Adding Bombers to the top side of the Scene
+	for (size_t bots = 0; bots < top; ++bots)
+	{
+		bomber = new Bomber;
+		bomber->Init(Vector3(225, 0, Math::RandFloatMinMax(25.0f, 225.0f)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		m_cSceneGraph->AddChild(bomber);
+		m_bomberList.push_back(bomber);
+	}
+
+	// Adding Bombers to the bottom side of the Scene
+	for (size_t bots = 0; bots < bot; ++bots)
+	{
+		bomber = new Bomber;
+		bomber->Init(Vector3(25, 0, Math::RandFloatMinMax(25.0f, 225.0f)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		m_cSceneGraph->AddChild(bomber);
+		m_bomberList.push_back(bomber);
+	}
 }
 
 
@@ -362,7 +411,6 @@ void GameScene::RenderFixedObjects()
 	//RenderMesh(meshList[GEO_AXES], false);
 }
 
-
 /********************************************************************************
 Render the ground in this scene
 ********************************************************************************/
@@ -375,12 +423,12 @@ void GameScene::RenderGround()
 		modelStack.PushMatrix();
 		modelStack.Translate(m_cSpatialPartition->GetGridSizeX() * 0.5f, -m_cSpatialPartition->GetGridSizeY() * 0.5f, 1);
 
-		 cout << "Rendering..." << endl;
+		 //cout << "Rendering..." << endl;
 		for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
 		{
 			for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
 			{
-				cout << m_cSpatialPartition->GetGridItemSize(i, j) << endl;
+				//cout << m_cSpatialPartition->GetGridItemSize(i, j) << endl;
 
 				// Only render it if there is something in it
 				if (m_cSpatialPartition->GetGridActiveItemCount(i, j) <= 0)
@@ -395,7 +443,7 @@ void GameScene::RenderGround()
 				modelStack.PopMatrix();
 			}
 		}
-		cout << "Rendering ENDS" << endl;
+		//cout << "Rendering ENDS" << endl;
 		modelStack.PopMatrix();
 	}
 	{

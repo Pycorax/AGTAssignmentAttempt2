@@ -98,10 +98,6 @@ bool Application::GetMouseUpdate()
 	// Update the GSM
 	theGSM->HandleEvents( mouse_current_x, mouse_current_x, Button_Left, Button_Middle, Button_Right);
 
-	// Get the mouse button status
-//	if (glfwGetMouseButton(m_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-//		scene->UpdateWeaponStatus(scene->WA_FIRE);
-
     return false;
 }
 

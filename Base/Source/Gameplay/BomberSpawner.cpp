@@ -26,7 +26,7 @@ void BomberSpawner::Init(int maxEnemies, Mesh * hatMesh, Mesh * headMesh, Mesh *
 	{
 		Bomber* newEnemy = new Bomber;
 		newEnemy->Init(Vector3(25, 0, 25), hatMesh, headMesh, bodyMesh);
-		newEnemy->Kill();
+		newEnemy->Deactivate();
 
 		m_enemyList.push_back(newEnemy);
 	}
@@ -105,7 +105,7 @@ vector<CSceneNode*> BomberSpawner::GetSceneNodes()
 	{
 		if ((*enemy)->GetActive() == false)
 		{
-			nodes.push_back((*enemy)->GetSceneGraph());
+			nodes.push_back(*enemy);
 		}
 	}
 

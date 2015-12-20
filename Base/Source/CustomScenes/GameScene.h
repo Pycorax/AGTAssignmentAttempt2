@@ -72,5 +72,6 @@ public:
 
 private:
 	void meshInit();
-	void bomberInit();
+	void bomberDemoInit();
+	void bomberSurvivalInit(unsigned left, unsigned right, unsigned top, unsigned bot);
 };
