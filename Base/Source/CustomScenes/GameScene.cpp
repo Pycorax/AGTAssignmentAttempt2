@@ -79,7 +79,7 @@ void GameScene::Update(double dt)
 	// Enemies
 	for (auto bomb = m_bomberList.begin(); bomb != m_bomberList.end(); ++bomb)
 	{
-		(*bomb)->Update(dt, m_cAvatar->GetPosition());
+		//(*bomb)->Update(dt, m_cAvatar->GetPosition());
 	}
 
 	// Update the Projectile Manager
@@ -167,17 +167,16 @@ void GameScene::Exit()
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		if (meshList[i])
+		{
 			delete meshList[i];
+			meshList[i] = nullptr;
+		}
 	}
 
 	// Clear Bombers
 	while (!m_bomberList.empty())
 	{
-		if (m_bomberList.back())
-		{
-			delete m_bomberList.back();
-		}
-
+		// Don't delete as they will be deleted by the scenegraph
 		m_bomberList.pop_back();
 	}
 
