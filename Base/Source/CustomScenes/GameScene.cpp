@@ -59,7 +59,7 @@ void GameScene::Init()
 	{
 		for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
 		{
-			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("GridMesh", Color(1.0f / i, 1.0f / j, 1.0f / (i*j)), 50.0f));
+			m_cSpatialPartition->SetGridMesh(i, j, MeshBuilder::GenerateQuad("GridMesh", Color(1.0f / i, 1.0f / j, 1.0f / (i*j)), 1.0f));
 		}
 	}
 
@@ -483,6 +483,7 @@ void GameScene::RenderGround()
 
 				modelStack.PushMatrix();
 				modelStack.Translate(m_cSpatialPartition->xGridSize*i, -m_cSpatialPartition->yGridSize*j, 0.0f);
+				modelStack.Scale(m_cSpatialPartition->GetGridSizeX(), m_cSpatialPartition->GetGridSizeY(), 1);
 				Mesh* t = m_cSpatialPartition->GetGridMesh(i, j);
 				RenderMesh(t, false);
 				modelStack.PopMatrix();
