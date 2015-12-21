@@ -2,7 +2,10 @@
 
 // Inheritance Include
 #include "../SceneManager.h"
-#include "../Gameplay/BomberSpawner.h"
+
+// Other Includes
+#include "../Gameplay/Bomber.h"
+#include "../Gameplay/Weapon.h"
 
 class GameScene : public CSceneManager
 {
@@ -59,6 +62,10 @@ private:	// Variables
 
 	// Invulnerability Timer
 	float m_invulnTime;
+
+	// The Weapons the Player can use
+	Weapon m_slowGun;
+	Weapon m_killGun;
 
 protected:
 	// For Pausing and Resuming

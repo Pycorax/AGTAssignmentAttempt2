@@ -204,6 +204,9 @@
     <ClCompile Include="Source\Gameplay\BomberSpawner.cpp">
       <Filter>Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Gameplay\Weapon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -381,6 +384,9 @@
       <Filter>Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\Gameplay\BomberSpawner.h">
+      <Filter>Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\Weapon.h">
       <Filter>Gameplay</Filter>
     </ClInclude>
   </ItemGroup>

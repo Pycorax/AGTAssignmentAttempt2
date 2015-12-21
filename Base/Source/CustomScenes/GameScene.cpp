@@ -74,6 +74,10 @@ void GameScene::Init()
 
 	// Give the player the max number of lives
 	m_lives = MAX_LIVES;
+
+	// Set up the player's weapons
+	m_slowGun.Init(200, 2.0f, 800, 40);
+	m_killGun.Init(1200, 1.0f, 100, 1);
 }
 
 void GameScene::Update(double dt)
@@ -85,6 +89,10 @@ void GameScene::Update(double dt)
 	m_cAvatar->ConstrainHero(0, m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), 0, m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid(), dt);
 	// Update the Camera
 	camera.UpdatePosition(m_cAvatar->GetPosition(), m_cAvatar->GetDirection(), m_cAvatar->GetUpDir(), m_cAvatar->GetMovedForward(), dt);
+
+	// Update the player weapons
+	m_slowGun.Update(dt);
+	m_killGun.Update(dt);
 
 	// Enemies
 	bool gotHit = false;
@@ -198,14 +206,14 @@ void GameScene::Exit()
 
 void GameScene::UpdateWeaponStatus(const unsigned char key)
 {
-	if (key == WA_FIRE)
+	if (key == WA_FIRE && m_slowGun.Shoot())
 	{
 		// Add a bullet object which starts at the camera position and moves in the camera's direction
-		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), 200.0f);
+		m_cProjectileManager->AddProjectile(camera.position, (camera.target - camera.position).Normalize(), m_slowGun.GetBulletSpeed());
 	}
-	else if (key == WA_FIRE_SECONDARY)
+	else if (key == WA_FIRE_SECONDARY && m_killGun.Shoot())
 	{
-		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), 1200.0f);
+		m_cProjectileManager->AddRayProjectile(camera.position, (camera.target - camera.position).Normalize(), m_killGun.GetBulletSpeed());
 	}
 }
 
