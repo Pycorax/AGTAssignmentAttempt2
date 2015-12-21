@@ -494,9 +494,9 @@ void GameScene::RenderGround()
 	}
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(125, -125, 0);
+		modelStack.Translate(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid()* 0.5f, -m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid() * 0.5f, 0.0f);
 		//modelStack.Rotate(-90, 0, 0, 1);
-		modelStack.Scale(250.0f, 250.0f, 1.0f);
+		modelStack.Scale(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid(), 1.0f);
 		RenderMesh(meshList[GEO_GROUND], false);
 		modelStack.PopMatrix();
 	}
