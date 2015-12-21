@@ -18,6 +18,8 @@ private:
 	float m_lastShotDT;
 	// Magazine Size
 	short m_magSize;
+
+protected:
 	short m_currentMag;
 	
 public:
@@ -25,7 +27,7 @@ public:
 	virtual ~Weapon();
 
 	// Class Lifetime
-	void Init(float bulletSpeed, float fullReloadSpeed, float fireRate, short magSize);
+	virtual void Init(float bulletSpeed, float fullReloadSpeed, float fireRate, short magSize);
 	virtual void Update(double dt);
 
 	// Actions

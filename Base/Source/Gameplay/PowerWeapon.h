@@ -11,8 +11,13 @@ public:
 	PowerWeapon();
 	~PowerWeapon();
 
+	// Life Time
+	void Init(float bulletSpeed, float fullReloadSpeed, float fireRate, short magSize);
+
 	// Actions
 	bool StartReload(void);
 
+	// Charges
 	void AddCharge(int charges = 1);
+	int GetCharge(void) const;
 };

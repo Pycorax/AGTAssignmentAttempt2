@@ -12,6 +12,7 @@ class GameScene : public CSceneManager
 private:	// Static Constants
 	static const int MAX_LIVES = 3;
 	static const float INVULN_TIME;
+	static const int LAZER_PRICE = 10;
 
 private:	// Enums
 	enum GEOMETRY_TYPE
@@ -73,6 +74,9 @@ private:	// Variables
 	// The Weapons the Player can use
 	Weapon m_slowGun;
 	PowerWeapon m_killGun;
+
+	// Power Collection
+	int m_lazerCollection;			// When more than LAZER_PRICE is collected, a charge is given to the lazer
 
 protected:
 	// For Pausing and Resuming

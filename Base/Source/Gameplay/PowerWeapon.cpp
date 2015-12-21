@@ -9,6 +9,14 @@ PowerWeapon::~PowerWeapon()
 {
 }
 
+void PowerWeapon::Init(float bulletSpeed, float fullReloadSpeed, float fireRate, short magSize)
+{
+	Weapon::Init(bulletSpeed, fullReloadSpeed, fireRate, magSize);
+
+	// Start with nothing
+	m_currentMag = 0;
+}
+
 
 bool PowerWeapon::StartReload(void)
 {
@@ -27,4 +35,9 @@ bool PowerWeapon::StartReload(void)
 void PowerWeapon::AddCharge(int charges)
 {
 	m_charges += charges;
+}
+
+int PowerWeapon::GetCharge(void) const
+{
+	return m_charges;
 }

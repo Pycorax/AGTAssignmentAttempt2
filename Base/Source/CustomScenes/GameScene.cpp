@@ -15,6 +15,7 @@ GameScene::GameScene() : CSceneManager()
 	, m_invulnTime(0.0f)
 	, m_lives(MAX_LIVES)
 	, m_numEnemiesAtStart(0)
+	, m_lazerCollection(0)
 {
 }
 
@@ -23,6 +24,7 @@ GameScene::GameScene(const int window_width, const int window_height) : CSceneMa
 	, m_invulnTime(0.0f)
 	, m_lives(MAX_LIVES)
 	, m_numEnemiesAtStart(0)
+	, m_lazerCollection(0)
 {
 }
 
@@ -136,6 +138,7 @@ void GameScene::Update(double dt)
 					{
 						// Nudge the parent back
 						bomber->GetParent()->Nudge(m_cProjectileManager->theListOfProjectiles[i]->GetDirection());
+						m_lazerCollection++;
 					}
 				}
 			}
@@ -169,6 +172,13 @@ void GameScene::Update(double dt)
 	if (gotHit && m_invulnTime <= 0.0f)
 	{
 		killPlayer();
+	}
+
+	// Give the player a kill charge if he has enough points
+	if (m_lazerCollection > LAZER_PRICE)
+	{
+		m_lazerCollection = 0;
+		m_killGun.AddCharge();
 	}
 
 	// Check conditions for going to the end state
@@ -409,6 +419,10 @@ Render mobile objects
 ********************************************************************************/
 void GameScene::RenderGUI()
 {
+	// Set up OSS for on screen text
+	std::ostringstream ss;
+	ss.precision(5);
+
 	// Render lives in top left
 	static const float LIFE_SIZE = 50;
 	for (size_t i = 0; i < m_lives; ++i)
@@ -449,10 +463,10 @@ void GameScene::RenderGUI()
 
 	float pammoBarLength;
 
-	if (m_killGun.IsReloading())
+	if (m_killGun.GetCurrentMag() <= 0)
 	{
-		// Show reload status
-		pammoBarLength = m_killGun.GetReloadStatus() * MAX_AMMO_BAR_SCALE.x;
+		// Show collection status
+		pammoBarLength = (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)) * MAX_AMMO_BAR_SCALE.x;
 	}
 	else
 	{
@@ -466,6 +480,9 @@ void GameScene::RenderGUI()
 
 	Render2DMesh(meshList[GEO_POWER_AMMO_BAR], false, pammoBarScale.x, pammoBarScale.y, PAMMO_BAR_POS.x + pammoBarDisplaceLength * 0.5, PAMMO_BAR_POS.y);
 	Render2DMesh(meshList[GEO_BAR_BG], false, MAX_AMMO_BAR_SCALE.x, MAX_AMMO_BAR_SCALE.y, PAMMO_BAR_POS.x, PAMMO_BAR_POS.y);
+	ss << m_killGun.GetCharge();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, 1200, 36);
+	ss.str("");
 
 	// Render Wave Bar
 	//const Vector3 MAX_WAVE_BAR_SCALE = Vector3(160.0f, 5.0f, 5.0f);
@@ -479,9 +496,7 @@ void GameScene::RenderGUI()
 	//Render2DMesh(meshList[GEO_BAR_BG], false, MAX_WAVE_BAR_SCALE.x, MAX_WAVE_BAR_SCALE.y, WAVE_BAR_POS.x, WAVE_BAR_POS.y);
 	//Render2DMesh(meshList[GEO_KILL_BAR], false, waveBarScale.x, waveBarScale.y, WAVE_BAR_POS.x - waveBarDisplaceLength * 0.5, WAVE_BAR_POS.y);
 
-	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
+	
 
 	//ss << "Projectiles: " << m_cProjectileManager->NumOfActiveProjectile;
 	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
