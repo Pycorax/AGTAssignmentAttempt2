@@ -5,7 +5,7 @@
 
 // Other Includes
 #include "../Gameplay/Bomber.h"
-#include "../Gameplay/Weapon.h"
+#include "../Gameplay/PowerWeapon.h"
 
 class GameScene : public CSceneManager
 {
@@ -44,6 +44,7 @@ private:	// Enums
 		GEO_LIFE,
 		GEO_BAR_BG,
 		GEO_AMMO_BAR,
+		GEO_POWER_AMMO_BAR,
 		GEO_KILL_BAR,
 		// -- Text
 		GEO_TEXT,
@@ -71,7 +72,7 @@ private:	// Variables
 
 	// The Weapons the Player can use
 	Weapon m_slowGun;
-	Weapon m_killGun;
+	PowerWeapon m_killGun;
 
 protected:
 	// For Pausing and Resuming

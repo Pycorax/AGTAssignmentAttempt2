@@ -274,6 +274,7 @@ void GameScene::meshInit()
 	meshList[GEO_LIFE] = MeshBuilder::Generate2DMesh("Life", Color(), 0, 0, 1, 1);
 	meshList[GEO_LIFE]->textureID = LoadTGA("Image//HUD/life.tga");
 	meshList[GEO_AMMO_BAR] = MeshBuilder::GenerateQuad("Ammo Bar", Color(0.65f, 0.87f, 0.97f));
+	meshList[GEO_POWER_AMMO_BAR] = MeshBuilder::GenerateQuad("PAmmo Bar", Color(0.95f, 0.396f, 0.13f));
 	meshList[GEO_KILL_BAR] = MeshBuilder::GenerateQuad("Score Bar", Color(0.22f, 0.71f, 0.29f));
 	meshList[GEO_BAR_BG] = MeshBuilder::GenerateQuad("Bar BG", Color(0.54f, 0.54f, 0.54f));
 }
@@ -420,9 +421,21 @@ void GameScene::RenderGUI()
 
 	// Render Ammo Bar
 	const Vector3 MAX_AMMO_BAR_SCALE = Vector3(300.0f, 30.0f, 5.0f);
-	const Vector3 AMMO_BAR_POS = Vector3(m_window_width - MAX_AMMO_BAR_SCALE.x * 0.5f, MAX_AMMO_BAR_SCALE.y * 0.5f);	// Bottom middle of the screen
+	const Vector3 AMMO_BAR_POS = Vector3(m_window_width - MAX_AMMO_BAR_SCALE.x * 0.5f, MAX_AMMO_BAR_SCALE.y * 0.5f);
 
-	float ammoBarLength = (static_cast<float>(m_slowGun.GetCurrentMag()) / m_slowGun.GetMagSize()) * MAX_AMMO_BAR_SCALE.x;
+	float ammoBarLength;
+
+	if (m_slowGun.IsReloading())
+	{
+		// Show reload status
+		ammoBarLength = m_slowGun.GetReloadStatus() * MAX_AMMO_BAR_SCALE.x;
+	}
+	else
+	{
+		// Show ammo left
+		ammoBarLength = (static_cast<float>(m_slowGun.GetCurrentMag()) / m_slowGun.GetMagSize()) * MAX_AMMO_BAR_SCALE.x;
+	}
+	
 	float ammoBarDisplaceLength = MAX_AMMO_BAR_SCALE.x - ammoBarLength;
 	Vector3 ammoBarScale = MAX_AMMO_BAR_SCALE;
 	ammoBarScale.x = ammoBarLength;
@@ -430,6 +443,29 @@ void GameScene::RenderGUI()
 
 	Render2DMesh(meshList[GEO_AMMO_BAR], false, ammoBarScale.x, ammoBarScale.y, AMMO_BAR_POS.x + ammoBarDisplaceLength * 0.5, AMMO_BAR_POS.y);
 	Render2DMesh(meshList[GEO_BAR_BG], false, MAX_AMMO_BAR_SCALE.x, MAX_AMMO_BAR_SCALE.y, AMMO_BAR_POS.x, AMMO_BAR_POS.y);
+
+	// Render Power Ammo Bar
+	const Vector3 PAMMO_BAR_POS = Vector3(m_window_width - MAX_AMMO_BAR_SCALE.x * 0.5f, MAX_AMMO_BAR_SCALE.y * 1.5f);
+
+	float pammoBarLength;
+
+	if (m_killGun.IsReloading())
+	{
+		// Show reload status
+		pammoBarLength = m_killGun.GetReloadStatus() * MAX_AMMO_BAR_SCALE.x;
+	}
+	else
+	{
+		// Show ammo left
+		pammoBarLength = (static_cast<float>(m_killGun.GetCurrentMag()) / m_killGun.GetMagSize()) * MAX_AMMO_BAR_SCALE.x;
+	}
+
+	float pammoBarDisplaceLength = MAX_AMMO_BAR_SCALE.x - pammoBarLength;
+	Vector3 pammoBarScale = MAX_AMMO_BAR_SCALE;
+	pammoBarScale.x = pammoBarLength;
+
+	Render2DMesh(meshList[GEO_POWER_AMMO_BAR], false, pammoBarScale.x, pammoBarScale.y, PAMMO_BAR_POS.x + pammoBarDisplaceLength * 0.5, PAMMO_BAR_POS.y);
+	Render2DMesh(meshList[GEO_BAR_BG], false, MAX_AMMO_BAR_SCALE.x, MAX_AMMO_BAR_SCALE.y, PAMMO_BAR_POS.x, PAMMO_BAR_POS.y);
 
 	// Render Wave Bar
 	//const Vector3 MAX_WAVE_BAR_SCALE = Vector3(160.0f, 5.0f, 5.0f);

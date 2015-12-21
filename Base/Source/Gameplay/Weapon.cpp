@@ -71,8 +71,8 @@ bool Weapon::Shoot(void)
 
 bool Weapon::StartReload(void)
 {
-	// Don't allow reload if mag is full or no more bullets
-	if (m_currentMag == m_magSize)
+	// Don't allow reload if mag is full or no more bullets or is already reloading
+	if (m_currentMag == m_magSize || m_reloading)
 	{
 		return false;
 	}
@@ -109,4 +109,9 @@ short Weapon::GetCurrentMag(void)
 short Weapon::GetMagSize(void)
 {
 	return m_magSize;
+}
+
+bool Weapon::IsReloading(void)
+{
+	return m_reloading;
 }

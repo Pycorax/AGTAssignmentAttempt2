@@ -22,19 +22,21 @@ private:
 	
 public:
 	Weapon();
-	~Weapon();
+	virtual ~Weapon();
 
 	// Class Lifetime
 	void Init(float bulletSpeed, float fullReloadSpeed, float fireRate, short magSize);
-	void Update(double dt);
+	virtual void Update(double dt);
 
 	// Actions
-	bool Shoot(void);
-	bool StartReload(void);
+	virtual bool Shoot(void);
+	virtual bool StartReload(void);
 
 	// Get Reload Status: 0.0 - 1.0f: Percentage of reload completion
 	float GetReloadStatus(void);
 	float GetBulletSpeed(void);
 	short GetCurrentMag(void);
 	short GetMagSize(void);
+
+	bool IsReloading(void);
 };

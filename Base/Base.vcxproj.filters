@@ -205,7 +205,10 @@
       <Filter>Gameplay</Filter>
     </ClCompile>
     <ClCompile Include="Source\Gameplay\Weapon.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Gameplay</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\PowerWeapon.cpp">
+      <Filter>Gameplay</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -387,6 +390,9 @@
       <Filter>Gameplay</Filter>
     </ClInclude>
     <ClInclude Include="Source\Gameplay\Weapon.h">
+      <Filter>Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\PowerWeapon.h">
       <Filter>Gameplay</Filter>
     </ClInclude>
   </ItemGroup>
