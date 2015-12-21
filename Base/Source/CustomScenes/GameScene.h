@@ -42,6 +42,9 @@ private:	// Enums
 		GEO_GROUND,
 		// -- HUD
 		GEO_LIFE,
+		GEO_BAR_BG,
+		GEO_AMMO_BAR,
+		GEO_KILL_BAR,
 		// -- Text
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -56,6 +59,9 @@ private:	// Variables
 
 	// The moving bomber
 	Bomber* m_movingBomber;
+
+	// Gameplay Stats
+	int m_numEnemiesAtStart;		// Stores the number of enemies at the start
 
 	// Number of Lives
 	int m_lives;

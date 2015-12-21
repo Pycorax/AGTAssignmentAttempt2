@@ -4,8 +4,8 @@ const float Weapon::HALF_RELOAD_SPEED_MULTIPLIER = 0.8f;
 
 Weapon::Weapon()
 	: m_bulletSpeed(0.0f)
-	, m_fullReloadSpeed(0.0f)
-	, m_reloadSpeed(0.0f)
+	, m_fullReloadTime(0.0f)
+	, m_reloadTime(0.0f)
 	, m_reloading(false)
 	, m_reloadTimer(0.0f)
 	, m_fireRate(0.0f)
@@ -22,8 +22,8 @@ Weapon::~Weapon()
 void Weapon::Init(float bulletSpeed, float fullReloadSpeed, float fireRate, short magSize)
 {
 	m_bulletSpeed = bulletSpeed;
-	m_fullReloadSpeed = fullReloadSpeed;
-	m_reloadSpeed = HALF_RELOAD_SPEED_MULTIPLIER * m_fullReloadSpeed;
+	m_fullReloadTime = fullReloadSpeed;
+	m_reloadTime = HALF_RELOAD_SPEED_MULTIPLIER * m_fullReloadTime;
 	m_lastShotDT = m_fireRate = 60.0f /*Seconds in a minute*/ / fireRate;
 	m_currentMag = m_magSize = magSize;
 }
@@ -50,20 +50,23 @@ void Weapon::Update(double dt)
 
 bool Weapon::Shoot(void)
 {
-	if (m_lastShotDT > m_fireRate && m_currentMag > 0)
+	if (m_lastShotDT > m_fireRate)
 	{
-		m_lastShotDT = 0.0f;
-		--m_currentMag;
+		if (m_currentMag > 0)
+		{
+			m_lastShotDT = 0.0f;
+			--m_currentMag;
 
-		return true;
+			return true;
+		}
+		else
+		{
+			// Automatic reloads
+			StartReload();
+		}
 	}
-	else
-	{
-		// Automatic reloads
-		m_reloading = true;
 
-		return false;
-	}
+	return false;
 }
 
 bool Weapon::StartReload(void)
@@ -78,11 +81,11 @@ bool Weapon::StartReload(void)
 		m_reloading = true;
 		if (m_currentMag <= 0)
 		{
-			m_reloadTimer = m_fullReloadSpeed;
+			m_reloadTimer = m_fullReloadTime;
 		}
 		else
 		{
-			m_reloadSpeed = m_reloadSpeed;
+			m_reloadTimer = m_reloadTime;
 		}
 		return true;
 	}
@@ -90,10 +93,20 @@ bool Weapon::StartReload(void)
 
 float Weapon::GetReloadStatus(void)
 {
-	return 1.0f - (m_reloadTimer / m_fullReloadSpeed);
+	return 1.0f - (m_reloadTimer / m_fullReloadTime);
 }
 
 float Weapon::GetBulletSpeed(void)
 {
 	return m_bulletSpeed;
+}
+
+short Weapon::GetCurrentMag(void)
+{
+	return m_currentMag;
+}
+
+short Weapon::GetMagSize(void)
+{
+	return m_magSize;
 }

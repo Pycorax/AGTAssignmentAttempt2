@@ -14,11 +14,15 @@ GameScene::GameScene() : CSceneManager()
 	, m_movingBomber(nullptr)
 	, m_invulnTime(0.0f)
 	, m_lives(MAX_LIVES)
+	, m_numEnemiesAtStart(0)
 {
 }
 
 GameScene::GameScene(const int window_width, const int window_height) : CSceneManager(window_width, window_height)
 	, m_movingBomber(nullptr)
+	, m_invulnTime(0.0f)
+	, m_lives(MAX_LIVES)
+	, m_numEnemiesAtStart(0)
 {
 }
 
@@ -65,6 +69,7 @@ void GameScene::Init()
 
 	//bomberDemoInit();
 	bomberSurvivalInit(1, 1, 1, 1);
+	m_numEnemiesAtStart = 4;
 
 	// Add the pointers to the scene graph to the spatial partition
 	m_cSpatialPartition->AddObject(m_cSceneGraph);
@@ -76,8 +81,8 @@ void GameScene::Init()
 	m_lives = MAX_LIVES;
 
 	// Set up the player's weapons
-	m_slowGun.Init(200, 2.0f, 800, 40);
-	m_killGun.Init(1200, 1.0f, 100, 1);
+	m_slowGun.Init(200, 1.5f, 800, 10);
+	m_killGun.Init(1200, 0.7f, 100, 1);
 }
 
 void GameScene::Update(double dt)
@@ -268,6 +273,9 @@ void GameScene::meshInit()
 	// HUD
 	meshList[GEO_LIFE] = MeshBuilder::Generate2DMesh("Life", Color(), 0, 0, 1, 1);
 	meshList[GEO_LIFE]->textureID = LoadTGA("Image//HUD/life.tga");
+	meshList[GEO_AMMO_BAR] = MeshBuilder::GenerateQuad("Ammo Bar", Color(0.65f, 0.87f, 0.97f));
+	meshList[GEO_KILL_BAR] = MeshBuilder::GenerateQuad("Score Bar", Color(0.22f, 0.71f, 0.29f));
+	meshList[GEO_BAR_BG] = MeshBuilder::GenerateQuad("Bar BG", Color(0.54f, 0.54f, 0.54f));
 }
 
 void GameScene::bomberDemoInit()
@@ -410,16 +418,41 @@ void GameScene::RenderGUI()
 	// Render the crosshair
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 
+	// Render Ammo Bar
+	const Vector3 MAX_AMMO_BAR_SCALE = Vector3(300.0f, 30.0f, 5.0f);
+	const Vector3 AMMO_BAR_POS = Vector3(m_window_width - MAX_AMMO_BAR_SCALE.x * 0.5f, MAX_AMMO_BAR_SCALE.y * 0.5f);	// Bottom middle of the screen
+
+	float ammoBarLength = (static_cast<float>(m_slowGun.GetCurrentMag()) / m_slowGun.GetMagSize()) * MAX_AMMO_BAR_SCALE.x;
+	float ammoBarDisplaceLength = MAX_AMMO_BAR_SCALE.x - ammoBarLength;
+	Vector3 ammoBarScale = MAX_AMMO_BAR_SCALE;
+	ammoBarScale.x = ammoBarLength;
+
+
+	Render2DMesh(meshList[GEO_AMMO_BAR], false, ammoBarScale.x, ammoBarScale.y, AMMO_BAR_POS.x + ammoBarDisplaceLength * 0.5, AMMO_BAR_POS.y);
+	Render2DMesh(meshList[GEO_BAR_BG], false, MAX_AMMO_BAR_SCALE.x, MAX_AMMO_BAR_SCALE.y, AMMO_BAR_POS.x, AMMO_BAR_POS.y);
+
+	// Render Wave Bar
+	//const Vector3 MAX_WAVE_BAR_SCALE = Vector3(160.0f, 5.0f, 5.0f);
+	//const Vector3 WAVE_BAR_POS = Vector3(-80.0 + MAX_WAVE_BAR_SCALE.x * 0.5, 57.5f);	// Bottom middle of the screen
+
+	//float waveBarLength = (static_cast<float>(m_numEnemiesAtStart - getNumBombersAlive()) / (m_numEnemiesAtStart)) * MAX_WAVE_BAR_SCALE.x;
+	//float waveBarDisplaceLength = MAX_WAVE_BAR_SCALE.x - waveBarLength;
+	//Vector3 waveBarScale = MAX_WAVE_BAR_SCALE;
+	//waveBarScale.x = waveBarLength;
+
+	//Render2DMesh(meshList[GEO_BAR_BG], false, MAX_WAVE_BAR_SCALE.x, MAX_WAVE_BAR_SCALE.y, WAVE_BAR_POS.x, WAVE_BAR_POS.y);
+	//Render2DMesh(meshList[GEO_KILL_BAR], false, waveBarScale.x, waveBarScale.y, WAVE_BAR_POS.x - waveBarDisplaceLength * 0.5, WAVE_BAR_POS.y);
+
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
 
-	ss << "Projectiles: " << m_cProjectileManager->NumOfActiveProjectile;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
+	//ss << "Projectiles: " << m_cProjectileManager->NumOfActiveProjectile;
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
 
-	ss.str("");
-	ss << "Position: " << m_cAvatar->GetPosition();
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 36);
+	//ss.str("");
+	//ss << "Position: " << m_cAvatar->GetPosition();
+	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 36);
 }
 
 /********************************************************************************

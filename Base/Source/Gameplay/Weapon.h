@@ -9,8 +9,8 @@ private:
 	// Bullet Speed
 	float m_bulletSpeed;
 	// Reload
-	float m_fullReloadSpeed;
-	float m_reloadSpeed;
+	float m_fullReloadTime;
+	float m_reloadTime;
 	bool m_reloading;
 	float m_reloadTimer;
 	// Fire Rate
@@ -35,4 +35,6 @@ public:
 	// Get Reload Status: 0.0 - 1.0f: Percentage of reload completion
 	float GetReloadStatus(void);
 	float GetBulletSpeed(void);
+	short GetCurrentMag(void);
+	short GetMagSize(void);
 };
