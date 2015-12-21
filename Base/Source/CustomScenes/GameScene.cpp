@@ -54,7 +54,7 @@ void GameScene::Init()
 
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
-	m_cSpatialPartition->Init(50, 50, 5, 5);
+	m_cSpatialPartition->Init(65, 65, 5, 5);
 	for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
 	{
 		for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
