@@ -15,9 +15,9 @@ public:
 
 private:
 	// Body Parts
-	CSceneNode* m_hat;
-	CSceneNode* m_head;
-	CSceneNode* m_body;
+	Bomber* m_hat;
+	Bomber* m_head;
+	Bomber* m_body;
 
 	// Human Stats
 	float m_speed;
@@ -27,9 +27,13 @@ public:
 	Bomber();
 	virtual ~Bomber();
 
-	void Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);
+	void Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);		// Should only be called on Body Bomber nodes
 	bool Update(double dt, Vector3 target);
 
 	// Life Time
 	void Spawn(Vector3 startPos, float speed);
+
+	// Interaction
+	void Nudge(Vector3 direction);
+	Bomber* GetParent(void) const;
 };

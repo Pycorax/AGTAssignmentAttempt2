@@ -24,17 +24,25 @@ void Bomber::Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMes
 	
 	// Head
 	CTransform* headPos = new CTransform(0.0f, 1.0f, 0.0f);
-	int headID = this->AddChild(headPos, new CModel(headMesh));
-	m_head = this->GetNode(headID);
+	m_head = new Bomber();
+	m_head->SetNode(headPos, new CModel(headMesh));
 	m_head->ApplyScale(0.4f, 0.4f, 0.4f);
 	m_head->SetType(CSceneNode::NT_BOMBER);
+	// Let the head know that THIS is the body
+	m_head->m_body = this;
+	// Add this to be the body
+	this->AddChild(m_head);
 
 	// Hat
 	CTransform* hatPos = new CTransform(0.0f, 0.8f, 0.0f);
-	int hatID = m_head->AddChild(hatPos, new CModel(hatMesh));
-	m_hat = this->GetNode(hatID);
+	m_hat = new Bomber();
+	m_hat->SetNode(hatPos, new CModel(hatMesh));
 	m_hat->ApplyScale(1.5f, 1.5f, 1.5f);
-	m_head->SetType(CSceneNode::NT_BOMBER);
+	m_hat->SetType(CSceneNode::NT_BOMBER);
+	// Let the hat know that THIS is the body
+	m_hat->m_body = this;
+	// Add this to be the body
+	m_head->AddChild(m_hat);
 }
 
 bool Bomber::Update(double dt, Vector3 target)
@@ -90,4 +98,27 @@ void Bomber::Spawn(Vector3 startPos, float speed)
 	m_speed = speed;
 	m_state = LS_CHASE;
 	Activate();
+}
+
+void Bomber::Nudge(Vector3 direction)
+{
+	if (direction != Vector3::ZERO_VECTOR)
+	{
+		// Discard the y
+		direction.y = 0.0f;
+
+		// Get the direction unit vector
+		direction.Normalize();
+
+		// Get the actual distance to move
+		Vector3 move = direction * 5.0f;
+
+		// Move in that direction
+		ApplyTranslate(move.x, move.y, move.z);
+	}
+}
+
+Bomber * Bomber::GetParent(void) const
+{
+	return m_body;
 }

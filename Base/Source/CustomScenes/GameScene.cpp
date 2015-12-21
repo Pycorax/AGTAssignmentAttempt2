@@ -117,8 +117,13 @@ void GameScene::Update(double dt)
 				{
 					// Remove the projectile
 					m_cProjectileManager->RemoveProjectile(i);
-					// React accordingly to the collided item
-					node->Deactivate();
+					// Check if the item is a bomber
+					Bomber* bomber = dynamic_cast<Bomber*>(node);
+					if (bomber)
+					{
+						// Nudge the parent back
+						bomber->GetParent()->Nudge(m_cProjectileManager->theListOfProjectiles[i]->GetDirection());
+					}
 				}
 			}
 			else if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_RAY)
