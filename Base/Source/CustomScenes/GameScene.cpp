@@ -251,6 +251,10 @@ void GameScene::meshInit()
 	// Load the ground mesh and texture
 	meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
 	meshList[GEO_GROUND]->textureID = LoadTGA("Image//floor.tga");
+
+	// HUD
+	meshList[GEO_LIFE] = MeshBuilder::Generate2DMesh("Life", Color(), 0, 0, 1, 1);
+	meshList[GEO_LIFE]->textureID = LoadTGA("Image//HUD/life.tga");
 }
 
 void GameScene::bomberDemoInit()
@@ -383,6 +387,13 @@ Render mobile objects
 ********************************************************************************/
 void GameScene::RenderGUI()
 {
+	// Render lives in top left
+	static const float LIFE_SIZE = 50;
+	for (size_t i = 0; i < m_lives; ++i)
+	{
+		Render2DMesh(meshList[GEO_LIFE], false, LIFE_SIZE, LIFE_SIZE, 0 + (i * LIFE_SIZE), m_window_height - LIFE_SIZE);
+	}
+
 	// Render the crosshair
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 
@@ -396,8 +407,6 @@ void GameScene::RenderGUI()
 	ss.str("");
 	ss << "Position: " << m_cAvatar->GetPosition();
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 36);
-
-	//RenderTextOnScreen(meshList[GEO_TEXT], "Hello Screen", Color(0, 1, 0), 3, 0, 0);
 }
 
 /********************************************************************************

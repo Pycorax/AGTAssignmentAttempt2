@@ -37,6 +37,8 @@ private:	// Enums
 		GEO_BACK,
 		// -- Floor
 		GEO_GROUND,
+		// -- HUD
+		GEO_LIFE,
 		// -- Text
 		GEO_TEXT,
 		NUM_GEOMETRY,
