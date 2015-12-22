@@ -472,16 +472,8 @@ void GameScene::RenderGUI()
 
 	// Render Power Ammo Bar
 	const Vector3 PAMMO_BAR_POS = Vector3(m_window_width - MAX_BAR_SCALE.x * 0.5f, MAX_BAR_SCALE.y * 1.5f);
-	if (m_killGun.GetCurrentMag() <= 0)
-	{
-		// Show collection status
-		renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)), meshList[GEO_POWER_AMMO_BAR]);
-	}
-	else
-	{
-		// Show ammo left
-		renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_killGun.GetCurrentMag()) / m_killGun.GetMagSize()), meshList[GEO_POWER_AMMO_BAR]);
-	}
+	// Show collection status
+	renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)), meshList[GEO_POWER_AMMO_BAR]);
 
 	ss << m_killGun.GetCharge();
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, m_window_width - MAX_BAR_SCALE.x, MAX_BAR_SCALE.y * 1.5f);
