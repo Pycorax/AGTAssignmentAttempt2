@@ -24,6 +24,7 @@
     <ClCompile Include="Source\CustomScenes\OptionMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\PauseMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\SplashScene.cpp" />
+    <ClCompile Include="Source\CustomScenes\WinMenuScene.cpp" />
     <ClCompile Include="Source\CustomStates\HighScoreState.cpp" />
     <ClCompile Include="Source\CustomStates\InstructionState.cpp" />
     <ClCompile Include="Source\CustomStates\IntroState.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="Source\CustomStates\OptionState.cpp" />
     <ClCompile Include="Source\CustomStates\PauseState.cpp" />
     <ClCompile Include="Source\CustomStates\PlayState.cpp" />
+    <ClCompile Include="Source\CustomStates\WinState.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Gameplay\Bomber.cpp" />
     <ClCompile Include="Source\Gameplay\BomberSpawner.cpp" />
@@ -85,6 +87,7 @@
     <ClInclude Include="Source\CustomScenes\OptionMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\PauseMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\SplashScene.h" />
+    <ClInclude Include="Source\CustomScenes\WinMenuScene.h" />
     <ClInclude Include="Source\CustomStates\HighScoreState.h" />
     <ClInclude Include="Source\CustomStates\InstructionState.h" />
     <ClInclude Include="Source\CustomStates\IntroState.h" />
@@ -95,6 +98,7 @@
     <ClInclude Include="Source\CustomStates\OptionState.h" />
     <ClInclude Include="Source\CustomStates\PauseState.h" />
     <ClInclude Include="Source\CustomStates\PlayState.h" />
+    <ClInclude Include="Source\CustomStates\WinState.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Gameplay\Bomber.h" />
     <ClInclude Include="Source\Gameplay\BomberSpawner.h" />

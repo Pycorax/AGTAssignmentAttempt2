@@ -1,7 +1,7 @@
 #include "Bomber.h"
 
 const float Bomber::DEATH_ROTATE_SPEED = 20.0f;
-const float Bomber::DEATH_MAX_ROTATE = 90.0f;
+const float Bomber::DEATH_MAX_ROTATE = 30.0f;
 
 Bomber::Bomber() : CSceneNode()
 	, m_hat(nullptr)
@@ -93,7 +93,6 @@ bool Bomber::Update(double dt, Vector3 target)
 		case LS_DEATH:
 		{
 			// Do death animation
-			std::cout << m_deathRotated << std::endl;
 			if (m_deathRotated < DEATH_MAX_ROTATE)
 			{
 				ApplyRotate(DEATH_ROTATE_SPEED * dt, 1, 0, 0);

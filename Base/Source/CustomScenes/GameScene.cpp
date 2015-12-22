@@ -6,6 +6,7 @@
 #include <sstream>
 #include "../Application.h"
 #include "../CustomStates/LoseState.h"
+#include "../CustomStates/WinState.h"
 
 using std::ostringstream;
 
@@ -408,7 +409,9 @@ void GameScene::checkEndState(double dt)
 	// Check if game end
 	if (getNumBombersAlive() == 0)
 	{
-		// Go to the win state
+		ostringstream oss;
+		oss << m_score;
+		changeState(WinState::Instance(), false, oss.str());
 	}
 
 	// Check if no health
