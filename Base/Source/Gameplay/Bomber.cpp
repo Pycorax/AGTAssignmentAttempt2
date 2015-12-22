@@ -1,11 +1,15 @@
 #include "Bomber.h"
 
+const float Bomber::DEATH_ROTATE_SPEED = 20.0f;
+const float Bomber::DEATH_MAX_ROTATE = 90.0f;
+
 Bomber::Bomber() : CSceneNode()
 	, m_hat(nullptr)
 	, m_head(nullptr)
 	, m_body(nullptr)
 	, m_speed(10.0f)
 	, m_state(LS_CHASE)
+	, m_deathRotated(0.0f)
 {
 }
 
@@ -85,6 +89,22 @@ bool Bomber::Update(double dt, Vector3 target)
 			Deactivate();
 			return true;
 		}
+
+		case LS_DEATH:
+		{
+			// Do death animation
+			std::cout << m_deathRotated << std::endl;
+			if (m_deathRotated < DEATH_MAX_ROTATE)
+			{
+				ApplyRotate(DEATH_ROTATE_SPEED * dt, 1, 0, 0);
+				m_deathRotated += DEATH_ROTATE_SPEED * dt;
+			}
+			else
+			{
+				Deactivate();
+			}
+		}
+
 		break;
 
 	}
@@ -98,6 +118,12 @@ void Bomber::Spawn(Vector3 startPos, float speed)
 	m_speed = speed;
 	m_state = LS_CHASE;
 	Activate();
+}
+
+void Bomber::Kill(void)
+{
+	m_deathRotated = 0.0f;
+	m_state = LS_DEATH;
 }
 
 void Bomber::Nudge(Vector3 direction)

@@ -5,11 +5,15 @@
 
 class Bomber : public CSceneNode
 {
+	static const float DEATH_ROTATE_SPEED;
+	static const float DEATH_MAX_ROTATE;
+
 public:
 	enum LIFE_STATE
 	{
 		LS_CHASE,
 		LS_BOOM,
+		LS_DEATH,
 		LS_TOTAL
 	};
 
@@ -23,6 +27,9 @@ private:
 	float m_speed;
 	LIFE_STATE m_state;
 
+	// Animation
+	float m_deathRotated;		// Angle rotated for the death animation
+
 public:
 	Bomber();
 	virtual ~Bomber();
@@ -32,6 +39,7 @@ public:
 
 	// Life Time
 	void Spawn(Vector3 startPos, float speed);
+	void Kill(void);
 
 	// Interaction
 	void Nudge(Vector3 direction);

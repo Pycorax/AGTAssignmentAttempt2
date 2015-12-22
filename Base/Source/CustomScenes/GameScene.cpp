@@ -160,7 +160,12 @@ void GameScene::Update(double dt)
 					// Remove the projectile
 					m_cProjectileManager->RemoveProjectile(i);
 					// React accordingly to the collided item
-					node->Deactivate();
+					// Check if the item is a bomber
+					Bomber* bomber = dynamic_cast<Bomber*>(node);
+					if (bomber)
+					{
+						bomber->Kill();
+					}
 					// Update score
 					m_score += SCORE_FOR_KILL;
 				}
