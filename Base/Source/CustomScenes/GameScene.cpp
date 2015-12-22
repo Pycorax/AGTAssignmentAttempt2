@@ -476,7 +476,7 @@ void GameScene::RenderGUI()
 	renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)), meshList[GEO_POWER_AMMO_BAR]);
 
 	ss << m_killGun.GetCharge();
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, m_window_width - MAX_BAR_SCALE.x, MAX_BAR_SCALE.y * 1.5f);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, m_window_width - ss.str().length() * 30, MAX_BAR_SCALE.y);
 	ss.str("");
 }
 
