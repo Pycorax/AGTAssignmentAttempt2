@@ -113,4 +113,7 @@ private:
 	void killPlayer(void);
 	// -- Update Functions
 	void checkEndState(double dt);
+
+	// UI
+	void renderUIBar(Vector3 pos, Vector3 scale, float progress, Mesh* progressMesh);
 };

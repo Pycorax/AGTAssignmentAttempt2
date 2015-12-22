@@ -405,6 +405,18 @@ void GameScene::checkEndState(double dt)
 	}
 }
 
+void GameScene::renderUIBar(Vector3 pos, Vector3 scale, float progress, Mesh * progressMesh)
+{
+	float ammoBarLength = progress * scale.x;
+	float barDisplaceLength = scale.x - ammoBarLength;
+	Vector3 barScale = scale;
+	barScale.x = ammoBarLength;
+
+	// Rendering
+	Render2DMesh(progressMesh, false, barScale.x, barScale.y, pos.x + barDisplaceLength * 0.5, pos.y);
+	Render2DMesh(meshList[GEO_BAR_BG], false, scale.x, scale.y, pos.x, pos.y);
+}
+
 
 void GameScene::OnResume()
 {
@@ -434,76 +446,35 @@ void GameScene::RenderGUI()
 	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
 
 	// Render Ammo Bar
-	const Vector3 MAX_AMMO_BAR_SCALE = Vector3(300.0f, 30.0f, 5.0f);
-	const Vector3 AMMO_BAR_POS = Vector3(m_window_width - MAX_AMMO_BAR_SCALE.x * 0.5f, MAX_AMMO_BAR_SCALE.y * 0.5f);
-
-	float ammoBarLength;
-
+	const Vector3 MAX_BAR_SCALE = Vector3(300.0f, 30.0f, 5.0f);
+	const Vector3 AMMO_BAR_POS = Vector3(m_window_width - MAX_BAR_SCALE.x * 0.5f, MAX_BAR_SCALE.y * 0.5f);
 	if (m_slowGun.IsReloading())
 	{
 		// Show reload status
-		ammoBarLength = m_slowGun.GetReloadStatus() * MAX_AMMO_BAR_SCALE.x;
+		renderUIBar(AMMO_BAR_POS, MAX_BAR_SCALE, m_slowGun.GetReloadStatus(), meshList[GEO_AMMO_BAR]);
 	}
 	else
 	{
 		// Show ammo left
-		ammoBarLength = (static_cast<float>(m_slowGun.GetCurrentMag()) / m_slowGun.GetMagSize()) * MAX_AMMO_BAR_SCALE.x;
+		renderUIBar(AMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_slowGun.GetCurrentMag()) / m_slowGun.GetMagSize()), meshList[GEO_AMMO_BAR]);
 	}
-	
-	float ammoBarDisplaceLength = MAX_AMMO_BAR_SCALE.x - ammoBarLength;
-	Vector3 ammoBarScale = MAX_AMMO_BAR_SCALE;
-	ammoBarScale.x = ammoBarLength;
-
-
-	Render2DMesh(meshList[GEO_AMMO_BAR], false, ammoBarScale.x, ammoBarScale.y, AMMO_BAR_POS.x + ammoBarDisplaceLength * 0.5, AMMO_BAR_POS.y);
-	Render2DMesh(meshList[GEO_BAR_BG], false, MAX_AMMO_BAR_SCALE.x, MAX_AMMO_BAR_SCALE.y, AMMO_BAR_POS.x, AMMO_BAR_POS.y);
 
 	// Render Power Ammo Bar
-	const Vector3 PAMMO_BAR_POS = Vector3(m_window_width - MAX_AMMO_BAR_SCALE.x * 0.5f, MAX_AMMO_BAR_SCALE.y * 1.5f);
-
-	float pammoBarLength;
-
+	const Vector3 PAMMO_BAR_POS = Vector3(m_window_width - MAX_BAR_SCALE.x * 0.5f, MAX_BAR_SCALE.y * 1.5f);
 	if (m_killGun.GetCurrentMag() <= 0)
 	{
 		// Show collection status
-		pammoBarLength = (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)) * MAX_AMMO_BAR_SCALE.x;
+		renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)), meshList[GEO_POWER_AMMO_BAR]);
 	}
 	else
 	{
 		// Show ammo left
-		pammoBarLength = (static_cast<float>(m_killGun.GetCurrentMag()) / m_killGun.GetMagSize()) * MAX_AMMO_BAR_SCALE.x;
+		renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_killGun.GetCurrentMag()) / m_killGun.GetMagSize()), meshList[GEO_POWER_AMMO_BAR]);
 	}
 
-	float pammoBarDisplaceLength = MAX_AMMO_BAR_SCALE.x - pammoBarLength;
-	Vector3 pammoBarScale = MAX_AMMO_BAR_SCALE;
-	pammoBarScale.x = pammoBarLength;
-
-	Render2DMesh(meshList[GEO_POWER_AMMO_BAR], false, pammoBarScale.x, pammoBarScale.y, PAMMO_BAR_POS.x + pammoBarDisplaceLength * 0.5, PAMMO_BAR_POS.y);
-	Render2DMesh(meshList[GEO_BAR_BG], false, MAX_AMMO_BAR_SCALE.x, MAX_AMMO_BAR_SCALE.y, PAMMO_BAR_POS.x, PAMMO_BAR_POS.y);
 	ss << m_killGun.GetCharge();
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, 1200, 36);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, m_window_width - MAX_BAR_SCALE.x, MAX_BAR_SCALE.y * 1.5f);
 	ss.str("");
-
-	// Render Wave Bar
-	//const Vector3 MAX_WAVE_BAR_SCALE = Vector3(160.0f, 5.0f, 5.0f);
-	//const Vector3 WAVE_BAR_POS = Vector3(-80.0 + MAX_WAVE_BAR_SCALE.x * 0.5, 57.5f);	// Bottom middle of the screen
-
-	//float waveBarLength = (static_cast<float>(m_numEnemiesAtStart - getNumBombersAlive()) / (m_numEnemiesAtStart)) * MAX_WAVE_BAR_SCALE.x;
-	//float waveBarDisplaceLength = MAX_WAVE_BAR_SCALE.x - waveBarLength;
-	//Vector3 waveBarScale = MAX_WAVE_BAR_SCALE;
-	//waveBarScale.x = waveBarLength;
-
-	//Render2DMesh(meshList[GEO_BAR_BG], false, MAX_WAVE_BAR_SCALE.x, MAX_WAVE_BAR_SCALE.y, WAVE_BAR_POS.x, WAVE_BAR_POS.y);
-	//Render2DMesh(meshList[GEO_KILL_BAR], false, waveBarScale.x, waveBarScale.y, WAVE_BAR_POS.x - waveBarDisplaceLength * 0.5, WAVE_BAR_POS.y);
-
-	
-
-	//ss << "Projectiles: " << m_cProjectileManager->NumOfActiveProjectile;
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 6);
-
-	//ss.str("");
-	//ss << "Position: " << m_cAvatar->GetPosition();
-	//RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 30, 0, 36);
 }
 
 /********************************************************************************
