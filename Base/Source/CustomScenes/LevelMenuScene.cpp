@@ -72,12 +72,12 @@ void LevelMenuScene::Init()
 	{
 		for (int row = 0; row < BUTTON_ROWS; ++row)
 		{
-			if ((BT_LEVEL_SURVIVAL1 + (row * BUTTON_COLS) + col) > BT_LEVEL_SURVIVAL5)
+			if ((BT_LEVEL_SURVIVAL1 + (row * BUTTON_COLS) + col) > BT_LEVEL_SURVIVAL6)
 			{
 				break;
 			}
 			std::cout << GEO_BT_LEVEL_1 + (row * BUTTON_COLS) + col << std::endl;
-			m_button[BT_LEVEL_SURVIVAL1 + (row * BUTTON_COLS) + col].Init(meshList[GEO_BT_LEVEL_DEMO], Vector3(m_window_width * (0.3 + 0.4 * col), m_window_height * (0.5 - 0.1 * row)), NORMAL_BUTTON_SIZE);
+			m_button[BT_LEVEL_SURVIVAL1 + (row * BUTTON_COLS) + col].Init(meshList[GEO_BT_LEVEL_1 + (row * BUTTON_COLS) + col], Vector3(m_window_width * (0.3 + 0.4 * col), m_window_height * (0.5 - 0.1 * row)), NORMAL_BUTTON_SIZE);
 		}
 	}
 }
