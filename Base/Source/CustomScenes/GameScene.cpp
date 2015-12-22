@@ -16,6 +16,7 @@ GameScene::GameScene() : CSceneManager()
 	, m_lives(MAX_LIVES)
 	, m_numEnemiesAtStart(0)
 	, m_lazerCollection(0)
+	, m_score(0)
 {
 }
 
@@ -25,6 +26,7 @@ GameScene::GameScene(const int window_width, const int window_height) : CSceneMa
 	, m_lives(MAX_LIVES)
 	, m_numEnemiesAtStart(0)
 	, m_lazerCollection(0)
+	, m_score(0)
 {
 }
 
@@ -139,6 +141,8 @@ void GameScene::Update(double dt)
 						// Nudge the parent back
 						bomber->GetParent()->Nudge(m_cProjectileManager->theListOfProjectiles[i]->GetDirection());
 						m_lazerCollection++;
+						// Update score
+						m_score += SCORE_FOR_HIT;
 					}
 				}
 			}
@@ -157,6 +161,8 @@ void GameScene::Update(double dt)
 					m_cProjectileManager->RemoveProjectile(i);
 					// React accordingly to the collided item
 					node->Deactivate();
+					// Update score
+					m_score += SCORE_FOR_KILL;
 				}
 			}
 		}
@@ -435,11 +441,16 @@ void GameScene::RenderGUI()
 	std::ostringstream ss;
 	ss.precision(5);
 
-	// Render lives in top left
+	// Render scores in the top left
+	ss << "Score: " << m_score;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, 0.0f, m_window_height - 30);
+	ss.str("");
+
+	// Render lives in top right
 	static const float LIFE_SIZE = 50;
-	for (size_t i = 0; i < m_lives; ++i)
+	for (size_t i = 1; i <= m_lives; ++i)
 	{
-		Render2DMesh(meshList[GEO_LIFE], false, LIFE_SIZE, LIFE_SIZE, 0 + (i * LIFE_SIZE), m_window_height - LIFE_SIZE);
+		Render2DMesh(meshList[GEO_LIFE], false, LIFE_SIZE, LIFE_SIZE, m_window_width - (i * LIFE_SIZE), m_window_height - LIFE_SIZE);
 	}
 
 	// Render the crosshair

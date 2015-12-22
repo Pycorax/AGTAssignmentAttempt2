@@ -10,9 +10,13 @@
 class GameScene : public CSceneManager
 {
 private:	// Static Constants
+	// -- Gameplay
 	static const int MAX_LIVES = 3;
 	static const float INVULN_TIME;
 	static const int LAZER_PRICE = 10;
+	// -- Score
+	static const int SCORE_FOR_HIT = 10;
+	static const int SCORE_FOR_KILL = 100;
 
 private:	// Enums
 	enum GEOMETRY_TYPE
@@ -77,6 +81,9 @@ private:	// Variables
 
 	// Power Collection
 	int m_lazerCollection;			// When more than LAZER_PRICE is collected, a charge is given to the lazer
+
+	// Total Score
+	int m_score;
 
 protected:
 	// For Pausing and Resuming
