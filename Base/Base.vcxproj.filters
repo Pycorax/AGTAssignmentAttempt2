@@ -210,6 +210,12 @@
     <ClCompile Include="Source\Gameplay\PowerWeapon.cpp">
       <Filter>Gameplay</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CustomStates\LoseState.cpp">
+      <Filter>CustomStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CustomScenes\LoseMenuScene.cpp">
+      <Filter>CustomScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -394,6 +400,18 @@
     </ClInclude>
     <ClInclude Include="Source\Gameplay\PowerWeapon.h">
       <Filter>Gameplay</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\LoseState.h">
+      <Filter>CustomStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\LoseMenuScene.h">
+      <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomScenes\IScoreMenu.h">
+      <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CustomStates\IScoreState.h">
+      <Filter>CustomStates</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

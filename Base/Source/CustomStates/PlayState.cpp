@@ -4,6 +4,7 @@
 #include "../GameStateManager.h"
 #include "PauseState.h"
 #include "..\CustomScenes\GameScene.h"
+#include "IScoreState.h"
 
 CPlayState CPlayState::thePlayState;
 
@@ -20,6 +21,28 @@ void CPlayState::Init(const int width, const int height)
 
 	scene = new GameScene(width, height);
 	scene->Init();
+}
+
+void CPlayState::Update(CGameStateManager * theGSM, const double m_dElapsedTime, string * tagReceiver)
+{
+	// For storing the tag
+	string tag = "";
+
+	// Run the default update
+	CGameState::Update(theGSM, m_dElapsedTime, &tag);
+
+	if (tag != "")
+	{
+		// Convert the stored score in the tag into an int
+		int score = stoi(tag);
+
+		// Send this score to the new state if that state is a IScoreState
+		IScoreState* scoreState = dynamic_cast<IScoreState*>(theGSM->PeekState());
+		if (scoreState)
+		{
+			scoreState->SetScore(score);
+		}
+	}
 }
 
 void CPlayState::HandleEvents(CGameStateManager* theGSM)

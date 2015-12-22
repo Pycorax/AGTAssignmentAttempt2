@@ -16,6 +16,8 @@ public:
 	void ChangeState(CGameState* state);
 	void PushState(CGameState* state);
 	void PopState();
+	CGameState* PeekState();
+	void ResetLastState();
 
 	void HandleEvents();
 	void HandleEvents(const unsigned char key, const bool status = true);

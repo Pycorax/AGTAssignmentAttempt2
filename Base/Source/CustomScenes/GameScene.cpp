@@ -5,10 +5,11 @@
 #include "../LoadOBJ.h"
 #include <sstream>
 #include "../Application.h"
+#include "../CustomStates/LoseState.h"
 
 using std::ostringstream;
 
-const float GameScene::INVULN_TIME = 5.0f;
+const float GameScene::INVULN_TIME = 2.0f;
 
 GameScene::GameScene() : CSceneManager()
 	, m_movingBomber(nullptr)
@@ -52,7 +53,7 @@ void GameScene::Init()
 	 */
 	// Initialise and load a model into it
 	m_cAvatar = new CPlayInfo3PV();
-	m_cAvatar->SetModel(meshList[GEO_PLAYER]);
+	m_cAvatar->SetModel(meshList[GEO_PLAYER_BODY]);
 
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
@@ -266,12 +267,13 @@ void GameScene::meshInit()
 	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	// Player
-	meshList[GEO_PLAYER] = MeshBuilder::GenerateCube("player", Color(1.0f, 0.6f, 0.0f), 1.0f);
+	meshList[GEO_PLAYER_BODY] = MeshBuilder::GenerateCone("playerBody", Color(0.282f, 0.568f, 0.803f), 36, 1.f, 1.f);
+	meshList[GEO_PLAYER_INVULN_HAT] = MeshBuilder::GenerateCone("invulnHat", Color(0.84f, 0.0f, 0.027f), 36, 1.f, 1.f);
 
 	// Human
 	meshList[GEO_HUMAN_HAT] = MeshBuilder::GenerateCone("humanHat", Color(0.0f, 0.0f, 0.0f), 36, 1.f, 1.f);
 	meshList[GEO_HUMAN_HEAD] = MeshBuilder::GenerateSphere("humanHead", Color(0.968f, 0.937f, 0.619f), 12, 12, 1.0f);
-	meshList[GEO_HUMAN_BODY] = MeshBuilder::GenerateCone("humanBody", Color(0.282f, 0.568f, 0.803f), 36, 1.f, 1.f);
+	meshList[GEO_HUMAN_BODY] = MeshBuilder::GenerateCone("humanBody", Color(0.83f, 0.11f, 0.14f), 36, 1.f, 1.f);
 
 	// Sky Box
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
@@ -412,7 +414,9 @@ void GameScene::checkEndState(double dt)
 	// Check if no health
 	if (m_lives <= 0)
 	{
-		// Go to lost state
+		ostringstream oss;
+		oss << m_score;
+		changeState(LoseState::Instance(), false, oss.str());
 	}
 }
 
@@ -526,10 +530,36 @@ void GameScene::RenderMobileObjects()
 
 	// Render the Avatar
 	modelStack.PushMatrix();
-	modelStack.Translate(m_cAvatar->GetPos_x(), m_cAvatar->GetPos_y() + 4.0f, m_cAvatar->GetPos_z());
+	modelStack.Translate(m_cAvatar->GetPos_x(), m_cAvatar->GetPos_y(), m_cAvatar->GetPos_z());
 	modelStack.Rotate(m_cAvatar->GetYRotation(), 0, 1, 0);
 	modelStack.Scale(m_cAvatar->GetScale().x, m_cAvatar->GetScale().y, m_cAvatar->GetScale().z);
 	RenderMesh(m_cAvatar->theAvatarMesh, false);
+
+		// Render the Head
+		modelStack.PushMatrix();
+		modelStack.Translate(0.0f, 0.6f, 0.0f);
+		modelStack.Scale(0.4f, 0.4f, 0.4f);
+		RenderMesh(meshList[GEO_HUMAN_HEAD], false);
+
+			// Render the Hat
+			modelStack.PushMatrix();
+			modelStack.Translate(0.0f, 0.5f, 0.0f);
+			modelStack.Scale(1.5f, 1.5f, 1.5f);
+
+			if (m_invulnTime > 0.0f)
+			{
+				RenderMesh(meshList[GEO_PLAYER_INVULN_HAT], false);
+			}
+			else
+			{
+				RenderMesh(meshList[GEO_HUMAN_HAT], false);
+			}
+			
+			modelStack.PopMatrix();
+
+		modelStack.PopMatrix();
+
+
 	modelStack.PopMatrix();
 }
 

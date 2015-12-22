@@ -85,6 +85,20 @@ void CGameStateManager::PopState()
 #endif
 }
 
+CGameState * CGameStateManager::PeekState()
+{
+	return StackOfStates.back();
+}
+
+void CGameStateManager::ResetLastState()
+{
+	if (!StackOfStates.empty()) 
+	{
+		StackOfStates.back()->Cleanup();
+		StackOfStates.back()->Init(m_window_width, m_window_height);
+	}
+}
+
 void CGameStateManager::HandleEvents() 
 {
 	// let the state handle events

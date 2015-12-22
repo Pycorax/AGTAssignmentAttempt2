@@ -18,6 +18,7 @@
     <ClCompile Include="Source\CustomScenes\HighScoreMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\InstructionMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\LevelMenuScene.cpp" />
+    <ClCompile Include="Source\CustomScenes\LoseMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\MainMenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\MenuScene.cpp" />
     <ClCompile Include="Source\CustomScenes\OptionMenuScene.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="Source\CustomStates\InstructionState.cpp" />
     <ClCompile Include="Source\CustomStates\IntroState.cpp" />
     <ClCompile Include="Source\CustomStates\LevelSelectState.cpp" />
+    <ClCompile Include="Source\CustomStates\LoseState.cpp" />
     <ClCompile Include="Source\CustomStates\MenuState.cpp" />
     <ClCompile Include="Source\CustomStates\OptionState.cpp" />
     <ClCompile Include="Source\CustomStates\PauseState.cpp" />
@@ -75,7 +77,9 @@
     <ClInclude Include="Source\CustomScenes\GameScene.h" />
     <ClInclude Include="Source\CustomScenes\HighScoreMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\InstructionMenuScene.h" />
+    <ClInclude Include="Source\CustomScenes\IScoreMenu.h" />
     <ClInclude Include="Source\CustomScenes\LevelMenuScene.h" />
+    <ClInclude Include="Source\CustomScenes\LoseMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\MainMenuScene.h" />
     <ClInclude Include="Source\CustomScenes\MenuScene.h" />
     <ClInclude Include="Source\CustomScenes\OptionMenuScene.h" />
@@ -84,7 +88,9 @@
     <ClInclude Include="Source\CustomStates\HighScoreState.h" />
     <ClInclude Include="Source\CustomStates\InstructionState.h" />
     <ClInclude Include="Source\CustomStates\IntroState.h" />
+    <ClInclude Include="Source\CustomStates\IScoreState.h" />
     <ClInclude Include="Source\CustomStates\LevelSelectState.h" />
+    <ClInclude Include="Source\CustomStates\LoseState.h" />
     <ClInclude Include="Source\CustomStates\MenuState.h" />
     <ClInclude Include="Source\CustomStates\OptionState.h" />
     <ClInclude Include="Source\CustomStates\PauseState.h" />

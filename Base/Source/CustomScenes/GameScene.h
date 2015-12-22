@@ -31,7 +31,8 @@ private:	// Enums
 		GEO_CUBE,
 		GEO_CONE,
 		// -- Player
-		GEO_PLAYER,
+		GEO_PLAYER_BODY,
+		GEO_PLAYER_INVULN_HAT,
 		// -- Human
 		GEO_HUMAN_HAT,
 		GEO_HUMAN_HEAD,

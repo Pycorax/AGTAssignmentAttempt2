@@ -7,7 +7,9 @@ class CPlayState : public CGameState
 public:
 	virtual ~CPlayState();
 
-	void Init(const int width = 800, const int height = 600);;
+	void Init(const int width = 800, const int height = 600);
+
+	void Update(CGameStateManager* theGSM, const double m_dElapsedTime, string* tagReceiver = nullptr);
 
 	void HandleEvents(CGameStateManager* theGSM);
 	void HandleEvents(CGameStateManager* theGSM, const unsigned char key, const bool status = true);
