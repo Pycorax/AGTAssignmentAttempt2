@@ -157,3 +157,13 @@ void CGameStateManager::Draw()
 	cout << "CGameStateManager::Draw\n" << endl;
 #endif
 }
+
+int CGameStateManager::GetWindowWidth(void) const
+{
+	return m_window_width;
+}
+
+int CGameStateManager::GetWindowHeight(void) const
+{
+	return m_window_height;
+}

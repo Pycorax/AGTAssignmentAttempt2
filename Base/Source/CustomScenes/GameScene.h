@@ -69,6 +69,7 @@ private:	// Variables
 
 	// Gameplay Stats
 	int m_numEnemiesAtStart;		// Stores the number of enemies at the start
+	bool m_demoMode;				// The game mode
 
 	// Number of Lives
 	int m_lives;
@@ -102,7 +103,7 @@ public:
 	GameScene(const int window_width, const int window_height);
 	~GameScene();
 
-	virtual void Init();
+	virtual void Init(bool demoMode, string levelString);
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();

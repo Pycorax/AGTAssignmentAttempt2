@@ -3,6 +3,7 @@
 #include "../GameStateManager.h"
 #include "../gamestate.h"
 #include "../CustomScenes/LevelMenuScene.h"
+#include "PlayState.h"
 
 LevelSelectState LevelSelectState::theMenuState;
 
@@ -19,6 +20,67 @@ void LevelSelectState::Init(const int width, const int height)
 {
 	scene = new LevelMenuScene(width, height);
 	scene->Init();
+}
+
+void LevelSelectState::Update(CGameStateManager * theGSM, const double m_dElapsedTime, string * tagReceiver)
+{
+	// Check if there is a scene
+	if (scene)
+	{
+		// Update the scene
+		scene->Update(m_dElapsedTime);
+
+		// Retrieve the StateCommand
+		auto stateCommand = scene->GetNextState();
+
+		// Check if a command was issued
+		if (stateCommand)
+		{
+			// Check contents of the command
+			// -- Check if the state is suiciding
+			if (stateCommand->GetKilled())
+			{
+				Cleanup();
+
+				// We must pop first, otherwise we will push and pop the new one instead
+				theGSM->PopState();
+			}
+
+			// -- Check the Next State
+			if (CGameState* newState = stateCommand->GetState())
+			{
+				// A state was provided so we add it onto the stack
+				theGSM->PushState(newState);
+
+				// Check if this next state is the play state
+				CPlayState* playState = dynamic_cast<CPlayState*>(newState);
+
+				if (playState)
+				{
+					string tag = stateCommand->GetTag();
+
+					if (tag != "")
+					{
+						// Send the play state level info that is stored in the tag
+						bool demoMode = tag[0] == 'd';
+
+						playState->Init(demoMode, tag.substr(1), theGSM->GetWindowWidth(), theGSM->GetWindowHeight());
+					}
+					else
+					{
+						//  If no info, send default demo info
+						playState->Init(true, "", theGSM->GetWindowWidth(), theGSM->GetWindowHeight());
+					}
+				}
+			}
+
+			// Check if a tag receiver was provided, if so, pass it on to the tagReceiver for it to work with it
+			if (tagReceiver)
+			{
+				*tagReceiver = stateCommand->GetTag();
+			}
+		}
+	}
 }
 
 void LevelSelectState::HandleEvents(CGameStateManager* theGSM)

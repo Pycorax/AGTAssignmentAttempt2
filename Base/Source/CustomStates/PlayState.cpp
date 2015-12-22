@@ -23,6 +23,16 @@ void CPlayState::Init(const int width, const int height)
 	scene->Init();
 }
 
+void CPlayState::Init(bool survival, string levelString, const int width, const int height)
+{
+	scene = new GameScene(width, height);
+	GameScene* gameScene = dynamic_cast<GameScene*>(scene);
+	if (gameScene)
+	{
+		gameScene->Init(survival, levelString);
+	}
+}
+
 void CPlayState::Update(CGameStateManager * theGSM, const double m_dElapsedTime, string * tagReceiver)
 {
 	// For storing the tag

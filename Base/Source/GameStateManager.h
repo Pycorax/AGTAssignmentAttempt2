@@ -29,6 +29,9 @@ public:
 	bool Running() { return m_bRunning; }
 	void Quit() { m_bRunning = false; }
 
+	int GetWindowWidth(void) const;
+	int GetWindowHeight(void) const;
+
 private:
 	// the stack of states
 	vector<CGameState*> StackOfStates;

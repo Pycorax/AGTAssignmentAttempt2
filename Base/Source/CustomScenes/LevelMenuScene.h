@@ -9,21 +9,31 @@ class LevelMenuScene : public MenuScene
 	{
 		GEO_TITLE,
 		GEO_BT_BACK,
-		GEO_BT_LEVEL,
+		GEO_BT_LEVEL_DEMO,
+		GEO_BT_LEVEL_1,
+		GEO_BT_LEVEL_2,
+		GEO_BT_LEVEL_3,
+		GEO_BT_LEVEL_4,
+		GEO_BT_LEVEL_5,
+		GEO_BT_LEVEL_6,
 		GEO_AXES,
 		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
 
-	static const int BUTTON_ROWS = 4;
+	static const int BUTTON_ROWS = 3;
 	static const int BUTTON_COLS = 2;
 
 	enum BUTTON_TYPE
 	{
 		BT_BACK,
 		BT_LEVEL_DEMO,
-		BT_LEVEL_SURVIVAL,
-		//BT_LEVEL_4_3 = BT_LEVEL + BUTTON_ROWS * BUTTON_COLS - 1,	// Create 12 Level buttons
+		BT_LEVEL_SURVIVAL1,
+		BT_LEVEL_SURVIVAL2,
+		BT_LEVEL_SURVIVAL3,
+		BT_LEVEL_SURVIVAL4,
+		BT_LEVEL_SURVIVAL5,
+		BT_LEVEL_SURVIVAL6,
 		BT_TOTAL
 	};
 

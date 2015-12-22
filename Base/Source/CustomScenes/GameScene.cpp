@@ -19,6 +19,7 @@ GameScene::GameScene() : CSceneManager()
 	, m_numEnemiesAtStart(0)
 	, m_lazerCollection(0)
 	, m_score(0)
+	, m_demoMode(false)
 {
 }
 
@@ -29,6 +30,7 @@ GameScene::GameScene(const int window_width, const int window_height) : CSceneMa
 	, m_numEnemiesAtStart(0)
 	, m_lazerCollection(0)
 	, m_score(0)
+	, m_demoMode(false)
 {
 }
 
@@ -36,7 +38,7 @@ GameScene::~GameScene()
 {
 }
 
-void GameScene::Init()
+void GameScene::Init(bool demoMode, string levelString)
 {
 	CSceneManager::Init();
 
@@ -55,6 +57,7 @@ void GameScene::Init()
 	// Initialise and load a model into it
 	m_cAvatar = new CPlayInfo3PV();
 	m_cAvatar->SetModel(meshList[GEO_PLAYER_BODY]);
+	
 
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
@@ -73,9 +76,35 @@ void GameScene::Init()
 		}
 	}
 
-	//bomberDemoInit();
-	bomberSurvivalInit(1, 1, 1, 1);
-	m_numEnemiesAtStart = 4;
+	// Put the player in the middle
+	m_cAvatar->SetPos_x(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid() * 0.5f);
+	m_cAvatar->SetPos_z(m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid() * 0.5f);
+
+	// Set up the level
+	if (demoMode)
+	{
+		bomberDemoInit();
+	}
+	else
+	{
+		int left = 0, right = 0, top = 0, bottom = 0;
+
+		// If there is one param for each side AKA valid
+		if (levelString.length() == 4)
+		{
+			left = stoi(levelString.substr(0, 1));
+			right = stoi(levelString.substr(1, 1));
+			top = stoi(levelString.substr(2, 1));
+			bottom = stoi(levelString.substr(3, 1));
+
+			bomberSurvivalInit(left, right, top, bottom);
+			m_numEnemiesAtStart = left + right + top + bottom;
+		}
+		else
+		{
+			bomberDemoInit();
+		}
+	}	
 
 	// Add the pointers to the scene graph to the spatial partition
 	m_cSpatialPartition->AddObject(m_cSceneGraph);
@@ -305,6 +334,9 @@ void GameScene::meshInit()
 
 void GameScene::bomberDemoInit()
 {
+	// Set the mode to demo
+	m_demoMode = true;
+
 	// Adding Bombers to the Scene
 	Bomber* bomber;
 
@@ -340,15 +372,19 @@ void GameScene::bomberDemoInit()
 
 void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, unsigned bot)
 {
-	float worldWidth = m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid();
-	float worldHeight = m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid();
+	// Set this to normal survival mode
+	m_demoMode = false;
+
+	const float BUFFER_SPACE = 25.0f;
+	float worldWidth = m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid() - BUFFER_SPACE;
+	float worldHeight = m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid() - BUFFER_SPACE;
 	Bomber* bomber = nullptr;
 
 	// Adding Bombers to the left side of the Scene
 	for (size_t bots = 0; bots < left; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(Math::RandFloatMinMax(25.0f, 225.0f), 0, 25), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, BUFFER_SPACE), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -357,7 +393,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	for (size_t bots = 0; bots < right; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(Math::RandFloatMinMax(25.0f, 225.0f), 0, 225), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, worldHeight), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -366,7 +402,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	for (size_t bots = 0; bots < top; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(225, 0, Math::RandFloatMinMax(25.0f, 225.0f)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		bomber->Init(Vector3(worldWidth, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -375,7 +411,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	for (size_t bots = 0; bots < bot; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(25, 0, Math::RandFloatMinMax(25.0f, 225.0f)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
+		bomber->Init(Vector3(BUFFER_SPACE, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY]);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -407,7 +443,7 @@ void GameScene::killPlayer(void)
 void GameScene::checkEndState(double dt)
 {
 	// Check if game end
-	if (getNumBombersAlive() == 0)
+	if (!m_demoMode && getNumBombersAlive() == 0)
 	{
 		ostringstream oss;
 		oss << m_score;
