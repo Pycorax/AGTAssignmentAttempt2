@@ -50,6 +50,8 @@ void Weapon::Update(double dt)
 
 bool Weapon::Shoot(void)
 {
+	bool shot = false;
+
 	if (m_lastShotDT > m_fireRate)
 	{
 		if (m_currentMag > 0)
@@ -57,16 +59,17 @@ bool Weapon::Shoot(void)
 			m_lastShotDT = 0.0f;
 			--m_currentMag;
 
-			return true;
-		}
-		else
-		{
-			// Automatic reloads
-			StartReload();
+			shot = true;
 		}
 	}
 
-	return false;
+	// Automatic Reloading
+	if (m_currentMag <= 0)
+	{
+		StartReload();
+	}
+
+	return shot;
 }
 
 bool Weapon::StartReload(void)
@@ -89,6 +92,11 @@ bool Weapon::StartReload(void)
 		}
 		return true;
 	}
+}
+
+void Weapon::InstantReload(void)
+{
+	m_currentMag = m_magSize;
 }
 
 float Weapon::GetReloadStatus(void)

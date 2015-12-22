@@ -33,6 +33,7 @@ public:
 	// Actions
 	virtual bool Shoot(void);
 	virtual bool StartReload(void);
+	void InstantReload(void);
 
 	// Get Reload Status: 0.0 - 1.0f: Percentage of reload completion
 	float GetReloadStatus(void);

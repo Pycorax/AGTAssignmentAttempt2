@@ -17,7 +17,6 @@ void PowerWeapon::Init(float bulletSpeed, float fullReloadSpeed, float fireRate,
 	m_currentMag = 0;
 }
 
-
 bool PowerWeapon::StartReload(void)
 {
 	if (m_charges > 0)
@@ -35,6 +34,7 @@ bool PowerWeapon::StartReload(void)
 void PowerWeapon::AddCharge(int charges)
 {
 	m_charges += charges;
+	InstantReload();
 }
 
 int PowerWeapon::GetCharge(void) const

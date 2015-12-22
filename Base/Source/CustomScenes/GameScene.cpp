@@ -86,7 +86,7 @@ void GameScene::Init()
 
 	// Set up the player's weapons
 	m_slowGun.Init(200, 1.5f, 800, 10);
-	m_killGun.Init(1200, 0.7f, 100, 1);
+	m_killGun.Init(1200, 0.0f, 100, 1);
 }
 
 void GameScene::Update(double dt)
