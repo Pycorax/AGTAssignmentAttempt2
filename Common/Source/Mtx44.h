@@ -46,6 +46,7 @@ public:
 				double upX, double upY, double upZ);
 	void SetToPerspective(double fovy, double aspect, double zNear, double zFar);
 	void SetToOrtho(double left, double right, double bottom, double top, double nearVal, double farVal);
+	friend ostream& operator<<(ostream& os, const Mtx44& mtx);
 
 	float a[16];
 };

@@ -495,3 +495,14 @@ void Mtx44::SetToOrtho(double left, double right, double bottom, double top, dou
 		0, 0, - 2 / (float)(farVal - nearVal), 0,
 		- (float)((right + left) / (right - left)), - (float)((top + bottom) / (top - bottom)), - (float)((farVal + nearVal) / (farVal - nearVal)), 1);
 }
+
+// For Mtx44 to be <<-able
+ostream& operator<<(ostream& os, const Mtx44& mtx)
+{
+	os << mtx.a[0] << " " << mtx.a[4] << " " << mtx.a[8] << " " << mtx.a[12] << "\n";
+	os << mtx.a[1] << " " << mtx.a[5] << " " << mtx.a[9] << " " << mtx.a[13] << "\n";
+	os << mtx.a[2] << " " << mtx.a[6] << " " << mtx.a[10] << " " << mtx.a[14] << "\n";
+	os << mtx.a[3] << " " << mtx.a[7] << " " << mtx.a[11] << " " << mtx.a[15] << "\n";
+
+	return os;
+}

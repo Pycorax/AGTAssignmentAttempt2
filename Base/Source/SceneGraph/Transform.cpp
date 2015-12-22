@@ -5,6 +5,7 @@
 #include <windows.h> // Header File For Windows
 #include <gl\gl.h> // Header File For The OpenGL32 Library
 #include <gl\glu.h> // Header File For The GLu32 Library
+#include <iostream>
 
 CTransform::CTransform(void)
 {
@@ -56,20 +57,23 @@ void CTransform::SetRotate( const float angle, const float rx, const float ry, c
 	Mtx44 TempMtx;
 	TempMtx.SetToRotation( angle, rx, ry, rz );
 	
-	Mtx44 MtxBackToOrigin;
-
-	MtxBackToOrigin.a[ 12 ] = -Mtx.a[ 12 ];
-	MtxBackToOrigin.a[ 13 ] = -Mtx.a[ 13 ];
-	MtxBackToOrigin.a[ 14 ] = -Mtx.a[ 14 ];
+	Mtx = TempMtx * Mtx;
 
 	Mtx44 MtxBackToPosition;
-	MtxBackToPosition.a[ 12 ] = Mtx.a[ 12 ];
-	MtxBackToPosition.a[ 13 ] = Mtx.a[ 13 ];
-	MtxBackToPosition.a[ 14 ] = Mtx.a[ 14 ];
+	MtxBackToPosition.SetToIdentity();
+	MtxBackToPosition.a[12] = Mtx.a[12];
+	MtxBackToPosition.a[13] = Mtx.a[13];
+	MtxBackToPosition.a[14] = Mtx.a[14];
 
-	Mtx = Mtx * MtxBackToOrigin;
-	Mtx = Mtx * TempMtx;
-	Mtx = Mtx * MtxBackToPosition;
+	Mtx44 MtxBackToOrigin;
+	MtxBackToOrigin.SetToIdentity();
+	MtxBackToOrigin.a[12] = -MtxBackToPosition.a[12];
+	MtxBackToOrigin.a[13] = -MtxBackToPosition.a[13];
+	MtxBackToOrigin.a[14] = -MtxBackToPosition.a[14];
+
+	Mtx = MtxBackToOrigin * Mtx;
+	Mtx = TempMtx * Mtx;
+	Mtx = MtxBackToPosition * Mtx;
 }
 
 void CTransform::SetScale( const float sx, const float sy, const float sz  )
