@@ -43,6 +43,9 @@
     <Filter Include="Gameplay">
       <UniqueIdentifier>{d1fa7bc5-3c29-447b-8d35-90fc621aab04}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Highscore">
+      <UniqueIdentifier>{76ee3c50-4b86-4888-a591-b1eda12a84c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -221,6 +224,9 @@
     </ClCompile>
     <ClCompile Include="Source\CustomScenes\WinMenuScene.cpp">
       <Filter>CustomScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Highscore\HighscoreSystem.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -424,6 +430,12 @@
     </ClInclude>
     <ClInclude Include="Source\CustomScenes\WinMenuScene.h">
       <Filter>CustomScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Highscore\HighscoreSystem.h">
+      <Filter>Highscore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Highscore\HighScoreRecord.h">
+      <Filter>Highscore</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

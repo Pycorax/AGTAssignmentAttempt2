@@ -12,3 +12,4 @@ Base/Debug/
 Base/Release/
 Common/Release/
 Release/Common.lib
+*.opendb
