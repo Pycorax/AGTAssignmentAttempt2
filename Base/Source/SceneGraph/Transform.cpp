@@ -81,7 +81,9 @@ void CTransform::SetScale( const float sx, const float sy, const float sz  )
 	Mtx44 TempMtx;
 	TempMtx.SetToScale(sx, sy, sz);
 
+	std::cout << Mtx << std::endl;
 	Mtx = Mtx * TempMtx;
+	std::cout << Mtx << std::endl;
 }
 
 void CTransform::GetOffset( float& x, float& y, float& z )

@@ -29,6 +29,7 @@ private:
 
 	// Animation
 	float m_deathRotated;		// Angle rotated for the death animation
+	float m_bloated;			// Stores the amount of bloat scale applied
 
 public:
 	Bomber();

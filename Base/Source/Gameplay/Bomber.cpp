@@ -10,6 +10,7 @@ Bomber::Bomber() : CSceneNode()
 	, m_speed(10.0f)
 	, m_state(LS_CHASE)
 	, m_deathRotated(0.0f)
+	, m_bloated(0.0f)
 {
 }
 
@@ -51,7 +52,10 @@ void Bomber::Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMes
 
 bool Bomber::Update(double dt, Vector3 target)
 {
-	static const float BOOM_RADIUS = 2.0f;
+	static const float BOOM_RADIUS = 10.0f;
+	static const float GROW_RADIUS = 50.0f;
+	static const float MAX_BLOAT = 1.3f;
+	static const float BLOAT_SPEED = 0.3f;
 
 	if (GetActive() == false)
 	{
@@ -67,8 +71,11 @@ bool Bomber::Update(double dt, Vector3 target)
 			// Discard the y. We don't want to compare height.
 			dir.y = 0;
 
+			// Calculate dist to target
+			float distToTargetSquared = dir.LengthSquared();
+
 			// If close enough, explode
-			if (dir.LengthSquared() < BOOM_RADIUS * BOOM_RADIUS)
+			if (distToTargetSquared < BOOM_RADIUS * BOOM_RADIUS)
 			{
 				m_state = LS_BOOM;
 			}
@@ -80,6 +87,21 @@ bool Bomber::Update(double dt, Vector3 target)
 				Vector3 move = dir * m_speed * dt;
 				// Move towards
 				ApplyTranslate(move.x, move.y, move.z);
+			}
+
+			// Bloat up if near to player
+			float bloat = 0;
+			if (distToTargetSquared < GROW_RADIUS * GROW_RADIUS && m_bloated < MAX_BLOAT)
+			{
+				bloat = BLOAT_SPEED * dt;
+				m_bloated += bloat;
+				ApplyScale(1 + bloat, 1 + bloat, 1 + bloat);
+			}
+			else if (m_bloated > 0.0f)
+			{
+				bloat = BLOAT_SPEED * dt;
+				m_bloated -= bloat;
+				ApplyScale(1 - bloat, 1 - bloat, 1 - bloat);
 			}
 		}
 		break;
