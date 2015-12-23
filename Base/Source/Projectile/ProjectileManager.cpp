@@ -1,6 +1,6 @@
 #include "ProjectileManager.h"
 
-static const int theMaxNumberOfProjectiles = 50;
+static const int theMaxNumberOfProjectiles = 100;
 
 /********************************************************************************
  Constructor
