@@ -7,6 +7,7 @@ class InstructionMenuScene : public MenuScene
 {
 	enum GEOMETRY_TYPE
 	{
+		GEO_BG,
 		GEO_TITLE,
 		GEO_BT_BACK,
 		GEO_AXES,

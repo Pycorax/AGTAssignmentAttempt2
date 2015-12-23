@@ -33,6 +33,8 @@ void InstructionMenuScene::Init()
 	}
 
 	// Load the meshes
+	meshList[GEO_BG] = MeshBuilder::GenerateQuad("bg", Color(0.1f, 0.1f, 0.1f), 1.0f);
+	meshList[GEO_BG]->textureID = LoadTGA("Image//instructionsBG.tga");
 	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("title", Color(), 1.0f);
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image//title_instructions.tga");
 	meshList[GEO_BT_BACK] = MeshBuilder::GenerateQuad("btn_back", Color(), 1.0f);
@@ -44,6 +46,9 @@ void InstructionMenuScene::Init()
 
 	// Set the title
 	createTitle(meshList[GEO_TITLE]);
+
+	// Set custom BG
+	createBackground(meshList[GEO_BG]);
 
 	// Initialize the buttons
 	const Vector3 NORMAL_BUTTON_SIZE(250, 50);
