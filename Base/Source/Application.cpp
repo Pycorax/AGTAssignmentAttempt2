@@ -188,6 +188,14 @@ bool Application::GetKeyboardUpdate()
 	{
 		theGSM->HandleEvents(VK_DOWN, false);
 	}
+	if (IsKeyPressed(VK_SHIFT))
+	{
+		theGSM->HandleEvents(VK_SHIFT);
+	}
+	else
+	{
+		theGSM->HandleEvents(VK_SHIFT, false);
+	}
 	return true;
 }
 

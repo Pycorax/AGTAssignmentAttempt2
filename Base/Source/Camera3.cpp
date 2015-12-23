@@ -147,24 +147,24 @@ void Camera3::Update(double dt)
  Update the camera for Third Person View
  Vector3 newPosition is the new position which the camera is to be based on
  ********************************************************************************/
-void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, Vector3 up, bool moved, double dt)
+void Camera3::UpdatePosition(Vector3 newPosition, Vector3 newDirection, Vector3 up, bool isSprinting, double dt)
 {
-	if (moved)
-	{
-		m_currentCamOffset.x -= m_offsetSpeed * dt;
-
-		if (m_currentCamOffset.x < m_camOffset.x)
-		{
-			m_currentCamOffset.x = m_camOffset.x;
-		}
-	}
-	else
+	if (isSprinting)
 	{
 		m_currentCamOffset.x += m_offsetSpeed * dt;
 
 		if (m_currentCamOffset.x > 0.0f)
 		{
 			m_currentCamOffset.x = 0.0f;
+		}
+	}
+	else
+	{
+		m_currentCamOffset.x -= m_offsetSpeed * dt;
+
+		if (m_currentCamOffset.x < m_camOffset.x)
+		{
+			m_currentCamOffset.x = m_camOffset.x;
 		}
 	}
 

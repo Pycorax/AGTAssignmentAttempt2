@@ -10,10 +10,10 @@ CPlayInfo3PV::CPlayInfo3PV(void)
 	: theAvatarMesh(NULL)
 	, jumpspeed(0)
 	, m_rotationY(0.0f)
-	, m_movementSpeed(200.0f)
 	, m_pitch(0.0f)
 	, curScale(Vector3(5, 8, 5))
 	, m_movedForward(false)
+	, m_state(PS_NORMAL)
 {
 	Init();
 }
@@ -29,6 +29,9 @@ void CPlayInfo3PV::Init(void)
 	curPosition.Set( 0, 0, 0);
 	curDirection.Set( 0, 0, 1 );
 	curUp.Set(0, 1, 0);
+
+	m_movementSpeed[PS_NORMAL] = 120.0f;
+	m_movementSpeed[PS_SPRINT] = 200.0f;
 
 	// Initialise the Avatar's movement flags
 	for(int i=0; i<255; i++){
@@ -199,6 +202,11 @@ bool CPlayInfo3PV::GetMovedForward() const
 	return m_movedForward;
 }
 
+bool CPlayInfo3PV::IsSprinting(void) const
+{
+	return m_state == PS_SPRINT;
+}
+
 // Update Jump Upwards
 void CPlayInfo3PV::UpdateJumpUpwards()
 {
@@ -277,6 +285,14 @@ void CPlayInfo3PV::Update(double dt)
 	{
 		MoveLeftRight( false, dt );
 	}
+	if (myKeys[VK_SHIFT] == true)
+	{
+		m_state = PS_SPRINT;
+	}
+	else
+	{
+		m_state = PS_NORMAL;
+	}
 
 	// Do calculations to move if we can actually move
 	if (m_deltaMovement != Vector3::ZERO_VECTOR)
@@ -288,7 +304,7 @@ void CPlayInfo3PV::Update(double dt)
 		Mtx44 charRotMatrix;
 		charRotMatrix.SetToRotation(m_rotationY, 0, 1, 0);
 		// Get change in position with regards to direction
-		Vector3 deltaPos = charRotMatrix * (m_deltaMovement * m_movementSpeed * dt);
+		Vector3 deltaPos = charRotMatrix * (m_deltaMovement * m_movementSpeed[m_state] * dt);
 		// Add the resulting change in position to char position
 		curPosition += deltaPos;
 

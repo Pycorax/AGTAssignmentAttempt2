@@ -19,6 +19,13 @@ public:
 		NUM_GEOMETRY,
 	};
 
+	enum PLAYER_STATE_TYPE
+	{
+		PS_NORMAL,
+		PS_SPRINT,
+		PS_TOTAL
+	};
+
 	// Initialise this class instance
 	void Init(void);
 
@@ -71,6 +78,11 @@ public:
 	// Check if the player had moved in the last frame
 	bool GetMovedForward() const;
 
+	/*
+	 * Sprinting
+	 */
+	bool IsSprinting(void) const;
+
 	// Update Jump Upwards
 	void UpdateJumpUpwards();
 	// Update FreeFall
@@ -111,9 +123,12 @@ private:
 	// Stores the movement direction for a frame. to be cleared each frame
 	Vector3 m_deltaMovement;
 	// Movement Speed
-	float m_movementSpeed;
+	float m_movementSpeed[PS_TOTAL];
 	// Stores if there was movement in the last frame. Allows other objects to respond to this.
 	bool m_movedForward;
+
+	// The current state of the player
+	PLAYER_STATE_TYPE m_state;
 
 	// Stores the current pitching angle for limiting the pitch
 	float m_pitch;
