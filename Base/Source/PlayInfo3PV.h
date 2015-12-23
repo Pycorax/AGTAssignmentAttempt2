@@ -76,7 +76,7 @@ public:
 	// Get Jumpspeed of the player
 	float GetJumpspeed(void);
 	// Check if the player had moved in the last frame
-	bool GetMovedForward() const;
+	bool GetMovedForwardOnly() const;
 
 	/*
 	 * Sprinting
@@ -125,7 +125,7 @@ private:
 	// Movement Speed
 	float m_movementSpeed[PS_TOTAL];
 	// Stores if there was movement in the last frame. Allows other objects to respond to this.
-	bool m_movedForward;
+	bool m_movedForwardOnly;
 
 	// The current state of the player
 	PLAYER_STATE_TYPE m_state;

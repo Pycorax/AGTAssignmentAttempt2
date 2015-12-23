@@ -12,7 +12,7 @@ CPlayInfo3PV::CPlayInfo3PV(void)
 	, m_rotationY(0.0f)
 	, m_pitch(0.0f)
 	, curScale(Vector3(5, 8, 5))
-	, m_movedForward(false)
+	, m_movedForwardOnly(false)
 	, m_state(PS_NORMAL)
 {
 	Init();
@@ -197,9 +197,9 @@ float CPlayInfo3PV::GetJumpspeed(void)
 	return jumpspeed;
 }
 
-bool CPlayInfo3PV::GetMovedForward() const
+bool CPlayInfo3PV::GetMovedForwardOnly() const
 {
-	return m_movedForward;
+	return m_movedForwardOnly;
 }
 
 bool CPlayInfo3PV::IsSprinting(void) const
@@ -263,31 +263,43 @@ void CPlayInfo3PV::UpdateMovement(const unsigned char key, const bool status)
 void CPlayInfo3PV::Update(double dt)
 {
 	// Reset movement flag each update
-	m_movedForward = false;
+	m_movedForwardOnly = false;
 
 	// WASD movement
 	if ( myKeys['w'] == true)
 	{
 		// We had moved forwards!
-		m_movedForward = true;
+		m_movedForwardOnly = true;
 
 		MoveFrontBack( false, dt );
 	}
 	if (myKeys['s'] == true)
 	{
+		m_movedForwardOnly = false;
 		MoveFrontBack( true, dt );
 	}
 	if (myKeys['a'] == true)
 	{
+		m_movedForwardOnly = false;
 		MoveLeftRight( true, dt );
 	}
 	if (myKeys['d'] == true)
 	{
+		m_movedForwardOnly = false;
 		MoveLeftRight( false, dt );
 	}
+
 	if (myKeys[VK_SHIFT] == true)
 	{
-		m_state = PS_SPRINT;
+		if (m_movedForwardOnly)
+		{
+			m_state = PS_SPRINT;
+		}
+		else
+		{
+			// Dash code here
+			m_state = PS_NORMAL;
+		}
 	}
 	else
 	{
