@@ -5,14 +5,16 @@
 //Include GLFW
 #include <GLFW/glfw3.h>
 
+// STL Includes
+#include <stdio.h>
+#include <stdlib.h>
+
+// Other Includes
 #include "GameState.h"
 #include "CustomStates/introstate.h"
 #include "Highscore\HighscoreSystem.h"
-
-//Include the standard C++ headers
-#include <stdio.h>
-#include <stdlib.h>
 #include "CustomStates/playstate.h"
+#include "SoundEngine.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -47,6 +49,9 @@ void resize_callback(GLFWwindow* window, int w, int h)
 {
 	glViewport(0, 0, w, h);
 }
+
+SoundPlayer2D* Application::m_bgm = nullptr;
+bool Application::m_bgmPlaying = false;
 
 /********************************************************************************
  Get keyboard's key states
@@ -288,6 +293,11 @@ void Application::Init()
 
 	// Start the high score system
 	HighScoreSystem::Init();
+
+	// Start the sound engine
+	SoundEngine::StartSoundEngine();
+	m_bgm = SoundEngine::CreateSound2D(SoundEngine::AddSoundSource("Sound//bgm.mp3"));
+	StartSound();
 }
 
 /********************************************************************************
@@ -342,6 +352,8 @@ void Application::Exit()
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW
 	glfwTerminate();
+	// Stop the sound engine
+	SoundEngine::StopSoundEngine();
 }
 
 void Application::setCursorShown()
@@ -356,4 +368,21 @@ void Application::setCursorHidden()
 	// Hide the cursor
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	m_mouseHidden = true;
+}
+
+void Application::StartSound(void)
+{
+	m_bgm->Play(true);
+	m_bgmPlaying = true;
+}
+
+void Application::StopSound(void)
+{
+	m_bgm->Pause();
+	m_bgmPlaying = false;
+}
+
+bool Application::IsBGMPlaying(void)
+{
+	return m_bgmPlaying;
 }

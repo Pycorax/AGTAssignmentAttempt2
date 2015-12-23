@@ -56,6 +56,16 @@ void OptionMenuScene::Init()
 	createButtonList(BT_TOTAL);
 	m_button[BT_BACK].Init(meshList[GEO_BT_BACK], Vector3(m_window_width * 0.5, m_window_height * 0.4), NORMAL_BUTTON_SIZE);
 	m_button[BT_MUSIC_TOGGLE].Init(meshList[GEO_BT_MUSIC_ON], Vector3(m_window_width * 0.5, m_window_height * 0.6), NORMAL_BUTTON_SIZE);
+
+	// Set the correct mesh according to music state
+	if (Application::IsBGMPlaying())
+	{
+		m_button[BT_MUSIC_TOGGLE].SetMesh(meshList[GEO_BT_MUSIC_ON]);
+	}
+	else
+	{
+		m_button[BT_MUSIC_TOGGLE].SetMesh(meshList[GEO_BT_MUSIC_OFF]);
+	}
 }
 
 void OptionMenuScene::Update(double dt)
@@ -68,13 +78,14 @@ void OptionMenuScene::Update(double dt)
 	}
 	else if (m_button[BT_MUSIC_TOGGLE].GetState() == UIButton::DOWN_STATE)
 	{
-		// Swap the mesh to simulate music off/on
-		if (m_button[BT_MUSIC_TOGGLE].GetMesh() == meshList[GEO_BT_MUSIC_ON])
+		if (Application::IsBGMPlaying())
 		{
+			Application::StopSound();
 			m_button[BT_MUSIC_TOGGLE].SetMesh(meshList[GEO_BT_MUSIC_OFF]);
 		}
 		else
 		{
+			Application::StartSound();
 			m_button[BT_MUSIC_TOGGLE].SetMesh(meshList[GEO_BT_MUSIC_ON]);
 		}
 	}

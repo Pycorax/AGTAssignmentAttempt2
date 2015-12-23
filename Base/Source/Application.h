@@ -3,6 +3,7 @@
 
 #include "timer.h"
 #include "GameStateManager.h"
+#include "SoundPlayer2D.h"
 
 class Application
 {
@@ -30,6 +31,10 @@ public:
 	int Button_Left, Button_Middle, Button_Right;
 	static double camera_yaw, camera_pitch;
 
+	// BGM
+	static SoundPlayer2D* m_bgm;
+	static bool m_bgmPlaying;
+
 private:
 	Application();
 	~Application();
@@ -52,6 +57,12 @@ private:
 
 	void setCursorShown(void);
 	void setCursorHidden(void);
+
+public:
+	// BGM
+	static void StartSound(void);
+	static void StopSound(void);
+	static bool IsBGMPlaying(void);
 };
 
 #endif
