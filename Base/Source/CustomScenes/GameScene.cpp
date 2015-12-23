@@ -119,6 +119,10 @@ void GameScene::Init(bool demoMode, string levelString)
 	// Create the projectile manager
 	m_cProjectileManager = new CProjectileManager();
 
+	// -- Set the projectile range
+	m_cProjectileManager->Boundary_TopLeft.Set(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), 300.0f, m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid());
+	m_cProjectileManager->Boundary_BottomRight.Set(0.0f, -50.0f, 0.0f);
+
 	// Give the player the max number of lives
 	m_lives = MAX_LIVES;
 
