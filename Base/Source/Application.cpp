@@ -1,4 +1,3 @@
-
 #include "Application.h"
 
 //Include GLEW
@@ -8,6 +7,7 @@
 
 #include "GameState.h"
 #include "CustomStates/introstate.h"
+#include "Highscore\HighscoreSystem.h"
 
 //Include the standard C++ headers
 #include <stdio.h>
@@ -285,6 +285,9 @@ void Application::Init()
 	theGSM->Init( "DM2240 Assignment 1", m_window_width, m_window_height);
 	//theGSM->ChangeState( CPlayState::Instance() );
 	theGSM->ChangeState(CIntroState::Instance());
+
+	// Start the high score system
+	HighScoreSystem::Init();
 }
 
 /********************************************************************************

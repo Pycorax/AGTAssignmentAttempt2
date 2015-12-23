@@ -5,6 +5,7 @@
 #include <sstream>
 #include "../Application.h"
 #include "../CustomStates/LoseState.h"
+#include "../Highscore/HighscoreSystem.h"
 
 using std::ostringstream;
 

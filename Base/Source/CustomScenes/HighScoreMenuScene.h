@@ -3,6 +3,9 @@
 // Inheritance Include
 #include "../CustomScenes/MenuScene.h"
 
+// Other Includes
+#include "../Highscore/HighscoreSystem.h"
+
 class HighScoreMenuScene : public MenuScene
 {
 	enum GEOMETRY_TYPE
@@ -35,4 +38,5 @@ public:
 
 private:
 	Mesh* meshList[NUM_GEOMETRY];
+	vector<HighScoreRecord> m_recordsToDisplay;
 };

@@ -7,6 +7,7 @@
 #include "../Application.h"
 #include "../CustomStates/LoseState.h"
 #include "../CustomStates/WinState.h"
+#include "../Highscore/HighscoreSystem.h"
 
 using std::ostringstream;
 
@@ -90,7 +91,7 @@ void GameScene::Init(bool demoMode, string levelString)
 		int left = 0, right = 0, top = 0, bottom = 0;
 
 		// If there is one param for each side AKA valid
-		if (levelString.length() == 4)
+		if (levelString.length() >= 4)
 		{
 			left = stoi(levelString.substr(0, 1));
 			right = stoi(levelString.substr(1, 1));
@@ -99,6 +100,12 @@ void GameScene::Init(bool demoMode, string levelString)
 
 			bomberSurvivalInit(left, right, top, bottom);
 			m_numEnemiesAtStart = left + right + top + bottom;
+
+			// Get the level name
+			if (levelString.length() >= 6)
+			{
+				m_levelName = levelString.substr(5);
+			}
 		}
 		else
 		{
@@ -445,6 +452,10 @@ void GameScene::checkEndState(double dt)
 	// Check if game end
 	if (!m_demoMode && getNumBombersAlive() == 0)
 	{
+		// Add score to highscore
+		HighScoreSystem::AddRecord(HighScoreRecord(m_levelName, m_score));
+
+		// Go to Win State
 		ostringstream oss;
 		oss << m_score;
 		changeState(WinState::Instance(), false, oss.str());
@@ -453,6 +464,10 @@ void GameScene::checkEndState(double dt)
 	// Check if no health
 	if (m_lives <= 0)
 	{
+		// Add score to highscore
+		HighScoreSystem::AddRecord(HighScoreRecord(m_levelName, m_score));
+
+		// Go to Lose State
 		ostringstream oss;
 		oss << m_score;
 		changeState(LoseState::Instance(), false, oss.str());

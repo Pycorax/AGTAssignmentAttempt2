@@ -24,7 +24,7 @@ void HighScoreMenuScene::Init()
 	Application::SetCursorShown();
 
 	// Set the bg col
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 	// Init the mesh list
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
@@ -54,6 +54,9 @@ void HighScoreMenuScene::Init()
 	createButtonList(BT_TOTAL);
 	m_button[BT_BACK].Init(meshList[GEO_BT_BACK], Vector3(m_window_width * 0.3, m_window_height * 0.1), NORMAL_BUTTON_SIZE);
 	m_button[BT_RESET].Init(meshList[GEO_BT_RESET], Vector3(m_window_width * 0.7, m_window_height * 0.1), NORMAL_BUTTON_SIZE);
+
+	// Load list of records to display
+	m_recordsToDisplay = HighScoreSystem::GetRecords();
 }
 
 void HighScoreMenuScene::Update(double dt)
@@ -66,7 +69,8 @@ void HighScoreMenuScene::Update(double dt)
 	}
 	if (m_button[BT_RESET].GetState() == UIButton::DOWN_STATE)
 	{
-		
+		HighScoreSystem::Reset();
+		m_recordsToDisplay = HighScoreSystem::GetRecords();
 	}
 }
 
@@ -74,7 +78,20 @@ void HighScoreMenuScene::Render()
 {
 	MenuScene::Render();
 
-	RenderMesh(meshList[GEO_AXES], false);
+	// Render the high score records
+	const Vector2 RECORD_START_POINT(m_window_width * 0.5f, m_window_height * 0.65f);
+	int i = 0;
+	for (auto record = m_recordsToDisplay.begin(); record != m_recordsToDisplay.end(); ++record)
+	{
+		// Create the string version of the record to print
+		ostringstream oss;
+		oss << record->levelName << " - " << record->score;
+
+		RenderTextOnScreen(meshList[GEO_TEXT], oss.str(), Color(0.0f, 0.0f, 0.0f), 30, RECORD_START_POINT.x - (7.5f * oss.str().length()), RECORD_START_POINT.y - 37 * i);
+
+		// Increment the i which controls the y
+		++i;
+	}
 }
 
 void HighScoreMenuScene::Exit()

@@ -9,7 +9,7 @@ struct HighScoreRecord
 	string levelName;
 	int score;
 
-	HighScoreRecord() : levelName(""), score(0)
+	HighScoreRecord(string levelName_ = "", int score_ = 0) : levelName(levelName_), score(score_)
 	{
 	}
 

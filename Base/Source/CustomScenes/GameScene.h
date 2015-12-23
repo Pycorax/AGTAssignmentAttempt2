@@ -70,6 +70,7 @@ private:	// Variables
 	// Gameplay Stats
 	int m_numEnemiesAtStart;		// Stores the number of enemies at the start
 	bool m_demoMode;				// The game mode
+	string m_levelName;
 
 	// Number of Lives
 	int m_lives;
