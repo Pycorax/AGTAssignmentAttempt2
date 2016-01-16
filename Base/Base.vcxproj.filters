@@ -46,6 +46,9 @@
     <Filter Include="Highscore">
       <UniqueIdentifier>{76ee3c50-4b86-4888-a591-b1eda12a84c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameScripts">
+      <UniqueIdentifier>{9bcc68f7-f1dd-4cd5-9e66-c6ebb26af809}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -437,5 +440,10 @@
     <ClInclude Include="Source\Highscore\HighScoreRecord.h">
       <Filter>Highscore</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\GameScripts\gameSettings.lua">
+      <Filter>GameScripts</Filter>
+    </None>
   </ItemGroup>
 </Project>
