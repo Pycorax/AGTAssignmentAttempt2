@@ -10,6 +10,13 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Lua.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Lua.h" />
+    <ClInclude Include="Source\LuaType.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4F62E64F-CDE2-4F24-939C-6292FF283AE1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
