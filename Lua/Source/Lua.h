@@ -11,6 +11,9 @@ extern "C"
 	#include "Lua/include/lauxlib.h"
 }
 
+// Other Includes
+#include "LuaType.h"
+
 // Using Directives
 using std::string;
 
@@ -20,14 +23,6 @@ private:
 	lua_State* m_luaState;
 
 public:
-	union LuaResult
-	{
-		int* Integer;
-		double* Number;
-		bool* Boolean;
-		string* String;
-	};
-
 	LuaFile(string luaFile = "");
 	~LuaFile(void);
 
@@ -39,10 +34,10 @@ public:
 	 * Variable Acquisition
 	 */
 	// Functions to get values from the stack
-	LuaResult GetValue(string varName);
+	LuaType* GetValue(string varName);
 
 	/*
 	 * Lua Function Importing
 	 */
-	void Call(string functionName, LuaResult params, ...);
+	void Call(string functionName, LuaType* params, ...);
 };
