@@ -1,11 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Base", "Base\Base.vcxproj", "{9B172635-4E2B-46F1-A403-08F4194D00F5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B594FE34-E00B-4E94-AD04-D1FF100AA5DC} = {B594FE34-E00B-4E94-AD04-D1FF100AA5DC}
+		{4F62E64F-CDE2-4F24-939C-6292FF283AE1} = {4F62E64F-CDE2-4F24-939C-6292FF283AE1}
 		{08E8BCA2-136F-4207-8D1B-C5F5E2BC962A} = {08E8BCA2-136F-4207-8D1B-C5F5E2BC962A}
 	EndProjectSection
 EndProject

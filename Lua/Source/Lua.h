@@ -2,6 +2,7 @@
 
 // STL Includes
 #include <string>
+#include <memory>
 
 // LUA Includes
 extern "C"
@@ -16,6 +17,10 @@ extern "C"
 
 // Using Directives
 using std::string;
+using std::shared_ptr;
+
+// Type Definitions
+typedef shared_ptr<LuaType> LuaTypePtr;
 
 class LuaFile
 {
@@ -28,16 +33,20 @@ public:
 
 	// Life time
 	bool LoadScript(string filename);
-	void RunScript(void);
+	bool RunScript(void);
+	bool RunScript(string filename);
 
 	/*
 	 * Variable Acquisition
 	 */
 	// Functions to get values from the stack
-	LuaType* GetValue(string varName);
+	LuaTypePtr GetValue(string varName);
+	double GetNumber(string varName);
+	bool GetBoolean(string varName);
+	string GetString(string varName);
 
 	/*
 	 * Lua Function Importing
 	 */
-	void Call(string functionName, LuaType* params, ...);
+	void Call(string functionName, LuaTypePtr params, ...);
 };

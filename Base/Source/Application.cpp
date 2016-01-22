@@ -15,15 +15,17 @@
 #include "Highscore\HighscoreSystem.h"
 #include "CustomStates/playstate.h"
 #include "SoundEngine.h"
+#include "Lua.h"
 
 GLFWwindow* m_window;
-const unsigned char FPS = 60; // FPS of this game
+const unsigned char FPS = 60; // FPS of thm_window_widthis game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0, 
 	   Application::mouse_current_x = 0.0, Application::mouse_current_y = 0.0,
 	   Application::mouse_diff_x = 0.0, Application::mouse_diff_y = 0.0;
 double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
-
+int Application::s_window_width = 1280;
+int Application::s_window_height = 800;
 /********************************************************************************
  Define an error callback
  ********************************************************************************/
@@ -79,14 +81,14 @@ bool Application::GetMouseUpdate()
 	if (m_mouseHidden)
 	{
 		// Do a wraparound if the mouse cursor has gone out of the deadzone
-		if ((mouse_current_x < m_window_deadzone) || (mouse_current_x > m_window_width - m_window_deadzone))
+		if ((mouse_current_x < m_window_deadzone) || (mouse_current_x > s_window_width - m_window_deadzone))
 		{
-			mouse_current_x = m_window_width >> 1;
+			mouse_current_x = s_window_width >> 1;
 			glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
 		}
-		if ((mouse_current_y < m_window_deadzone) || (mouse_current_y > m_window_height - m_window_deadzone))
+		if ((mouse_current_y < m_window_deadzone) || (mouse_current_y > s_window_height - m_window_deadzone))
 		{
-			mouse_current_y = m_window_height >> 1;
+			mouse_current_y = s_window_height >> 1;
 			glfwSetCursorPos(m_window, mouse_current_x, mouse_current_y);
 		}
 	}
@@ -255,9 +257,13 @@ void Application::Init()
 	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
+	// Load Game Properties from Lua
+	LuaFile luaFile("Source//GameScripts//gameSettings.lua");
+	s_window_width = luaFile.GetNumber("WINDOW_WIDTH");
+	s_window_height = luaFile.GetNumber("WINDOW_HEIGHT");
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(m_window_width, m_window_height, "DM2240 Assignment 1", NULL, NULL);
+	m_window = glfwCreateWindow(s_window_width, s_window_height, luaFile.GetString("WINDOW_TITLE").c_str(), NULL, NULL);
 
 	//If the window couldn't be created
 	if (!m_window)
@@ -295,7 +301,7 @@ void Application::Init()
 
 	// Initialise the GSM
 	theGSM = new CGameStateManager();
-	theGSM->Init( "DM2240 Assignment 1", m_window_width, m_window_height);
+	theGSM->Init( "DM2240 Assignment 1", s_window_width, s_window_height);
 	//theGSM->ChangeState( CPlayState::Instance() );
 	theGSM->ChangeState(CIntroState::Instance());
 

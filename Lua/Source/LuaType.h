@@ -10,22 +10,13 @@ struct LuaType
 {
 	enum LUA_TYPE
 	{
-		LT_INTEGER,
 		LT_NUMBER,
 		LT_BOOL,
 		LT_STRING,
 		LT_TOTAL
 	};
 
-	virtual ~LuaType() = 0;
-};
-
-struct LuaInteger : public LuaType
-{
-	int Integer;
-
-	LuaInteger(int integer = 0) : Integer(integer) {}
-	~LuaInteger() {}
+	virtual ~LuaType() {}
 };
 
 struct LuaNumber : public LuaType
