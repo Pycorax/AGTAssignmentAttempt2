@@ -26,15 +26,14 @@ class LuaFile
 {
 private:
 	lua_State* m_luaState;
+	bool m_scriptExecuted;
 
 public:
-	LuaFile(string luaFile = "");
+	LuaFile(string luaFile);
 	~LuaFile(void);
 
 	// Life time
-	bool LoadScript(string filename);
 	bool RunScript(void);
-	bool RunScript(string filename);
 
 	/*
 	 * Variable Acquisition
@@ -49,4 +48,8 @@ public:
 	 * Lua Function Importing
 	 */
 	void Call(string functionName, LuaTypePtr params, ...);
+
+private:
+	// For script loading
+	bool loadScript(string filename);
 };

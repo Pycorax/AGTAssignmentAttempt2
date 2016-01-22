@@ -2,16 +2,28 @@
 
 // STL Include
 #include <cstdarg>		// For Variable Argument Lists
+#include <exception>
+
+// Using Directives
+using std::runtime_error;
 
 LuaFile::LuaFile(string luaFile)
 	: m_luaState(nullptr)
+	, m_scriptExecuted(false)
 {
 	m_luaState = lua_open();
 	luaL_openlibs(m_luaState);
 
 	if (luaFile != "")
 	{
-		LoadScript(luaFile);
+		if (!loadScript(luaFile))
+		{
+			throw new runtime_error("Failed to load " + luaFile + "!");
+		}
+	}
+	else
+	{
+		throw new runtime_error("Cannot load an empty Lua file!");
 	}
 }
 
@@ -21,14 +33,16 @@ LuaFile::~LuaFile(void)
 	m_luaState = nullptr;
 }
 
-bool LuaFile::LoadScript(string filename)
+bool LuaFile::RunScript(void)
 {
 	if (m_luaState)
 	{
-		if (luaL_loadfile(m_luaState, filename.c_str()) || lua_pcall(m_luaState, 0, 0, 0))
+		if (lua_pcall(m_luaState, 0, 0, 0))
 		{
+			throw new runtime_error("Failed to execute Lua script!");
 			return false;
 		}
+		m_scriptExecuted = true;
 
 		return true;
 	}
@@ -39,6 +53,11 @@ bool LuaFile::LoadScript(string filename)
 LuaTypePtr LuaFile::GetValue(string varName)
 {
 	LuaTypePtr luaResult;
+
+	if (!m_scriptExecuted)
+	{
+		RunScript();
+	}
 
 	// Only check if we have a luaState set up
 	if (m_luaState)
@@ -102,4 +121,19 @@ void LuaFile::Call(string functionName, LuaTypePtr params, ...)
 
 	// Clean up the Variable Argument List after reading
 	va_end(vargList);
+}
+
+bool LuaFile::loadScript(string filename)
+{
+	if (m_luaState)
+	{
+		if (luaL_loadfile(m_luaState, filename.c_str()))
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	return false;
 }
