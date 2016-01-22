@@ -125,6 +125,21 @@ LuaTypePtr LuaFile::Call(string functionName, int expectedResults, vector<LuaTyp
 	return luaResult;
 }
 
+LuaTypePtr LuaFile::NewNum(double num)
+{
+	return LuaTypePtr(new LuaNumber(num));
+}
+
+LuaTypePtr LuaFile::NewBool(bool b)
+{
+	return LuaTypePtr(new LuaBoolean(b));
+}
+
+LuaTypePtr LuaFile::NewStr(string str)
+{
+	return LuaTypePtr(new LuaString(str));
+}
+
 bool LuaFile::loadScript(string filename)
 {
 	if (m_luaState)

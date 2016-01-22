@@ -23,6 +23,7 @@ using std::vector;
 
 // Type Definitions
 typedef shared_ptr<LuaType> LuaTypePtr;
+typedef vector<LuaTypePtr> LuaFuncList;
 
 class LuaFile
 {
@@ -50,6 +51,13 @@ public:
 	 * Lua Function Importing
 	 */
 	LuaTypePtr Call(string functionName, int expectedResults, vector<LuaTypePtr> params);
+
+	/*
+	 * Functions to easily produce LuaTypes
+	 */
+	static LuaTypePtr NewNum(double num);
+	static LuaTypePtr NewBool(bool b);
+	static LuaTypePtr NewStr(string str);
 
 private:
 	// For script loading
