@@ -3,6 +3,7 @@
 // STL Includes
 #include <string>
 #include <memory>
+#include <vector>
 
 // LUA Includes
 extern "C"
@@ -18,6 +19,7 @@ extern "C"
 // Using Directives
 using std::string;
 using std::shared_ptr;
+using std::vector;
 
 // Type Definitions
 typedef shared_ptr<LuaType> LuaTypePtr;
@@ -47,9 +49,11 @@ public:
 	/*
 	 * Lua Function Importing
 	 */
-	void Call(string functionName, LuaTypePtr params, ...);
+	LuaTypePtr Call(string functionName, int expectedResults, vector<LuaTypePtr> params);
 
 private:
 	// For script loading
 	bool loadScript(string filename);
+	// For converting the top value in the stack into a LuaTypePtr
+	LuaTypePtr getTopLuaValue(void);
 };

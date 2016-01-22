@@ -24,3 +24,8 @@ PLAYER_POSITION_Z = 0
 PLAYER_LOOK_X = 1
 PLAYER_LOOK_Y = 0
 PLAYER_LOOK_Z = 0
+
+function testFunc(personToHelloTo)
+	return "Hello " .. personToHelloTo
+end
+

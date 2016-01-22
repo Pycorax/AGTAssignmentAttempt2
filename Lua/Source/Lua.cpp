@@ -5,6 +5,7 @@
 #include <exception>
 
 // Using Directives
+using std::dynamic_pointer_cast;
 using std::runtime_error;
 
 LuaFile::LuaFile(string luaFile)
@@ -65,24 +66,10 @@ LuaTypePtr LuaFile::GetValue(string varName)
 		// Push this on to the lua stack
 		lua_getglobal(m_luaState, varName.c_str());
 
-		// If this global is a number,
-		if (lua_isnumber(m_luaState, lua_gettop(m_luaState)))
-		{
-			// Store this in a LuaNumber in luaResult
-			luaResult.reset(new LuaNumber(lua_tointeger(m_luaState, lua_gettop(m_luaState))));
-		}
-		// If this global is a boolean,
-		else if (lua_isboolean(m_luaState, lua_gettop(m_luaState)))
-		{
-			// Store this in a LuaBoolean in luaResult
-			luaResult.reset(new LuaBoolean(lua_toboolean(m_luaState, lua_gettop(m_luaState))));
-		}
-		// If this global is a string,
-		else if (lua_isstring(m_luaState, lua_gettop(m_luaState)))
-		{
-			// Store this in a LuaBoolean in luaResult
-			luaResult.reset(new LuaString(lua_tostring(m_luaState, lua_gettop(m_luaState))));
-		}
+		luaResult = getTopLuaValue();
+
+		// Pop it off since we've read it
+		lua_pop(m_luaState, 1);
 	}
 
 	// Return the result
@@ -91,36 +78,51 @@ LuaTypePtr LuaFile::GetValue(string varName)
 
 double LuaFile::GetNumber(string varName)
 {
-	return std::dynamic_pointer_cast<LuaNumber>(GetValue(varName)).get()->Number;
+	return dynamic_pointer_cast<LuaNumber>(GetValue(varName)).get()->Number;
 }
 
 bool LuaFile::GetBoolean(string varName)
 {
-	return std::dynamic_pointer_cast<LuaBoolean>(GetValue(varName)).get()->Boolean;;
+	return dynamic_pointer_cast<LuaBoolean>(GetValue(varName)).get()->Boolean;;
 }
 
 string LuaFile::GetString(string varName)
 {
-	return std::dynamic_pointer_cast<LuaString>(GetValue(varName)).get()->String;
+	return dynamic_pointer_cast<LuaString>(GetValue(varName)).get()->String;
 }
 
-void LuaFile::Call(string functionName, LuaTypePtr params, ...)
+LuaTypePtr LuaFile::Call(string functionName, int expectedResults, vector<LuaTypePtr> params)
 {
-	// Get a reference to the Variable Argument List
-	va_list vargList;
-
-	// Prepare to read the Variable Argument List
-	va_start(vargList, params);
+	// Push the function to the top
+	lua_getglobal(m_luaState, functionName.c_str());
 
 	// Loop through all elements in the Variable Argument List
-	for (size_t i = 0; vargList[i] != '\0'; ++i)
+	for (auto param : params)
 	{
-		LuaType* lr;
-		// TODO: Fill this up
+		if (auto luaNum = dynamic_pointer_cast<LuaNumber>(param))
+		{
+			lua_pushnumber(m_luaState, luaNum->Number);
+		}
+		else if (auto luaBool = dynamic_pointer_cast<LuaBoolean>(param))
+		{
+			lua_pushboolean(m_luaState, luaBool->Boolean);
+		}
+		else if (auto luaStr = dynamic_pointer_cast<LuaString>(param))
+		{
+			lua_pushstring(m_luaState, luaStr->String.c_str());
+		}
 	}
 
-	// Clean up the Variable Argument List after reading
-	va_end(vargList);
+	// Call the function
+	lua_call(m_luaState, params.size(), expectedResults);
+
+	// Obtain the result
+	LuaTypePtr luaResult = getTopLuaValue();
+
+	// Pop the result
+	lua_pop(m_luaState, expectedResults);
+
+	return luaResult;
 }
 
 bool LuaFile::loadScript(string filename)
@@ -136,4 +138,30 @@ bool LuaFile::loadScript(string filename)
 	}
 
 	return false;
+}
+
+LuaTypePtr LuaFile::getTopLuaValue(void)
+{
+	LuaTypePtr luaResult;
+
+	// If this global is a number,
+	if (lua_isnumber(m_luaState, lua_gettop(m_luaState)))
+	{
+		// Store this in a LuaNumber in luaResult
+		luaResult.reset(new LuaNumber(lua_tointeger(m_luaState, lua_gettop(m_luaState))));
+	}
+	// If this global is a boolean,
+	else if (lua_isboolean(m_luaState, lua_gettop(m_luaState)))
+	{
+		// Store this in a LuaBoolean in luaResult
+		luaResult.reset(new LuaBoolean(lua_toboolean(m_luaState, lua_gettop(m_luaState))));
+	}
+	// If this global is a string,
+	else if (lua_isstring(m_luaState, lua_gettop(m_luaState)))
+	{
+		// Store this in a LuaBoolean in luaResult
+		luaResult.reset(new LuaString(lua_tostring(m_luaState, lua_gettop(m_luaState))));
+	}
+
+	return luaResult;
 }

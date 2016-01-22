@@ -261,6 +261,8 @@ void Application::Init()
 	LuaFile luaFile("Source//GameScripts//gameSettings.lua");
 	s_window_width = luaFile.GetNumber("WINDOW_WIDTH");
 	s_window_height = luaFile.GetNumber("WINDOW_HEIGHT");
+	auto result = luaFile.Call("testFunc", 1, vector<LuaTypePtr>{ LuaTypePtr(new LuaString("testMan")) });
+	std::cout << ::dynamic_pointer_cast<LuaString>(result).get()->String;
 
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(s_window_width, s_window_height, luaFile.GetString("WINDOW_TITLE").c_str(), NULL, NULL);
