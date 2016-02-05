@@ -22,23 +22,35 @@ public:
 	};
 
 private:
-	vector<CNode*> theChildren;
+	// Children Nodes
+	vector<CSceneNode*> theChildren;
 
+	// Mesh
 	CModel* theModel;
+
+	// Transform
 	CTransform* theTransform;
+
+	// IDs for locating spatial details of this node
 	int sceneNodeID;
 	int gridID;
 	int secondaryGridID;
 	CSpatialPartition* spatialPartition;		// Pointer to the spatial partition system that houses this object
 
+	// If this node is active
 	bool active;
 
+	// The type of node
 	NODE_TYPE type;
+
+	
 
 public:
 	CSceneNode(void);
 	CSceneNode(const int sceneNodeID);
 	~CSceneNode(void);
+
+	void Update(CModel::RESOLUTION_TYPE resType);
 
 	// Draw this Node and its children
 	void Draw(void);
@@ -56,7 +68,7 @@ public:
 	// Get methods
 	int GetSceneNodeID(void);
 	CSceneNode* GetNode(const int sceneNodeID);
-	vector<CNode*> GetChildren(void) const;
+	vector<CSceneNode*> GetChildren(void) const;
 
 	// Get Transforms
 	Vector3 GetTranslate(void) const;

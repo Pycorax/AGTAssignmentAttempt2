@@ -181,9 +181,13 @@ void CGrid::DeleteObjects(void)
 /********************************************************************************
  Update the grid
  ********************************************************************************/
-void CGrid::Update(void)
+void CGrid::Update(CModel::RESOLUTION_TYPE resType)
 {
-
+	for (auto object : ListOfObjects)
+	{
+		// Update the resolution type for each scene node object
+		object->Update(resType);
+	}
 }
 
 /********************************************************************************

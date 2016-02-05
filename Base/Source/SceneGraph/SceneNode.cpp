@@ -51,6 +51,21 @@ CSceneNode::~CSceneNode(void)
 	}
 }
 
+void CSceneNode::Update(CModel::RESOLUTION_TYPE resType)
+{
+	// Update the current model
+	if (theModel)
+	{
+		theModel->SetResolution(resType);
+	}
+
+	// Update children as well
+	for (auto child : theChildren)
+	{
+		child->Update(resType);
+	}
+}
+
 void CSceneNode::Draw(void)
 {
 	if (!active)
@@ -184,7 +199,7 @@ CSceneNode* CSceneNode::GetNode(const int sceneNodeID)
 	return theTarget;
 }
 
-vector<CNode*> CSceneNode::GetChildren(void) const
+vector<CSceneNode*> CSceneNode::GetChildren(void) const
 {
 	return theChildren;
 }

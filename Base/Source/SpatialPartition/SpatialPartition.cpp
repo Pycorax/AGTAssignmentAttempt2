@@ -180,10 +180,10 @@ void CSpatialPartition::AddObject(CSceneNode* theObject)
 	theObject->SetSpatialPartition(this);
 
 	// Rinse and repeat for each child node
-	vector<CNode*> children = theObject->GetChildren();
+	vector<CSceneNode*> children = theObject->GetChildren();
 	for (auto child = children.begin(); child != children.end(); ++child)
 	{
-		CSceneNode* sChild = dynamic_cast<CSceneNode*>(*child);
+		CSceneNode* sChild = *child;
 
 		if (sChild)
 		{
@@ -219,10 +219,10 @@ void CSpatialPartition::RemoveObject(CSceneNode * theObject)
 		}
 
 		// Rinse and repeat for each child node
-		vector<CNode*> children = theObject->GetChildren();
+		vector<CSceneNode*> children = theObject->GetChildren();
 		for (auto child = children.begin(); child != children.end(); ++child)
 		{
-			CSceneNode* sChild = dynamic_cast<CSceneNode*>(*child);
+			CSceneNode* sChild = *child;
 
 			if (sChild)
 			{
@@ -400,111 +400,32 @@ void CSpatialPartition::Render(Vector3* theCameraPosition)
  ********************************************************************************/
 void CSpatialPartition::Update(Vector3 theCameraPosition, Vector3 theCameraNormal)
 {
+	// Update Grids
     for (int i=0; i<xNumOfGrid; i++)
     {
         for (int j=0; j<yNumOfGrid; j++)
         {
-            // Update the Grids
-            theGrid[ i*yNumOfGrid + j ].Update();
+			float distanceGrid2Camera = CalculateDistanceSquare(theCameraPosition, theCameraNormal, i ,j);
+
+			if (distanceGrid2Camera < CModel::LOD_LIMITS[CModel::RT_HIGH])
+			{
+				// Update the Grids
+				theGrid[i*yNumOfGrid + j].Update(CModel::RT_HIGH);
+			}
+			else if (distanceGrid2Camera < CModel::LOD_LIMITS[CModel::RT_MED])
+			{
+				// Update the Grids
+				theGrid[i*yNumOfGrid + j].Update(CModel::RT_MED);
+			}
+			else
+			{
+				// Update the Grids
+				theGrid[i*yNumOfGrid + j].Update(CModel::RT_LOW);
+			}
         }
     }
 
-    /*
-    // Check for Occlusion
-    FindNearestGrid( theCameraPosition, theCameraNormal );	// Find the grid which is nearest to the camera
-    
-    theOcclusionChecker.SetScreenCoordinate( theCameraPosition );	// Set the position of the plane where all grids will map to
-    theOcclusionChecker.SetScreenNormal( theCameraNormal );
-
-#if _DEBUG
-    cout << "theCameraPosition: " << theCameraPosition << endl;
-#endif
-
-#if _DEBUG
-#endif
-
-    if ( (int)vec.size() > 1 )
-    {
-        // Use the nearest grid as the reference grid
-        Vector3 positionReference_TopLeft		= theOcclusionChecker.GetProjectedCoordinate( theGrid[ vec[0].indexValue ].GetTopLeft() );
-        Vector3 positionReference_BottomRight	= theOcclusionChecker.GetProjectedCoordinate( theGrid[ vec[0].indexValue ].GetBottomRight() );
-#if _DEBUG
-        cout << "0. Before projection: " << theGrid[ vec[0].indexValue ].GetTopLeft() << ", " << theGrid[ vec[0].indexValue ].GetBottomRight() << endl;
-        cout << "0. After projection: " << positionReference_TopLeft << ", " << positionReference_BottomRight << endl << endl;
-#endif
-        // Set the nearest grid's display boolean flag to true first
-        theGrid[ vec[0].indexValue ].m_bDisplayed = true;
-
-        for (int i=1; i<(int)vec.size(); i++)
-        {
-            // Use the nearest grid as the reference positions
-            Vector3 positionCheck_TopLeft		= theOcclusionChecker.GetProjectedCoordinate( theGrid[ vec[i].indexValue ].GetTopLeft() );
-            Vector3 positionCheck_BottomRight	= theOcclusionChecker.GetProjectedCoordinate( theGrid[ vec[i].indexValue ].GetBottomRight() );
-
-#if _DEBUG
-        cout << i << ". Before projection: " << theGrid[ vec[i].indexValue ].GetTopLeft() << ", " << theGrid[ vec[i].indexValue ].GetBottomRight() << endl;
-        cout << i << ". After projection: " << positionCheck_TopLeft << ", " << positionReference_BottomRight << endl;
-        cout << "----- Start of Occlusion -----" << endl;
-#endif
-
-            // Set the grid's display boolean flag to false first
-            theGrid[ vec[i].indexValue ].m_bDisplayed = false;
-
-            // Check the top left corner of a grid against the reference positions
-            if (positionReference_TopLeft.x > positionCheck_TopLeft.x)
-            {
-#if _DEBUG
-                cout << "positionReference_TopLeft.x set from " << positionReference_TopLeft.x << "to " << positionCheck_TopLeft.x << endl;
-#endif
-                positionReference_TopLeft.x = positionCheck_TopLeft.x;
-                theGrid[ vec[i].indexValue ].m_bDisplayed = true;
-            }
-            if (positionReference_TopLeft.z > positionCheck_TopLeft.z)
-            {
-#if _DEBUG
-                cout << "positionReference_TopLeft.z set from " << positionReference_TopLeft.z << "to " << positionCheck_TopLeft.z << endl;
-#endif
-                positionReference_TopLeft.z = positionCheck_TopLeft.z;
-                theGrid[ vec[i].indexValue ].m_bDisplayed = true;
-            }
-
-            // Check the bottom right corner of a grid against the reference positions
-            if (positionReference_BottomRight.x < positionCheck_BottomRight.x)
-            {
-#if _DEBUG
-                cout << "positionReference_BottomRight.x set from " << positionReference_BottomRight.x << "to " << positionCheck_BottomRight.x << endl;
-#endif
-                positionReference_BottomRight.x = positionCheck_BottomRight.x;
-                theGrid[ vec[i].indexValue ].m_bDisplayed = true;
-            }
-            if (positionReference_BottomRight.z < positionCheck_BottomRight.z)
-            {
-#if _DEBUG
-                cout << "positionReference_BottomRight.z set from " << positionReference_BottomRight.z << "to " << positionCheck_BottomRight.z << endl;
-#endif
-                positionReference_BottomRight.z = positionCheck_BottomRight.z;
-                theGrid[ vec[i].indexValue ].m_bDisplayed = true;
-            }
-#if _DEBUG
-    cout << "======= End of Occlusion =====" << endl;
-    cout << "Current Reference: " << positionReference_TopLeft << ", " << positionReference_BottomRight << endl << endl;
-#endif
-        }
-
-#if _DEBUG
-        cout << endl << "Printout of vec" << endl;
-        for (int i=0; i<(int)vec.size(); i++)
-        {
-            cout << i << " : " << theGrid[ vec[i].indexValue ].GetTopLeft() << ", " 
-                 << theGrid[ vec[i].indexValue ].GetBottomRight() 
-                 << theGrid[ vec[i].indexValue ].m_bDisplayed << endl;
-        }
-#endif
-
-        // Clear the list of grids in the vec vector.
-        vec.clear();
-    }
-    */
+   
 }
 
 

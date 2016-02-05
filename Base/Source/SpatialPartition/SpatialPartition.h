@@ -15,6 +15,7 @@ public:
 
 	// Initialise the spatial partition
 	bool Init(const int xSize, const int ySize, const int xNumOfGrid, const int yNumOfGrid);
+
 	// Get xNumOfGrid
 	int GetxNumOfGrid(void);
 	// Get yNumOfGrid
