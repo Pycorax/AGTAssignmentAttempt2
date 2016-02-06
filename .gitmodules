@@ -1,3 +1,6 @@
 [submodule "Lua"]
 	path = Lua
 	url = https://github.com/Pycorax/LuaC-Wrapper.git
+[submodule "StateMachine"]
+	path = StateMachine
+	url = https://github.com/Pycorax/StateMachine.git
