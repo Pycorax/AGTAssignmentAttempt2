@@ -8,6 +8,7 @@
 #include "../CustomStates/LoseState.h"
 #include "../CustomStates/WinState.h"
 #include "../Highscore/HighscoreSystem.h"
+#include "Lua.h"
 
 using std::ostringstream;
 
@@ -52,6 +53,10 @@ void GameScene::Init(bool demoMode, string levelString)
 	// Enable lighting
 	bLightEnabled = true;
 
+	// Load LUA
+	// Load Game Properties from Lua
+	LuaFile luaFile("Source//GameScripts//gameSettings.lua");
+
 	/*
 	 * Gameplay Init
 	 */
@@ -68,7 +73,7 @@ void GameScene::Init(bool demoMode, string levelString)
 
 	// Create a spatial partition
 	m_cSpatialPartition = new CSpatialPartition();
-	m_cSpatialPartition->Init(65, 65, 5, 5);
+	m_cSpatialPartition->Init(luaFile.GetNumber("SPATIAL_PARTITION_GRID_WIDTH"), luaFile.GetNumber("SPATIAL_PARTITION_GRID_HEIGHT"), luaFile.GetNumber("SPATIAL_PARTITION_COL"), luaFile.GetNumber("SPATIAL_PARTITION_ROW"));
 	for (int i = 0; i<m_cSpatialPartition->GetxNumOfGrid(); i++)
 	{
 		for (int j = 0; j<m_cSpatialPartition->GetyNumOfGrid(); j++)
@@ -121,7 +126,7 @@ void GameScene::Init(bool demoMode, string levelString)
 
 	// -- Set the projectile range
 	m_cProjectileManager->Boundary_TopLeft.Set(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), 300.0f, m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid());
-	m_cProjectileManager->Boundary_BottomRight.Set(0.0f, -50.0f, 0.0f);
+	m_cProjectileManager->Boundary_BottomRight.Set(-m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), -50.0f, -m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid());
 
 	// Give the player the max number of lives
 	m_lives = MAX_LIVES;
