@@ -36,7 +36,9 @@ private:	// Enums
 		// -- Human
 		GEO_HUMAN_HAT,
 		GEO_HUMAN_HEAD,
-		GEO_HUMAN_BODY,
+		GEO_HUMAN_BODY_LOW,
+		GEO_HUMAN_BODY_MED,
+		GEO_HUMAN_BODY_HIGH,
 		// -- Skybox
 		GEO_LEFT,
 		GEO_RIGHT,

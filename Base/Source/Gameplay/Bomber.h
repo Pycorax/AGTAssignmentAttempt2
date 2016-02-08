@@ -35,12 +35,15 @@ public:
 	Bomber();
 	virtual ~Bomber();
 
+	// Life Time
 	void Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);		// Should only be called on Body Bomber nodes
 	bool Update(double dt, Vector3 target);
-
-	// Life Time
+	
 	void Spawn(Vector3 startPos, float speed);
 	void Kill(void);
+
+	// Models
+	void SetBodyLODModels(Mesh* lowRes, Mesh* medRes, Mesh* highRes);
 
 	// Interaction
 	void Nudge(Vector3 direction);

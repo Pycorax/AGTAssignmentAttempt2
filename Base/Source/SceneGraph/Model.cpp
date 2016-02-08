@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "..\MeshBuilder.h"
 
-const float CModel::LOD_LIMITS[RT_TOTAL] = { 0, 40000, 10000 };
+const float CModel::LOD_LIMITS[RT_TOTAL] = { 0, 450, 150 };
 
 CModel::CModel(Mesh* mesh)
 	: m_cModelMesh(mesh)

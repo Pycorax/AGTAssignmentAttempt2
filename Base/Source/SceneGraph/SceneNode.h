@@ -10,8 +10,7 @@ using namespace std;
 class CSceneManager;
 class CSpatialPartition;
 
-class CSceneNode :
-	public CNode
+class CSceneNode : 	public CNode
 {
 public:
 	enum NODE_TYPE
@@ -21,7 +20,7 @@ public:
 		NT_TOTAL
 	};
 
-private:
+protected:
 	// Children Nodes
 	vector<CSceneNode*> theChildren;
 

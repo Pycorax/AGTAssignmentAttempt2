@@ -407,12 +407,12 @@ void CSpatialPartition::Update(Vector3 theCameraPosition, Vector3 theCameraNorma
         {
 			float distanceGrid2Camera = CalculateDistanceSquare(theCameraPosition, theCameraNormal, i ,j);
 
-			if (distanceGrid2Camera < CModel::LOD_LIMITS[CModel::RT_HIGH])
+			if (distanceGrid2Camera < CModel::LOD_LIMITS[CModel::RT_HIGH] * CModel::LOD_LIMITS[CModel::RT_HIGH])
 			{
 				// Update the Grids
 				theGrid[i*yNumOfGrid + j].Update(CModel::RT_HIGH);
 			}
-			else if (distanceGrid2Camera < CModel::LOD_LIMITS[CModel::RT_MED])
+			else if (distanceGrid2Camera < CModel::LOD_LIMITS[CModel::RT_MED] * CModel::LOD_LIMITS[CModel::RT_MED])
 			{
 				// Update the Grids
 				theGrid[i*yNumOfGrid + j].Update(CModel::RT_MED);
