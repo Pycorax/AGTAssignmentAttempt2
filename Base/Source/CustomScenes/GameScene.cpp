@@ -4,7 +4,7 @@
 #include <sstream>
 
 // API Includes
-#include "Lua.h"
+#include "LuaFunction.h"
 
 // Other Includes
 #include "../MeshBuilder.h"
@@ -17,6 +17,7 @@
 
 // Using Directives
 using Lua::LuaFile;
+using Lua::Type;
 using std::ostringstream;
 
 const float GameScene::INVULN_TIME = 2.0f;
@@ -47,7 +48,7 @@ GameScene::~GameScene()
 {
 }
 
-void GameScene::Init(bool demoMode, string levelString)
+void GameScene::Init(string levelString)
 {
 	CSceneManager::Init();
 
@@ -61,7 +62,7 @@ void GameScene::Init(bool demoMode, string levelString)
 	bLightEnabled = true;
 
 	// Load LUA
-	// Load Game Properties from Lua
+	// -- Load Game Properties from Lua
 	LuaFile luaFile("Source//GameScripts//gameSettings.lua");
 
 	/*
@@ -71,6 +72,7 @@ void GameScene::Init(bool demoMode, string levelString)
 	m_cAvatar = new CPlayInfo3PV();
 	m_cAvatar->SetModel(meshList[GEO_PLAYER_BODY]);
 	
+
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
 
@@ -92,37 +94,39 @@ void GameScene::Init(bool demoMode, string levelString)
 	m_cAvatar->SetPos_x(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid() * 0.5f);
 	m_cAvatar->SetPos_z(m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid() * 0.5f);
 
-	// Set up the level
-	if (demoMode)
+	// If a level string is provided
+	if (levelString.length() > 0)
 	{
-		bomberDemoInit();
+		// Load LUA
+		// -- Load Game Properties from Lua
+		LuaFile levelLuaScript(levelString);
+		// -- Register C++ Functions
+		levelLuaScript.RegisterFunction("spawnSurvivalBombers", bomberSurvivalInit);
+
+		levelLuaScript.Call("levelInit", 0, Lua::LuaFuncList{ Lua::NewPtr(this) });
+
+		// Get the level name
+		int nameStartPos = 0;
+		int nameEndPos = levelString.length() - 1;
+		// -- Start from the end and find a '/' if there is
+		for (size_t i = levelString.length() - 1; i >= 0; --i)
+		{
+			if (levelString[i] == '/')
+			{
+				nameStartPos = i + 1;
+				break;
+			}
+			else if (levelString[i] == '.')
+			{
+				nameEndPos = i;
+			}
+		}
+		m_levelName = levelString.substr(nameStartPos, nameEndPos - nameStartPos);
 	}
 	else
 	{
-		int left = 0, right = 0, top = 0, bottom = 0;
-
-		// If there is one param for each side AKA valid
-		if (levelString.length() >= 4)
-		{
-			left = stoi(levelString.substr(0, 1));
-			right = stoi(levelString.substr(1, 1));
-			top = stoi(levelString.substr(2, 1));
-			bottom = stoi(levelString.substr(3, 1));
-
-			bomberSurvivalInit(left, right, top, bottom);
-			m_numEnemiesAtStart = left + right + top + bottom;
-
-			// Get the level name
-			if (levelString.length() >= 6)
-			{
-				m_levelName = levelString.substr(5);
-			}
-		}
-		else
-		{
-			bomberDemoInit();
-		}
-	}	
+		bomberDemoInit();
+	}
 
 	// Add the pointers to the scene graph to the spatial partition
 	m_cSpatialPartition->AddObject(m_cSceneGraph);
@@ -455,6 +459,8 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
+
+	m_numEnemiesAtStart = left + right + top + bot;
 }
 
 int GameScene::getNumBombersAlive(void)
@@ -519,6 +525,19 @@ void GameScene::renderUIBar(Vector3 pos, Vector3 scale, float progress, Mesh * p
 	Render2DMesh(meshList[GEO_BAR_BG], false, scale.x, scale.y, pos.x, pos.y);
 }
 
+int GameScene::bomberSurvivalInit(lua_State* L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_NUMBER: Left | LT_NUMBER: Right | LT_NUMBER: Top | LT_NUMBER: Bottom*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->bomberSurvivalInit(Lua::ExtNum(params[1]), Lua::ExtNum(params[2]), Lua::ExtNum(params[3]), Lua::ExtNum(params[4]));
+
+	return LuaFunc::postCall(L, returns);
+}
 
 void GameScene::OnResume()
 {

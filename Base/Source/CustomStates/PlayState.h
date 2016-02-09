@@ -8,7 +8,7 @@ public:
 	virtual ~CPlayState();
 
 	void Init(const int width = 800, const int height = 600);
-	void Init(bool survival, string levelString, const int width = 800, const int height = 600);
+	void Init(string levelString, const int width = 800, const int height = 600);
 
 	void Update(CGameStateManager* theGSM, const double m_dElapsedTime, string* tagReceiver = nullptr);
 

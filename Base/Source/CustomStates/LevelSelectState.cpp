@@ -57,20 +57,9 @@ void LevelSelectState::Update(CGameStateManager * theGSM, const double m_dElapse
 
 				if (playState)
 				{
+					// Retrieve the tag and init it
 					string tag = stateCommand->GetTag();
-
-					if (tag != "")
-					{
-						// Send the play state level info that is stored in the tag
-						bool demoMode = tag[0] == 'd';
-
-						playState->Init(demoMode, tag.substr(1), theGSM->GetWindowWidth(), theGSM->GetWindowHeight());
-					}
-					else
-					{
-						//  If no info, send default demo info
-						playState->Init(true, "", theGSM->GetWindowWidth(), theGSM->GetWindowHeight());
-					}
+					playState->Init(tag, theGSM->GetWindowWidth(), theGSM->GetWindowHeight());
 				}
 			}
 

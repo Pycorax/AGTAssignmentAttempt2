@@ -93,37 +93,37 @@ void LevelMenuScene::Update(double dt)
 
 	if (m_button[BT_LEVEL_DEMO].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance(), true, "d");
+		changeState(CPlayState::Instance(), true, "");
 	}
 
 	if (m_button[BT_LEVEL_SURVIVAL1].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance(), true, "s1111 Level 1");
+		changeState(CPlayState::Instance(), true, "Levels//Level 1.lua");
 	}
 
 	if (m_button[BT_LEVEL_SURVIVAL2].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance(), true, "s2112 Level 2");
+		changeState(CPlayState::Instance(), true, "Levels//Level 2.lua");
 	}
 
 	if (m_button[BT_LEVEL_SURVIVAL3].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance(), true, "s3212 Level 3");
+		changeState(CPlayState::Instance(), true, "Levels//Level 3.lua");
 	}
 
 	if (m_button[BT_LEVEL_SURVIVAL4].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance(), true, "s3323 Level 4");
+		changeState(CPlayState::Instance(), true, "Levels//Level 4.lua");
 	}
 
 	if (m_button[BT_LEVEL_SURVIVAL5].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance(), true, "s4231 Level 5");
+		changeState(CPlayState::Instance(), true, "Levels//Level 5.lua");
 	}
 
 	if (m_button[BT_LEVEL_SURVIVAL6].GetState() == UIButton::DOWN_STATE)
 	{
-		changeState(CPlayState::Instance(), true, "s5555 Level 6");
+		changeState(CPlayState::Instance(), true, "Levels//Level 6.lua");
 	}
 }
 

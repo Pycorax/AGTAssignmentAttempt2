@@ -23,13 +23,13 @@ void CPlayState::Init(const int width, const int height)
 	scene->Init();
 }
 
-void CPlayState::Init(bool survival, string levelString, const int width, const int height)
+void CPlayState::Init(string levelString, const int width, const int height)
 {
 	scene = new GameScene(width, height);
 	GameScene* gameScene = dynamic_cast<GameScene*>(scene);
 	if (gameScene)
 	{
-		gameScene->Init(survival, levelString);
+		gameScene->Init(levelString);
 	}
 }
 

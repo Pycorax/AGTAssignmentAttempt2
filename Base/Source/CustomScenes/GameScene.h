@@ -3,6 +3,9 @@
 // Inheritance Include
 #include "../SceneManager.h"
 
+// API Includes
+#include "Lua.h"
+
 // Other Includes
 #include "../Gameplay/Bomber.h"
 #include "../Gameplay/PowerWeapon.h"
@@ -106,7 +109,7 @@ public:
 	GameScene(const int window_width, const int window_height);
 	~GameScene();
 
-	virtual void Init(bool demoMode, string levelString);
+	virtual void Init(string levelString);
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
@@ -128,4 +131,7 @@ private:
 
 	// UI
 	void renderUIBar(Vector3 pos, Vector3 scale, float progress, Mesh* progressMesh);
+
+	// Load from Lua
+	static int bomberSurvivalInit(lua_State* L);
 };
