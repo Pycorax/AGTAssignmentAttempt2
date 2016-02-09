@@ -9,13 +9,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// API Includes
+#include "SoundEngine.h"
+#include "Lua.h"
+
 // Other Includes
 #include "GameState.h"
 #include "CustomStates/introstate.h"
 #include "Highscore\HighscoreSystem.h"
 #include "CustomStates/playstate.h"
-#include "SoundEngine.h"
-#include "Lua.h"
+
+// Using Directives
+using Lua::LuaFile;
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of thm_window_widthis game
@@ -261,8 +266,6 @@ void Application::Init()
 	LuaFile luaFile("Source//GameScripts//gameSettings.lua");
 	s_window_width = luaFile.GetNumber("WINDOW_WIDTH");
 	s_window_height = luaFile.GetNumber("WINDOW_HEIGHT");
-
-	auto result = luaFile.Call("testFunc", 1, LuaFuncList { LuaFile::NewStr("testMan") } );
 
 	//Create a window and create its OpenGL context
 	m_window = glfwCreateWindow(s_window_width, s_window_height, luaFile.GetString("WINDOW_TITLE").c_str(), NULL, NULL);

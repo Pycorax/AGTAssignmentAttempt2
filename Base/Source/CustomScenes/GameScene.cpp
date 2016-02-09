@@ -1,15 +1,22 @@
 #include "GameScene.h"
 
+// STL Includes
+#include <sstream>
+
+// API Includes
+#include "Lua.h"
+
+// Other Includes
 #include "../MeshBuilder.h"
 #include "../LoadTGA.h"
 #include "../LoadOBJ.h"
-#include <sstream>
 #include "../Application.h"
 #include "../CustomStates/LoseState.h"
 #include "../CustomStates/WinState.h"
 #include "../Highscore/HighscoreSystem.h"
-#include "Lua.h"
 
+// Using Directives
+using Lua::LuaFile;
 using std::ostringstream;
 
 const float GameScene::INVULN_TIME = 2.0f;
@@ -64,7 +71,6 @@ void GameScene::Init(bool demoMode, string levelString)
 	m_cAvatar = new CPlayInfo3PV();
 	m_cAvatar->SetModel(meshList[GEO_PLAYER_BODY]);
 	
-
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
 
