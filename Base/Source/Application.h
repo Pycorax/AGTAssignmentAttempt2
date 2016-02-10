@@ -7,6 +7,9 @@
 
 class Application
 {
+	// Static Constants
+	static const string SAVE_MUSIC_PROPERTY_STR;
+
 public:
 	static Application& GetInstance()
 	{
@@ -57,6 +60,7 @@ private:
 
 	void setCursorShown(void);
 	void setCursorHidden(void);
+	static void saveSetting(bool music);
 
 public:
 	// BGM

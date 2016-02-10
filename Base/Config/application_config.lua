@@ -1,4 +1,4 @@
---[[  gameSettings.lua for  ]]--  
+--[[  application_config.lua for  application settings ]]--  
 
 -- Game Window --
 -----------------
@@ -12,8 +12,3 @@ SPATIAL_PARTITION_ROW = 5
 SPATIAL_PARTITION_COL = 5
 SPATIAL_PARTITION_GRID_WIDTH = 65
 SPATIAL_PARTITION_GRID_HEIGHT = 65
-
-function testFunc(personToHelloTo)
-	return "Hello " .. personToHelloTo
-end
-

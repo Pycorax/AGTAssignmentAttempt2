@@ -23,6 +23,8 @@ class OptionMenuScene : public MenuScene
 		BT_TOTAL
 	};
 
+	Mesh* meshList[NUM_GEOMETRY];
+
 public:
 	OptionMenuScene(const int window_width = 800, const int window_height = 600);
 	~OptionMenuScene();
@@ -33,7 +35,4 @@ public:
 	virtual void Exit();
 
 	void UpdateWeaponStatus(const unsigned char key);
-
-private:
-	Mesh* meshList[NUM_GEOMETRY];
 };

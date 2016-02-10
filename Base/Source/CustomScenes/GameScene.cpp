@@ -67,7 +67,7 @@ void GameScene::Init(string levelString)
 
 	// Load LUA
 	// -- Load Game Properties from Lua
-	LuaFile luaFile("Source//GameScripts//gameSettings.lua");
+	LuaFile luaFile("Config//application_config.lua");
 
 	/*
 	 * Gameplay Init
@@ -76,7 +76,6 @@ void GameScene::Init(string levelString)
 	m_cAvatar = new CPlayInfo3PV();
 	m_cAvatar->SetModel(meshList[GEO_PLAYER_BODY]);
 	
-
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
 

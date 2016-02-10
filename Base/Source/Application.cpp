@@ -8,6 +8,7 @@
 // STL Includes
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
 
 // API Includes
 #include "SoundEngine.h"
@@ -21,6 +22,7 @@
 
 // Using Directives
 using Lua::LuaFile;
+using std::ofstream;
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of thm_window_widthis game
@@ -31,6 +33,7 @@ double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
 double Application::camera_yaw = 0.0, Application::camera_pitch = 0.0;
 int Application::s_window_width = 1280;
 int Application::s_window_height = 800;
+const string Application::SAVE_MUSIC_PROPERTY_STR = "music";
 /********************************************************************************
  Define an error callback
  ********************************************************************************/
@@ -263,7 +266,7 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	// Load Game Properties from Lua
-	LuaFile luaFile("Source//GameScripts//gameSettings.lua");
+	LuaFile luaFile("Config//application_config.lua");
 	s_window_width = luaFile.GetNumber("WINDOW_WIDTH");
 	s_window_height = luaFile.GetNumber("WINDOW_HEIGHT");
 
@@ -316,7 +319,13 @@ void Application::Init()
 	// Start the sound engine
 	SoundEngine::StartSoundEngine();
 	m_bgm = SoundEngine::CreateSound2D(SoundEngine::AddSoundSource("Sound//bgm.mp3"));
-	StartSound();
+	// -- Check the previous setting
+	LuaFile soundConfig("Config//game_options.lua");
+	// -- Only play the sound if it was enabled
+	if (soundConfig.GetBoolean(SAVE_MUSIC_PROPERTY_STR))
+	{
+		StartSound();
+	}
 }
 
 /********************************************************************************
@@ -393,15 +402,47 @@ void Application::StartSound(void)
 {
 	m_bgm->Play(true);
 	m_bgmPlaying = true;
+	saveSetting(true);
 }
 
 void Application::StopSound(void)
 {
 	m_bgm->Pause();
 	m_bgmPlaying = false;
+	saveSetting(false);
 }
 
 bool Application::IsBGMPlaying(void)
 {
 	return m_bgmPlaying;
+}
+
+void Application::saveSetting(bool music)
+{
+	// Generate a Options File
+	ofstream optionsFile("Config//game_options.lua");
+	if (optionsFile.is_open())
+	{
+		// Write data to the savefile
+		optionsFile << "--[[game_options.lua for  Game Specific Options]]--\n";
+		optionsFile << "-- Sound --\n";
+		optionsFile << "-----------\n";
+		optionsFile << SAVE_MUSIC_PROPERTY_STR << " = ";
+
+		if (music)
+		{
+			optionsFile << "true";
+		}
+		else
+		{
+			optionsFile << "false";
+		}
+
+		// Close
+		optionsFile.close();
+	}
+	else
+	{
+		throw runtime_error("Unable to generate save file!");
+	}
 }

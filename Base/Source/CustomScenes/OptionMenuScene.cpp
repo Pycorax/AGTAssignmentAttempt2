@@ -1,12 +1,21 @@
 #include "OptionMenuScene.h"
 
+// STL Includes
+#include <sstream>
+#include <fstream>
+
+// API Includes
+#include "Lua.h"
+
+// Other Includes
 #include "../MeshBuilder.h"
 #include "../LoadTGA.h"
-#include <sstream>
 #include "../Application.h"
 #include "../CustomStates/menustate.h"
 
+// Using Directives
 using std::ostringstream;
+using std::ofstream;
 
 OptionMenuScene::OptionMenuScene(const int window_width, const int window_height) : MenuScene(window_width, window_height)
 {
