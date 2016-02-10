@@ -18,6 +18,7 @@ class Bomber : public CSceneNode, public LuaSerializable, public ConcurrentState
 	friend class ChaseState;
 	friend class BoomState;
 	friend class DeathState;
+	friend class FlockState;
 
 private:
 	// Static Constants
@@ -28,6 +29,7 @@ public:
 	enum CSM_ITEM
 	{
 		CI_AI,
+		CI_FLOCK,
 		CI_TOTAL
 	};
 
@@ -54,7 +56,10 @@ private:
 	float m_bloated;			// Stores the amount of bloat scale applied
 
 	// AI
+	// -- Normal AI
 	Vector3 m_currentTarget;
+	// -- Flocking AI
+	vector<Bomber*>* m_flock;
 
 public:
 	Bomber();
@@ -74,6 +79,9 @@ public:
 	// Interaction
 	void Nudge(Vector3 direction);
 	Bomber* GetParent(void) const;
+
+	// Others
+	void SetFlock(vector<Bomber*>* flock);
 
 	/*
 	* Implemented abstract functions for LuaSerializable

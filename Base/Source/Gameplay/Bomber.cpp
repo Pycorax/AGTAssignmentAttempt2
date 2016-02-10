@@ -6,6 +6,7 @@
 // State Includes
 #include "AIState\ChaseState.h"
 #include "AIState\DeathState.h"
+#include "AIState\FlockState.h"
 
 // Using Directives
 using std::ostringstream;
@@ -23,6 +24,7 @@ Bomber::Bomber() : CSceneNode(), LuaSerializable("BomberData")
 {
 	ConcurrentStateMachine::Init(CI_TOTAL);
 	setCurrentState(new ChaseState(), CI_AI);
+	setCurrentState(new FlockState(), CI_FLOCK);
 }
 
 Bomber::~Bomber()
@@ -106,6 +108,11 @@ void Bomber::Nudge(Vector3 direction)
 Bomber * Bomber::GetParent(void) const
 {
 	return m_body;
+}
+
+void Bomber::SetFlock(vector<Bomber*>* flock)
+{
+	m_flock = flock;
 }
 
 string Bomber::SaveStatus(int id)

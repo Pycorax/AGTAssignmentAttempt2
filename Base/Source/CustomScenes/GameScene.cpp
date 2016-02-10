@@ -141,6 +141,7 @@ void GameScene::Init(string levelString)
 				Bomber* bomber = new Bomber;
 				bomber->LoadedInit(&saveFile, i, meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
 				bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+				bomber->SetFlock(&m_bomberList);
 				m_cSceneGraph->AddChild(bomber);
 				m_bomberList.push_back(bomber);
 			}
@@ -543,6 +544,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber = new Bomber;
 		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, BUFFER_SPACE), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
 		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -553,6 +555,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber = new Bomber;
 		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, worldHeight), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
 		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -563,6 +566,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber = new Bomber;
 		bomber->Init(Vector3(worldWidth, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
 		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -573,6 +577,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber = new Bomber;
 		bomber->Init(Vector3(BUFFER_SPACE, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
 		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}

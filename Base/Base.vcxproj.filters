@@ -55,6 +55,12 @@
     <Filter Include="Gameplay\AIStates">
       <UniqueIdentifier>{cf761dde-cba3-4c2e-aeb8-53c759e7bd76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gameplay\AIStates\Flocking">
+      <UniqueIdentifier>{15efbe10-fe09-481d-9409-3bbcd047c34d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gameplay\AIStates\BomberAI">
+      <UniqueIdentifier>{64a86624-f24c-4818-abbc-6317b554aeab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -240,14 +246,17 @@
     <ClCompile Include="Source\LuaSerializable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Gameplay\AIState\ChaseState.cpp">
-      <Filter>Gameplay\AIStates</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Gameplay\AIState\BoomState.cpp">
-      <Filter>Gameplay\AIStates</Filter>
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\ChaseState.cpp">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Gameplay\AIState\DeathState.cpp">
-      <Filter>Gameplay\AIStates</Filter>
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\FlockState.cpp">
+      <Filter>Gameplay\AIStates\Flocking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,14 +470,17 @@
     <ClInclude Include="Source\LuaSerializable.h">
       <Filter>Save/Load</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Gameplay\AIState\ChaseState.h">
-      <Filter>Gameplay\AIStates</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Gameplay\AIState\BoomState.h">
-      <Filter>Gameplay\AIStates</Filter>
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\ChaseState.h">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Gameplay\AIState\DeathState.h">
-      <Filter>Gameplay\AIStates</Filter>
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\FlockState.h">
+      <Filter>Gameplay\AIStates\Flocking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
