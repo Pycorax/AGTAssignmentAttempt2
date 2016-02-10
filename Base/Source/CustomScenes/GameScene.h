@@ -69,9 +69,6 @@ private:	// Variables
 	// A list of bombers for players to shoot at
 	vector<Bomber*> m_bomberList;
 
-	// The moving bomber
-	Bomber* m_movingBomber;
-
 	// Gameplay Stats
 	int m_numEnemiesAtStart;		// Stores the number of enemies at the start
 	bool m_demoMode;				// The game mode

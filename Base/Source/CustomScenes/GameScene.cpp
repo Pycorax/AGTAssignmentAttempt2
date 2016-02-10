@@ -23,7 +23,6 @@ using std::ostringstream;
 const float GameScene::INVULN_TIME = 2.0f;
 
 GameScene::GameScene() : CSceneManager()
-	, m_movingBomber(nullptr)
 	, m_invulnTime(0.0f)
 	, m_lives(MAX_LIVES)
 	, m_numEnemiesAtStart(0)
@@ -34,7 +33,6 @@ GameScene::GameScene() : CSceneManager()
 }
 
 GameScene::GameScene(const int window_width, const int window_height) : CSceneManager(window_width, window_height)
-	, m_movingBomber(nullptr)
 	, m_invulnTime(0.0f)
 	, m_lives(MAX_LIVES)
 	, m_numEnemiesAtStart(0)
@@ -402,12 +400,6 @@ void GameScene::bomberDemoInit()
 	bomber->Init(Vector3(200, 0, 103), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
 	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
 	m_cSceneGraph->AddChild(bomber);
-
-	// Moving Bomber
-	m_movingBomber = new Bomber;
-	m_movingBomber->Init(Vector3(25, 0, 225), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
-	m_cSceneGraph->AddChild(m_movingBomber);
 }
 
 void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, unsigned bot)
