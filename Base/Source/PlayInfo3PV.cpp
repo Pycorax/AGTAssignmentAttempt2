@@ -479,23 +479,21 @@ void CPlayInfo3PV::Yaw(const double dt)
 		TurnLeft(Application::camera_yaw * dt);
 }
 
-string CPlayInfo3PV::SaveStatus(void)
+string CPlayInfo3PV::SaveStatus(int id)
 {
-	static const string SAVE_DATA_NAME = "PlayerData";
-
 	ostringstream luaScript;
 
 	// Position
-	luaScript << buildPropString("PositionX", to_string(curPosition.x));
-	luaScript << buildPropString("PositionY", to_string(curPosition.y));
-	luaScript << buildPropString("PositionZ", to_string(curPosition.z));
+	luaScript << buildPropString("PositionX", to_string(curPosition.x), id);
+	luaScript << buildPropString("PositionY", to_string(curPosition.y), id);
+	luaScript << buildPropString("PositionZ", to_string(curPosition.z), id);
 
 	return luaScript.str();
 }
 
-void CPlayInfo3PV::LoadStatus(LuaFile* L)
+void CPlayInfo3PV::LoadStatus(LuaFile* L, int id)
 {
-	curPosition.x = L->GetNumber(getPropString("PositionX"));
-	curPosition.y = L->GetNumber(getPropString("PositionY"));
-	curPosition.z = L->GetNumber(getPropString("PositionZ"));
+	curPosition.x = L->GetNumber(getPropString("PositionX", id));
+	curPosition.y = L->GetNumber(getPropString("PositionY", id));
+	curPosition.z = L->GetNumber(getPropString("PositionZ", id));
 }

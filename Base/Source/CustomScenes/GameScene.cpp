@@ -24,7 +24,9 @@ using std::ifstream;
 using std::ofstream;
 
 const float GameScene::INVULN_TIME = 2.0f;
-const string GameScene::SAVE_FILE_NAME = "Saves//demoSaveFile.lua";
+const string GameScene::SAVE_FILE_PREFIX = "Saves//";
+const string GameScene::SAVE_FILE_SUFFIX = "_save.lua";
+const string GameScene::SAVE_NUM_ENEMIES_PROP_NAME = "GameNumEnemies";
 
 GameScene::GameScene() : CSceneManager()
 	, m_invulnTime(0.0f)
@@ -96,18 +98,10 @@ void GameScene::Init(string levelString)
 	m_cAvatar->SetPos_x(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid() * 0.5f);
 	m_cAvatar->SetPos_z(m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid() * 0.5f);
 
-	// If a level string is provided
+	
+	// Get the level name
 	if (levelString.length() > 0)
 	{
-		// Load LUA
-		// -- Load Game Properties from Lua
-		LuaFile levelLuaScript(levelString);
-		// -- Register C++ Functions
-		levelLuaScript.RegisterFunction("spawnSurvivalBombers", bomberSurvivalInit);
-
-		levelLuaScript.Call("levelInit", 0, Lua::LuaFuncList{ Lua::NewPtr(this) });
-
-		// Get the level name
 		int nameStartPos = 0;
 		int nameEndPos = levelString.length() - 1;
 		// -- Start from the end and find a '/' if there is
@@ -127,18 +121,62 @@ void GameScene::Init(string levelString)
 	}
 	else
 	{
-		// Load Player Status from File
-		try
+		m_levelName = "";
+	}
+
+	// Load Player Saved Status from File
+	bool saveLoaded = false;
+	try
+	{
+		LuaFile saveFile(SAVE_FILE_PREFIX + m_levelName + SAVE_FILE_SUFFIX);
+		m_cAvatar->LoadStatus(&saveFile);
+
+		// If a level string is provided, this means it's Survival mode
+		if (m_levelName.length() > 0)
 		{
-			LuaFile saveFile(SAVE_FILE_NAME);
-			m_cAvatar->LoadStatus(&saveFile);
-		}
-		catch (runtime_error e)
-		{
-			// During first run, this will hit as no save file has been created yet
-			cout << e.what() << endl;
+			// Load Enemy Status
+			int numEnemies = saveFile.GetNumber(SAVE_NUM_ENEMIES_PROP_NAME);
+			for (size_t i = 0; i < numEnemies; ++i)
+			{
+				Bomber* bomber = new Bomber;
+				bomber->LoadedInit(&saveFile, i, meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
+				bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+				m_cSceneGraph->AddChild(bomber);
+				m_bomberList.push_back(bomber);
+			}
 		}
 
+		// Mark that yes, we did load a save
+		saveLoaded = true;
+	}
+	catch (runtime_error e)
+	{
+		// Nothing. No save file exists so we do nothing.
+		cout << e.what() << endl;
+	}
+	catch (...)
+	{
+
+	}
+
+	// If a level string is provided, this means it's Survival mode
+	if (m_levelName.length() > 0)
+	{
+		// If not loaded by save, let's load it ourselves
+		if (!saveLoaded)
+		{
+			// Load LUA
+			// -- Load Game Properties from Lua
+			LuaFile levelLuaScript(levelString);
+			// -- Register C++ Functions
+			levelLuaScript.RegisterFunction("spawnSurvivalBombers", bomberSurvivalInit);
+
+			// Spawn the Enemies
+			levelLuaScript.Call("levelInit", 0, Lua::LuaFuncList{ Lua::NewPtr(this) });
+		}
+	}
+	else
+	{
 		bomberDemoInit();
 	}
 
@@ -285,30 +323,77 @@ void GameScene::Render()
 
 void GameScene::Exit()
 {
-	if (m_demoMode)
+	bool deleteFile = false;
+	if (m_lives > 0 && m_bomberList.size() > 0 || m_demoMode)
 	{
 		// Save Data
 		string saveLuaScript;
 		// -- Save Player Status
 		saveLuaScript += m_cAvatar->SaveStatus();
-		
-		// -- Save Enemy Status
 
-		// -- Generate a Save File
-		ofstream saveFile(SAVE_FILE_NAME);
-		if (saveFile.is_open())
+		if (!m_demoMode)
 		{
-			// Write data to the savefile
-			saveFile << saveLuaScript;
+			// -- Save Enemy Status
+			int numActiveEnemies = 0;
+			// ---- Save Enemy Status
+			for (auto enemy : m_bomberList)
+			{
+				// Only save active enemies
+				if (enemy->GetActive())
+				{
+					saveLuaScript += enemy->SaveStatus(numActiveEnemies);
+					++numActiveEnemies;
+				}
+			}
+			// ---- Save Number of Enemies
+			saveLuaScript += LuaSerializable::BuildGenericPropString(SAVE_NUM_ENEMIES_PROP_NAME, to_string(numActiveEnemies));
 
-			// Close
-			saveFile.close();
+			if (numActiveEnemies <= 0)
+			{
+				// If all the enemies are inactive, what's the point?
+				deleteFile = true;
+			}
 		}
-		else
+
+		// -- Check if anything has changed that would make it pointless to save
+		if (!deleteFile)
 		{
-			throw new runtime_error("Unable to generate save file!");
+			// -- Generate a Save File
+			ofstream saveFile(SAVE_FILE_PREFIX + m_levelName + SAVE_FILE_SUFFIX);
+			if (saveFile.is_open())
+			{
+				// Write data to the savefile
+				saveFile << saveLuaScript;
+
+				// Close
+				saveFile.close();
+			}
+			else
+			{
+				throw runtime_error("Unable to generate save file!");
+			}
 		}
 	}
+	else
+	{
+		deleteFile = true;
+	}
+
+	// We died or finished the level, so we delete this file
+	if (deleteFile)
+	{
+		// We check if this exist first
+		ifstream saveFile(SAVE_FILE_PREFIX + m_levelName + SAVE_FILE_SUFFIX);
+		if (saveFile.good())
+		{
+			// Close this file
+			saveFile.close();
+
+			// Delete the save file
+			remove((SAVE_FILE_PREFIX + m_levelName + SAVE_FILE_SUFFIX).c_str());
+		}
+	}
+
 	// Clear Meshes
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{

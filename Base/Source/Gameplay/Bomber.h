@@ -2,8 +2,9 @@
 
 // Inheritance Include
 #include "..\SceneGraph\SceneNode.h"
+#include "..\LuaSerializable.h"
 
-class Bomber : public CSceneNode
+class Bomber : public CSceneNode, public LuaSerializable
 {
 	static const float DEATH_ROTATE_SPEED;
 	static const float DEATH_MAX_ROTATE;
@@ -37,6 +38,7 @@ public:
 
 	// Life Time
 	void Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);		// Should only be called on Body Bomber nodes
+	void LoadedInit(LuaFile* L, int id, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);
 	bool Update(double dt, Vector3 target);
 	
 	void Spawn(Vector3 startPos, float speed);
@@ -48,4 +50,13 @@ public:
 	// Interaction
 	void Nudge(Vector3 direction);
 	Bomber* GetParent(void) const;
+
+	/*
+	* Implemented abstract functions for LuaSerializable
+	*/
+	virtual string SaveStatus(int id = -1);
+	virtual void LoadStatus(LuaFile* L, int id = -1);
+
+private:
+	void init(CTransform* tf, Mesh * hatMesh, Mesh * headMesh, Mesh * bodyMesh);
 };

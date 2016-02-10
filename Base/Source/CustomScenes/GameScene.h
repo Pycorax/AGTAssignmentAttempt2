@@ -21,7 +21,9 @@ private:	// Static Constants
 	static const int SCORE_FOR_HIT = 10;
 	static const int SCORE_FOR_KILL = 100;
 	// -- Saves
-	static const string SAVE_FILE_NAME;
+	static const string SAVE_FILE_PREFIX;
+	static const string SAVE_FILE_SUFFIX;
+	static const string SAVE_NUM_ENEMIES_PROP_NAME;
 
 private:	// Enums
 	enum GEOMETRY_TYPE

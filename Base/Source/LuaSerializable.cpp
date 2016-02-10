@@ -5,17 +5,45 @@
 
 // Using Directives
 using std::ostringstream;
+using std::to_string;
 
-string LuaSerializable::buildPropString(string propName, string prop)
+string LuaSerializable::BuildGenericPropString(string propName, string prop)
 {
 	ostringstream luaScript;
 
-	luaScript << SAVE_PROPERTY_NAME << "_" << propName << " = " << prop << "\n";
+	luaScript << propName << " = " << prop << "\n";
 
 	return luaScript.str();
 }
 
-string LuaSerializable::getPropString(string propName)
+string LuaSerializable::buildPropString(string propName, string prop, int id)
 {
-	return SAVE_PROPERTY_NAME + "_" + propName;
+	ostringstream luaScript;
+
+	luaScript << SAVE_PROPERTY_NAME;
+
+	if (id >= 0)
+	{
+		// Provide the ID
+		luaScript << "_" << id;
+	}
+
+	luaScript << "_" << propName << " = " << prop << "\n";
+
+	return luaScript.str();
+}
+
+string LuaSerializable::getPropString(string propName, int id)
+{
+	string propString = SAVE_PROPERTY_NAME;
+
+	if (id >= 0)
+	{
+		// Provide the ID
+		propString += "_" + to_string(id);
+	}
+
+	propString += "_" + propName;
+
+	return propString;
 }

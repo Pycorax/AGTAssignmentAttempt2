@@ -1,9 +1,15 @@
 #include "Bomber.h"
 
+// STL Includes
+#include <sstream>
+
+// Using Directives
+using std::ostringstream;
+
 const float Bomber::DEATH_ROTATE_SPEED = 20.0f;
 const float Bomber::DEATH_MAX_ROTATE = 30.0f;
 
-Bomber::Bomber() : CSceneNode()
+Bomber::Bomber() : CSceneNode(), LuaSerializable("BomberData")
 	, m_hat(nullptr)
 	, m_head(nullptr)
 	, m_body(nullptr)
@@ -22,32 +28,20 @@ void Bomber::Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMes
 {
 	CTransform* rootPos = new CTransform(startPos.x, startPos.y, startPos.z);
 
-	SetNode(rootPos, new CModel(bodyMesh));
-	m_body = this;
-	m_body->ApplyScale(8.0f, 8.0f, 8.0f);
-	m_body->SetType(CSceneNode::NT_BOMBER);
-	
-	// Head
-	CTransform* headPos = new CTransform(0.0f, 1.0f, 0.0f);
-	m_head = new Bomber();
-	m_head->SetNode(headPos, new CModel(headMesh));
-	m_head->ApplyScale(0.4f, 0.4f, 0.4f);
-	m_head->SetType(CSceneNode::NT_BOMBER);
-	// Let the head know that THIS is the body
-	m_head->m_body = this;
-	// Add this to be the body
-	this->AddChild(m_head);
+	init(rootPos, hatMesh, headMesh, bodyMesh);
+}
 
-	// Hat
-	CTransform* hatPos = new CTransform(0.0f, 0.8f, 0.0f);
-	m_hat = new Bomber();
-	m_hat->SetNode(hatPos, new CModel(hatMesh));
-	m_hat->ApplyScale(1.5f, 1.5f, 1.5f);
-	m_hat->SetType(CSceneNode::NT_BOMBER);
-	// Let the hat know that THIS is the body
-	m_hat->m_body = this;
-	// Add this to be the body
-	m_head->AddChild(m_hat);
+void Bomber::LoadedInit(LuaFile * L, int id, Mesh * hatMesh, Mesh * headMesh, Mesh * bodyMesh)
+{
+	// State Restoration
+	m_state = static_cast<LIFE_STATE>(static_cast<int>(L->GetNumber(getPropString("State", id))));
+	m_deathRotated = L->GetNumber(getPropString("DeathRotation", id));
+	m_bloated = L->GetNumber(getPropString("Bloat", id));
+
+	// Position Restoration
+	CTransform* rootPos = new CTransform(L->GetNumber(getPropString("PositionX", id)), L->GetNumber(getPropString("PositionY", id)), L->GetNumber(getPropString("PositionZ", id)));
+
+	init(rootPos, hatMesh, headMesh, bodyMesh);
 }
 
 bool Bomber::Update(double dt, Vector3 target)
@@ -173,4 +167,70 @@ void Bomber::Nudge(Vector3 direction)
 Bomber * Bomber::GetParent(void) const
 {
 	return m_body;
+}
+
+string Bomber::SaveStatus(int id)
+{
+	ostringstream luaScript;
+
+	float x, y, z;
+	theTransform->GetOffset(x, y, z);
+
+	// Position
+	luaScript << buildPropString("PositionX", to_string(x), id);
+	luaScript << buildPropString("PositionY", to_string(y), id);
+	luaScript << buildPropString("PositionZ", to_string(z), id);
+
+	// State
+	luaScript << buildPropString("State", to_string(m_state), id);
+	luaScript << buildPropString("DeathRotation", to_string(m_deathRotated), id);
+	luaScript << buildPropString("Bloat", to_string(m_bloated), id);
+
+	return luaScript.str();
+}
+
+void Bomber::LoadStatus(LuaFile * L, int id)
+{
+	// Position
+	float x, y, z;
+	theTransform->GetOffset(x, y, z);
+	ApplyTranslate(-x, -y, -z);
+	ApplyTranslate(L->GetNumber(getPropString("PositionX", id)),
+								L->GetNumber(getPropString("PositionY", id)),
+								L->GetNumber(getPropString("PositionZ", id)));
+	
+	// State
+	m_state = static_cast<LIFE_STATE>(static_cast<int>(L->GetNumber(getPropString("State", id))));
+	m_deathRotated = L->GetNumber(getPropString("DeathRotation", id));
+	m_bloated = L->GetNumber(getPropString("Bloat", id));
+}
+
+void Bomber::init(CTransform * tf, Mesh * hatMesh, Mesh * headMesh, Mesh * bodyMesh)
+{
+	SetNode(tf, new CModel(bodyMesh));
+	m_body = this;
+	m_body->ApplyScale(8.0f, 8.0f, 8.0f);
+	m_body->SetType(CSceneNode::NT_BOMBER);
+
+	// Head
+	CTransform* headPos = new CTransform(0.0f, 1.0f, 0.0f);
+	m_head = new Bomber();
+	m_head->SetNode(headPos, new CModel(headMesh));
+	m_head->ApplyScale(0.4f, 0.4f, 0.4f);
+	m_head->SetType(CSceneNode::NT_BOMBER);
+	// Let the head know that THIS is the body
+	m_head->m_body = this;
+	// Add this to be the body
+	this->AddChild(m_head);
+
+	// Hat
+	CTransform* hatPos = new CTransform(0.0f, 0.8f, 0.0f);
+	m_hat = new Bomber();
+	m_hat->SetNode(hatPos, new CModel(hatMesh));
+	m_hat->ApplyScale(1.5f, 1.5f, 1.5f);
+	m_hat->SetType(CSceneNode::NT_BOMBER);
+	// Let the hat know that THIS is the body
+	m_hat->m_body = this;
+	// Add this to be the body
+	m_head->AddChild(m_hat);
 }

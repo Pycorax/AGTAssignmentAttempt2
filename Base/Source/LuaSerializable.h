@@ -29,6 +29,8 @@ using Lua::LuaFile;
 /******************************************************************************/
 class LuaSerializable
 {
+
+
 protected:
 	const string SAVE_PROPERTY_NAME;
 
@@ -36,13 +38,16 @@ public:
 	LuaSerializable(string savePropertyName) : SAVE_PROPERTY_NAME(savePropertyName) {}
 	virtual ~LuaSerializable() {}
 
+	static string BuildGenericPropString(string propName, string prop);
+
 	/*
 	 * Implement abstract functions
 	 */
-	virtual string SaveStatus(void) = 0;
-	virtual void LoadStatus(LuaFile* L) = 0;
+	virtual string SaveStatus(int id = -1) = 0;
+	virtual void LoadStatus(LuaFile* L, int id = -1) = 0;
 
 protected:
-	string buildPropString(string propName, string prop);
-	string getPropString(string propName);
+	// Use an ID if dealing with multiple similar objects to identify different objects
+	string buildPropString(string propName, string prop, int id = -1);			
+	string getPropString(string propName, int id = -1);
 };

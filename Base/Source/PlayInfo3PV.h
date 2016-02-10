@@ -119,8 +119,8 @@ public:
 	/*
 	 * Implemented abstract functions for LuaSerializable
 	 */
-	virtual string SaveStatus(void);
-	virtual void LoadStatus(LuaFile* L);
+	virtual string SaveStatus(int id = -1);
+	virtual void LoadStatus(LuaFile* L, int id = -1);
 
 private:
 	// Hero's information
