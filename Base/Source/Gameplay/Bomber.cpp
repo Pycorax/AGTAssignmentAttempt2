@@ -149,6 +149,14 @@ void Bomber::LoadStatus(LuaFile * L, int id)
 	m_state = static_cast<LIFE_STATE>(static_cast<int>(L->GetNumber(getPropString("State", id))));
 	m_deathRotated = L->GetNumber(getPropString("DeathRotation", id));
 	m_bloated = L->GetNumber(getPropString("Bloat", id));
+
+	// Load State (Other states are ignored as they are when active == false
+	switch (m_state)
+	{
+		case LS_CHASE:
+			setCurrentState(new ChaseState(), CI_AI);
+			break;
+	}
 }
 
 void Bomber::init(CTransform * tf, Mesh * hatMesh, Mesh * headMesh, Mesh * bodyMesh)
