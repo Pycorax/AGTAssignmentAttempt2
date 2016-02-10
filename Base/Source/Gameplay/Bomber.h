@@ -3,13 +3,34 @@
 // Inheritance Include
 #include "..\SceneGraph\SceneNode.h"
 #include "..\LuaSerializable.h"
+#include "ConcurrentStateMachine.h"
 
-class Bomber : public CSceneNode, public LuaSerializable
+// Using Directives
+using StateMachine::ConcurrentStateMachine;
+
+class Bomber : public CSceneNode, public LuaSerializable, public ConcurrentStateMachine
 {
+	/*
+ 	 *		State Classes Friend Declarations
+ 	 *		States should be able to access this class's properties
+	 */
+	friend class State;
+	friend class ChaseState;
+	friend class BoomState;
+	friend class DeathState;
+
+private:
+	// Static Constants
 	static const float DEATH_ROTATE_SPEED;
 	static const float DEATH_MAX_ROTATE;
 
 public:
+	enum CSM_ITEM
+	{
+		CI_AI,
+		CI_TOTAL
+	};
+
 	enum LIFE_STATE
 	{
 		LS_CHASE,
@@ -31,6 +52,9 @@ private:
 	// Animation
 	float m_deathRotated;		// Angle rotated for the death animation
 	float m_bloated;			// Stores the amount of bloat scale applied
+
+	// AI
+	Vector3 m_currentTarget;
 
 public:
 	Bomber();

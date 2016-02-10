@@ -52,6 +52,9 @@
     <Filter Include="Save/Load">
       <UniqueIdentifier>{cd33b557-6579-4df5-af12-73f8d5e6141d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gameplay\AIStates">
+      <UniqueIdentifier>{cf761dde-cba3-4c2e-aeb8-53c759e7bd76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -236,6 +239,15 @@
     </ClCompile>
     <ClCompile Include="Source\LuaSerializable.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\ChaseState.cpp">
+      <Filter>Gameplay\AIStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\BoomState.cpp">
+      <Filter>Gameplay\AIStates</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\DeathState.cpp">
+      <Filter>Gameplay\AIStates</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,6 +460,15 @@
     </ClInclude>
     <ClInclude Include="Source\LuaSerializable.h">
       <Filter>Save/Load</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\ChaseState.h">
+      <Filter>Gameplay\AIStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\BoomState.h">
+      <Filter>Gameplay\AIStates</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\DeathState.h">
+      <Filter>Gameplay\AIStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

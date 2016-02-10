@@ -3,11 +3,14 @@
 // STL Includes
 #include <sstream>
 
+// State Includes
+#include "AIState\ChaseState.h"
+#include "AIState\DeathState.h"
+
 // Using Directives
 using std::ostringstream;
 
-const float Bomber::DEATH_ROTATE_SPEED = 20.0f;
-const float Bomber::DEATH_MAX_ROTATE = 30.0f;
+
 
 Bomber::Bomber() : CSceneNode(), LuaSerializable("BomberData")
 	, m_hat(nullptr)
@@ -18,6 +21,8 @@ Bomber::Bomber() : CSceneNode(), LuaSerializable("BomberData")
 	, m_deathRotated(0.0f)
 	, m_bloated(0.0f)
 {
+	ConcurrentStateMachine::Init(CI_TOTAL);
+	setCurrentState(new ChaseState(), CI_AI);
 }
 
 Bomber::~Bomber()
@@ -46,99 +51,33 @@ void Bomber::LoadedInit(LuaFile * L, int id, Mesh * hatMesh, Mesh * headMesh, Me
 
 bool Bomber::Update(double dt, Vector3 target)
 {
-	static const float BOOM_RADIUS = 10.0f;
-	static const float GROW_RADIUS = 50.0f;
-	static const float MAX_BLOAT = 1.3f;
-	static const float BLOAT_SPEED = 0.3f;
-
+	// Do nothing if active is not set to true
 	if (GetActive() == false)
 	{
 		return false;
 	}
 
-	switch (m_state)
-	{
-		case LS_CHASE:
-		{
-			// Get a direction to the target
-			Vector3 dir = target - GetTranslate();
-			// Discard the y. We don't want to compare height.
-			dir.y = 0;
+	// Set the current target
+	m_currentTarget = target;
 
-			// Calculate dist to target
-			float distToTargetSquared = dir.LengthSquared();
+	// Update the CSM
+	ConcurrentStateMachine::Update(dt);
 
-			// If close enough, explode
-			if (distToTargetSquared < BOOM_RADIUS * BOOM_RADIUS)
-			{
-				m_state = LS_BOOM;
-			}
-			else // Else Go towards
-			{
-				// Get Direction
-				dir.Normalize();
-				// Get Movement Vector
-				Vector3 move = dir * m_speed * dt;
-				// Move towards
-				ApplyTranslate(move.x, move.y, move.z);
-			}
-
-			// Bloat up if near to player
-			float bloat = 0;
-			if (distToTargetSquared < GROW_RADIUS * GROW_RADIUS && m_bloated < MAX_BLOAT)
-			{
-				bloat = BLOAT_SPEED * dt;
-				m_bloated += bloat;
-				ApplyScale(1 + bloat, 1 + bloat, 1 + bloat);
-			}
-			else if (m_bloated > 0.0f)
-			{
-				bloat = BLOAT_SPEED * dt;
-				m_bloated -= bloat;
-				ApplyScale(1 - bloat, 1 - bloat, 1 - bloat);
-			}
-		}
-		break;
-
-		case LS_BOOM:
-		{
-			Deactivate();
-			return true;
-		}
-
-		case LS_DEATH:
-		{
-			// Do death animation
-			if (m_deathRotated < DEATH_MAX_ROTATE)
-			{
-				ApplyRotate(DEATH_ROTATE_SPEED * dt, 1, 0, 0);
-				m_deathRotated += DEATH_ROTATE_SPEED * dt;
-			}
-			else
-			{
-				Deactivate();
-			}
-		}
-
-		break;
-
-	}
-
-	return false;
+	return m_state == LS_BOOM;
 }
 
 void Bomber::Spawn(Vector3 startPos, float speed)
 {
 	SetTranslate(startPos.x, startPos.y, startPos.z);
 	m_speed = speed;
-	m_state = LS_CHASE;
+	setCurrentState(new ChaseState(), CI_AI);
 	Activate();
 }
 
 void Bomber::Kill(void)
 {
 	m_deathRotated = 0.0f;
-	m_state = LS_DEATH;
+	setCurrentState(new DeathState(), CI_AI);
 }
 
 void Bomber::SetBodyLODModels(Mesh * lowRes, Mesh * medRes, Mesh * highRes)

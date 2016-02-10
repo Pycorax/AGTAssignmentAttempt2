@@ -36,6 +36,9 @@
     <ClCompile Include="Source\CustomStates\PlayState.cpp" />
     <ClCompile Include="Source\CustomStates\WinState.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\Gameplay\AIState\BoomState.cpp" />
+    <ClCompile Include="Source\Gameplay\AIState\ChaseState.cpp" />
+    <ClCompile Include="Source\Gameplay\AIState\DeathState.cpp" />
     <ClCompile Include="Source\Gameplay\Bomber.cpp" />
     <ClCompile Include="Source\Gameplay\BomberSpawner.cpp" />
     <ClCompile Include="Source\Gameplay\PowerWeapon.cpp" />
@@ -102,6 +105,9 @@
     <ClInclude Include="Source\CustomStates\PlayState.h" />
     <ClInclude Include="Source\CustomStates\WinState.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\Gameplay\AIState\BoomState.h" />
+    <ClInclude Include="Source\Gameplay\AIState\ChaseState.h" />
+    <ClInclude Include="Source\Gameplay\AIState\DeathState.h" />
     <ClInclude Include="Source\Gameplay\Bomber.h" />
     <ClInclude Include="Source\Gameplay\BomberSpawner.h" />
     <ClInclude Include="Source\Gameplay\PowerWeapon.h" />
