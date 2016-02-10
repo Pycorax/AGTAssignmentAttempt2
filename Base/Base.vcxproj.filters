@@ -258,6 +258,9 @@
     <ClCompile Include="Source\Gameplay\AIState\FlockState.cpp">
       <Filter>Gameplay\AIStates\Flocking</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\RunAwayState.cpp">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -481,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="Source\Gameplay\AIState\FlockState.h">
       <Filter>Gameplay\AIStates\Flocking</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\RunAwayState.h">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -40,6 +40,7 @@
     <ClCompile Include="Source\Gameplay\AIState\ChaseState.cpp" />
     <ClCompile Include="Source\Gameplay\AIState\DeathState.cpp" />
     <ClCompile Include="Source\Gameplay\AIState\FlockState.cpp" />
+    <ClCompile Include="Source\Gameplay\AIState\RunAwayState.cpp" />
     <ClCompile Include="Source\Gameplay\Bomber.cpp" />
     <ClCompile Include="Source\Gameplay\BomberSpawner.cpp" />
     <ClCompile Include="Source\Gameplay\PowerWeapon.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Source\Gameplay\AIState\ChaseState.h" />
     <ClInclude Include="Source\Gameplay\AIState\DeathState.h" />
     <ClInclude Include="Source\Gameplay\AIState\FlockState.h" />
+    <ClInclude Include="Source\Gameplay\AIState\RunAwayState.h" />
     <ClInclude Include="Source\Gameplay\Bomber.h" />
     <ClInclude Include="Source\Gameplay\BomberSpawner.h" />
     <ClInclude Include="Source\Gameplay\PowerWeapon.h" />

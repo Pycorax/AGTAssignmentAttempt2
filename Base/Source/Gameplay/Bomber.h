@@ -19,6 +19,7 @@ class Bomber : public CSceneNode, public LuaSerializable, public ConcurrentState
 	friend class BoomState;
 	friend class DeathState;
 	friend class FlockState;
+	friend class RunAwayState;
 
 private:
 	// Static Constants
@@ -58,6 +59,7 @@ private:
 	// AI
 	// -- Normal AI
 	Vector3 m_currentTarget;
+	bool m_targetInvuln;
 	// -- Flocking AI
 	vector<Bomber*>* m_flock;
 
@@ -68,7 +70,7 @@ public:
 	// Life Time
 	void Init(Vector3 startPos, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);		// Should only be called on Body Bomber nodes
 	void LoadedInit(LuaFile* L, int id, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh);
-	bool Update(double dt, Vector3 target);
+	bool Update(double dt, Vector3 target, bool playerInvuln);
 	
 	void Spawn(Vector3 startPos, float speed);
 	void Kill(void);

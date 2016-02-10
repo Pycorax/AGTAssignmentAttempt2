@@ -35,7 +35,7 @@ public:
 	~BomberSpawner();
 
 	void Init(int maxEnemies, Mesh* hatMesh, Mesh* headMesh, Mesh* bodyMesh, float minSpeed = 5.0, float maxSpeed = 10.0, float spawnTime = 1.0f);
-	void Update(double dt, Vector3 target);
+	void Update(double dt, Vector3 target, bool targetInvuln);
 	void Exit();
 
 	// Spawning

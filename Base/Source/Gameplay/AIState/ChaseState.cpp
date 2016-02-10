@@ -2,6 +2,7 @@
 
 // State Includes
 #include "BoomState.h"
+#include "RunAwayState.h"
 
 // Other Include
 #include "../Bomber.h"
@@ -80,6 +81,13 @@ void ChaseState::Update(double dt)
 			bloat = BLOAT_SPEED * dt;
 			bomber->m_bloated -= bloat;
 			bomber->ApplyScale(1 - bloat, 1 - bloat, 1 - bloat);
+		}
+
+		// If the player can insta-kill us
+		if (bomber->m_targetInvuln)
+		{
+			// Runnnnnn
+			changeState(new RunAwayState());
 		}
 	}
 }

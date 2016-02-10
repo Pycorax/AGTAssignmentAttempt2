@@ -21,6 +21,7 @@ Bomber::Bomber() : CSceneNode(), LuaSerializable("BomberData")
 	, m_state(LS_CHASE)
 	, m_deathRotated(0.0f)
 	, m_bloated(0.0f)
+	, m_targetInvuln(false)
 {
 	ConcurrentStateMachine::Init(CI_TOTAL);
 	setCurrentState(new ChaseState(), CI_AI);
@@ -51,7 +52,7 @@ void Bomber::LoadedInit(LuaFile * L, int id, Mesh * hatMesh, Mesh * headMesh, Me
 	init(rootPos, hatMesh, headMesh, bodyMesh);
 }
 
-bool Bomber::Update(double dt, Vector3 target)
+bool Bomber::Update(double dt, Vector3 target, bool playerInvuln)
 {
 	// Do nothing if active is not set to true
 	if (GetActive() == false)
@@ -61,6 +62,9 @@ bool Bomber::Update(double dt, Vector3 target)
 
 	// Set the current target
 	m_currentTarget = target;
+
+	// Set target invuln status
+	m_targetInvuln = playerInvuln;
 
 	// Update the CSM
 	ConcurrentStateMachine::Update(dt);

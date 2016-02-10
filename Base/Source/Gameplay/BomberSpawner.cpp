@@ -32,7 +32,7 @@ void BomberSpawner::Init(int maxEnemies, Mesh * hatMesh, Mesh * headMesh, Mesh *
 	}
 }
 
-void BomberSpawner::Update(double dt, Vector3 target)
+void BomberSpawner::Update(double dt, Vector3 target, bool targetInvuln)
 {
 	// Update Spawn Timer
 	m_lastSpawn += dt;
@@ -47,7 +47,7 @@ void BomberSpawner::Update(double dt, Vector3 target)
 	// Update all of them
 	for (auto enemy = m_enemyList.begin(); enemy != m_enemyList.end(); ++enemy)
 	{
-		(*enemy)->Update(dt, target);
+		(*enemy)->Update(dt, target, targetInvuln);
 	}
 }
 

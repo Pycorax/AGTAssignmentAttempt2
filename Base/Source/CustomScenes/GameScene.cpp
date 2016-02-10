@@ -221,7 +221,7 @@ void GameScene::Update(double dt)
 	bool gotHit = false;
 	for (auto bomb = m_bomberList.begin(); bomb != m_bomberList.end(); ++bomb)
 	{
-		if ((*bomb)->Update(dt, m_cAvatar->GetPosition()))
+		if ((*bomb)->Update(dt, m_cAvatar->GetPosition(), m_invulnTime > 0))
 		{
 			gotHit = true;
 		}
