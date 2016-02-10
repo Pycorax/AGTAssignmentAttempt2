@@ -1,13 +1,21 @@
 #include "PlayInfo3PV.h"
+
+// STL Includes
+#include <sstream>
+
+// Other Includes
 #include "MeshBuilder.h"
 #include "Application.h"
 #include "Mtx44.h"
 
+// Using Directives
+using std::ostringstream;
+
 const float CPlayInfo3PV::DIRECTION_SPEED = 100.0f;
 const float CPlayInfo3PV::MAX_PITCH = 60.0f;
 
-CPlayInfo3PV::CPlayInfo3PV(void)
-	: theAvatarMesh(NULL)
+CPlayInfo3PV::CPlayInfo3PV(void) : LuaSerializable("PlayerData")
+	, theAvatarMesh(NULL)
 	, jumpspeed(0)
 	, m_rotationY(0.0f)
 	, m_pitch(0.0f)
@@ -469,4 +477,25 @@ void CPlayInfo3PV::Yaw(const double dt)
 		TurnRight(Application::camera_yaw * dt);
 	else if (Application::camera_yaw < 0.0)
 		TurnLeft(Application::camera_yaw * dt);
+}
+
+string CPlayInfo3PV::SaveStatus(void)
+{
+	static const string SAVE_DATA_NAME = "PlayerData";
+
+	ostringstream luaScript;
+
+	// Position
+	luaScript << buildPropString("PositionX", to_string(curPosition.x));
+	luaScript << buildPropString("PositionY", to_string(curPosition.y));
+	luaScript << buildPropString("PositionZ", to_string(curPosition.z));
+
+	return luaScript.str();
+}
+
+void CPlayInfo3PV::LoadStatus(LuaFile* L)
+{
+	curPosition.x = L->GetNumber(getPropString("PositionX"));
+	curPosition.y = L->GetNumber(getPropString("PositionY"));
+	curPosition.z = L->GetNumber(getPropString("PositionZ"));
 }

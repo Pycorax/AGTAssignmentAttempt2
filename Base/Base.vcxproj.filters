@@ -49,6 +49,9 @@
     <Filter Include="GameScripts">
       <UniqueIdentifier>{9bcc68f7-f1dd-4cd5-9e66-c6ebb26af809}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Save/Load">
+      <UniqueIdentifier>{cd33b557-6579-4df5-af12-73f8d5e6141d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -229,6 +232,9 @@
       <Filter>CustomScenes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Highscore\HighscoreSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LuaSerializable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -439,6 +445,9 @@
     </ClInclude>
     <ClInclude Include="Source\Highscore\HighScoreRecord.h">
       <Filter>Highscore</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LuaSerializable.h">
+      <Filter>Save/Load</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

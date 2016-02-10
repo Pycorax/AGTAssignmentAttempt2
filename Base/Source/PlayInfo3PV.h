@@ -1,8 +1,13 @@
 #pragma once
+
+// Inheritance Includes
+#include "LuaSerializable.h"
+
+// Other Includes
 #include "Vector3.h"
 #include "Mesh.h"
 
-class CPlayInfo3PV
+class CPlayInfo3PV : public LuaSerializable
 {
 	// Turning speed
 	static const float DIRECTION_SPEED;
@@ -110,6 +115,12 @@ public:
 
 	virtual void Pitch(const double dt);
 	virtual void Yaw(const double dt);
+
+	/*
+	 * Implemented abstract functions for LuaSerializable
+	 */
+	virtual string SaveStatus(void);
+	virtual void LoadStatus(LuaFile* L);
 
 private:
 	// Hero's information

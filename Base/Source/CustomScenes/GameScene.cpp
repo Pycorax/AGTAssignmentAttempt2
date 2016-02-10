@@ -2,6 +2,7 @@
 
 // STL Includes
 #include <sstream>
+#include <fstream>
 
 // API Includes
 #include "LuaFunction.h"
@@ -19,8 +20,11 @@
 using Lua::LuaFile;
 using Lua::Type;
 using std::ostringstream;
+using std::ifstream;
+using std::ofstream;
 
 const float GameScene::INVULN_TIME = 2.0f;
+const string GameScene::SAVE_FILE_NAME = "Saves//demoSaveFile.lua";
 
 GameScene::GameScene() : CSceneManager()
 	, m_invulnTime(0.0f)
@@ -123,6 +127,18 @@ void GameScene::Init(string levelString)
 	}
 	else
 	{
+		// Load Player Status from File
+		try
+		{
+			LuaFile saveFile(SAVE_FILE_NAME);
+			m_cAvatar->LoadStatus(&saveFile);
+		}
+		catch (runtime_error e)
+		{
+			// During first run, this will hit as no save file has been created yet
+			cout << e.what() << endl;
+		}
+
 		bomberDemoInit();
 	}
 
@@ -269,6 +285,30 @@ void GameScene::Render()
 
 void GameScene::Exit()
 {
+	if (m_demoMode)
+	{
+		// Save Data
+		string saveLuaScript;
+		// -- Save Player Status
+		saveLuaScript += m_cAvatar->SaveStatus();
+		
+		// -- Save Enemy Status
+
+		// -- Generate a Save File
+		ofstream saveFile(SAVE_FILE_NAME);
+		if (saveFile.is_open())
+		{
+			// Write data to the savefile
+			saveFile << saveLuaScript;
+
+			// Close
+			saveFile.close();
+		}
+		else
+		{
+			throw new runtime_error("Unable to generate save file!");
+		}
+	}
 	// Clear Meshes
 	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
