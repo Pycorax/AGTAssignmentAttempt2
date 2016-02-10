@@ -261,6 +261,15 @@
     <ClCompile Include="Source\Gameplay\AIState\RunAwayState.cpp">
       <Filter>Gameplay\AIStates\BomberAI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\MineShrinkState.cpp">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\MineGrowState.cpp">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Gameplay\AIState\MineState.cpp">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -486,6 +495,15 @@
       <Filter>Gameplay\AIStates\Flocking</Filter>
     </ClInclude>
     <ClInclude Include="Source\Gameplay\AIState\RunAwayState.h">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\MineShrinkState.h">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\MineGrowState.h">
+      <Filter>Gameplay\AIStates\BomberAI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Gameplay\AIState\MineState.h">
       <Filter>Gameplay\AIStates\BomberAI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -20,6 +20,9 @@ class Bomber : public CSceneNode, public LuaSerializable, public ConcurrentState
 	friend class DeathState;
 	friend class FlockState;
 	friend class RunAwayState;
+	friend class MineShrinkState;
+	friend class MineState;
+	friend class MineGrowState;
 
 private:
 	// Static Constants
@@ -39,6 +42,10 @@ public:
 		LS_CHASE,
 		LS_BOOM,
 		LS_DEATH,
+		LS_RUNAWAY,
+		LS_MINE_SHRINK,
+		LS_MINE,
+		LS_MINE_UNSHRINK,
 		LS_TOTAL
 	};
 
@@ -84,6 +91,7 @@ public:
 
 	// Others
 	void SetFlock(vector<Bomber*>* flock);
+	LIFE_STATE GetState(void) const;
 
 	/*
 	* Implemented abstract functions for LuaSerializable

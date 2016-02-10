@@ -2,6 +2,8 @@
 
 // State Includes
 #include "ChaseState.h"
+#include "MineShrinkState.h"
+#include "BoomState.h"
 
 // Other Include
 #include "../Bomber.h"
@@ -22,7 +24,7 @@ void RunAwayState::Init(FiniteStateMachine * FSMOwner)
 
 	if (bomber)
 	{
-		bomber->m_state = Bomber::LS_CHASE;
+		bomber->m_state = Bomber::LS_RUNAWAY;
 	}
 }
 
@@ -33,6 +35,9 @@ void RunAwayState::Init(State * stateOwner)
 
 void RunAwayState::Update(double dt)
 {
+	static const float MINE_CHANCE = 0.1f;
+	static const float BOOM_RADIUS = 7.5f;
+
 	State::Update(dt);
 
 	Bomber* bomber = dynamic_cast<Bomber*>(m_FSMOwner->GetParent());
@@ -41,6 +46,7 @@ void RunAwayState::Update(double dt)
 	{
 		// Get a direction away from the target
 		Vector3 dir = bomber->GetTranslate() - bomber->m_currentTarget;
+		float distToTargetSquared = dir.LengthSquared();
 		// Discard the y. We don't want to compare height.
 		dir.y = 0;
 
@@ -61,6 +67,19 @@ void RunAwayState::Update(double dt)
 		{
 			// Return back to chasing
 			changeState(new ChaseState());
+		}
+		// If close enough, explode
+		else if (distToTargetSquared < BOOM_RADIUS * BOOM_RADIUS)
+		{
+			changeState(new BoomState());
+		}
+		else
+		{
+			float chance = Math::RandFloatMinMax(0.0f, 100.0f);
+			if (chance <= MINE_CHANCE)
+			{
+				changeState(new MineShrinkState());
+			}
 		}
 	}
 }

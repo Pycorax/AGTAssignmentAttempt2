@@ -40,6 +40,9 @@
     <ClCompile Include="Source\Gameplay\AIState\ChaseState.cpp" />
     <ClCompile Include="Source\Gameplay\AIState\DeathState.cpp" />
     <ClCompile Include="Source\Gameplay\AIState\FlockState.cpp" />
+    <ClCompile Include="Source\Gameplay\AIState\MineGrowState.cpp" />
+    <ClCompile Include="Source\Gameplay\AIState\MineShrinkState.cpp" />
+    <ClCompile Include="Source\Gameplay\AIState\MineState.cpp" />
     <ClCompile Include="Source\Gameplay\AIState\RunAwayState.cpp" />
     <ClCompile Include="Source\Gameplay\Bomber.cpp" />
     <ClCompile Include="Source\Gameplay\BomberSpawner.cpp" />
@@ -111,6 +114,9 @@
     <ClInclude Include="Source\Gameplay\AIState\ChaseState.h" />
     <ClInclude Include="Source\Gameplay\AIState\DeathState.h" />
     <ClInclude Include="Source\Gameplay\AIState\FlockState.h" />
+    <ClInclude Include="Source\Gameplay\AIState\MineGrowState.h" />
+    <ClInclude Include="Source\Gameplay\AIState\MineShrinkState.h" />
+    <ClInclude Include="Source\Gameplay\AIState\MineState.h" />
     <ClInclude Include="Source\Gameplay\AIState\RunAwayState.h" />
     <ClInclude Include="Source\Gameplay\Bomber.h" />
     <ClInclude Include="Source\Gameplay\BomberSpawner.h" />

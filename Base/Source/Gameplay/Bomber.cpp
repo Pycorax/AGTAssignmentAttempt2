@@ -6,6 +6,8 @@
 // State Includes
 #include "AIState\ChaseState.h"
 #include "AIState\DeathState.h"
+#include "AIState\MineShrinkState.h"
+#include "AIState\RunAwayState.h"
 #include "AIState\FlockState.h"
 
 // Using Directives
@@ -119,6 +121,11 @@ void Bomber::SetFlock(vector<Bomber*>* flock)
 	m_flock = flock;
 }
 
+Bomber::LIFE_STATE Bomber::GetState(void) const
+{
+	return m_state;
+}
+
 string Bomber::SaveStatus(int id)
 {
 	ostringstream luaScript;
@@ -159,6 +166,14 @@ void Bomber::LoadStatus(LuaFile * L, int id)
 	{
 		case LS_CHASE:
 			setCurrentState(new ChaseState(), CI_AI);
+			break;
+		case LS_MINE:
+		case LS_MINE_SHRINK:
+			setCurrentState(new MineShrinkState(), CI_AI);
+			break;
+		case LS_RUNAWAY:
+		case LS_MINE_UNSHRINK:
+			setCurrentState(new RunAwayState(), CI_AI);
 			break;
 	}
 }

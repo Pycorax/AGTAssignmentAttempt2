@@ -250,7 +250,7 @@ void GameScene::Update(double dt)
 					m_cProjectileManager->RemoveProjectile(i);
 					// Check if the item is a bomber
 					Bomber* bomber = dynamic_cast<Bomber*>(node);
-					if (bomber)
+					if (bomber && bomber->GetState() != Bomber::LS_MINE)
 					{
 						// Nudge the parent back
 						bomber->GetParent()->Nudge(m_cProjectileManager->theListOfProjectiles[i]->GetDirection());
@@ -276,12 +276,13 @@ void GameScene::Update(double dt)
 					// React accordingly to the collided item
 					// Check if the item is a bomber
 					Bomber* bomber = dynamic_cast<Bomber*>(node);
-					if (bomber)
+					if (bomber && bomber->GetState() != Bomber::LS_MINE)
 					{
 						bomber->Kill();
+
+						// Update score
+						m_score += SCORE_FOR_KILL;
 					}
-					// Update score
-					m_score += SCORE_FOR_KILL;
 				}
 			}
 		}
