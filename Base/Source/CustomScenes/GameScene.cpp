@@ -59,6 +59,9 @@ void GameScene::Init(string levelString)
 	// Hide the Cursor
 	Application::SetCursorHidden();
 
+	// Init the textures
+	textureInit();
+
 	// Init the meshes
 	meshInit();
 
@@ -451,34 +454,12 @@ void GameScene::meshInit()
 	meshLoader.RegisterFunction("loadMeshSphere", loadMeshSphere);
 	meshLoader.RegisterFunction("loadMeshCone", loadMeshCone);
 	meshLoader.RegisterFunction("loadMeshCrosshair", loadMeshCrosshair);
+	meshLoader.RegisterFunction("setTexture", setTexture);
 	// -- Call Load Mesh Function
 	meshLoader.Call("loadMeshes", 0, Lua::LuaFuncList{Lua::NewPtr(this)});
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-
-	// Sky Box
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("RIGHT", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("TOP", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("BOTTOM", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("FRONT", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("BACK", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-
-	// Load the ground mesh and texture
-	meshList[GEO_GROUND] = MeshBuilder::GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
-	meshList[GEO_GROUND]->textureID = LoadTGA("Image//floor.tga");
-
-	// HUD
-	meshList[GEO_LIFE] = MeshBuilder::Generate2DMesh("Life", Color(), 0, 0, 1, 1);
-	meshList[GEO_LIFE]->textureID = LoadTGA("Image//HUD/life.tga");
 }
 
 void GameScene::loadMeshRay(string name, Color col, float length)
@@ -509,6 +490,21 @@ void GameScene::loadMeshCone(string name, Color col, int slice, float radius, fl
 void GameScene::loadMeshCrosshair(string name, Color col, float length)
 {
 	m_meshResource[name] = MeshBuilder::GenerateCrossHair(name, col.r, col.g, col.b, length);
+}
+
+void GameScene::textureInit(void)
+{
+	// Load Textures from Lua
+	LuaFile textureLoader ("Config//texture_loader.lua");
+	// -- Register Texture Loading Functions
+	textureLoader.RegisterFunction("loadTexture", loadTexture);
+	// -- Call Load Texture Function
+	textureLoader.Call("loadTextures", 0, Lua::LuaFuncList{ Lua::NewPtr(this) });
+}
+
+void GameScene::loadTexture(string name, string filePath)
+{
+	m_texResource[name] = LoadTGA(filePath.c_str());
 }
 
 void GameScene::bomberDemoInit()
@@ -782,6 +778,37 @@ int GameScene::loadMeshCrosshair(lua_State * L)
 	return LuaFunc::postCall(L, returns);
 }
 
+int GameScene::loadTexture(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_STRING: File Path*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_STRING });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadTexture(Lua::ExtStr(params[1]), Lua::ExtStr(params[2]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
+int GameScene::setTexture(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_STRING: Texture Name*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_STRING });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	// Get a Mesh Pointer to the mesh we want to change
+	Mesh* mesh = context->m_meshResource[Lua::ExtStr(params[1])];
+	// Set the texture
+	mesh->textureID = context->m_texResource[Lua::ExtStr(params[2])];
+
+	return LuaFunc::postCall(L, returns);
+}
+
 void GameScene::OnResume()
 {
 	CSceneManager::OnResume();
@@ -808,7 +835,7 @@ void GameScene::RenderGUI()
 	static const float LIFE_SIZE = 50;
 	for (size_t i = 1; i <= m_lives; ++i)
 	{
-		Render2DMesh(meshList[GEO_LIFE], false, LIFE_SIZE, LIFE_SIZE, m_window_width - (i * LIFE_SIZE), m_window_height - LIFE_SIZE);
+		Render2DMesh(m_meshResource["Life"], false, LIFE_SIZE, LIFE_SIZE, m_window_width - (i * LIFE_SIZE), m_window_height - LIFE_SIZE);
 	}
 
 	// Render the crosshair
@@ -961,7 +988,7 @@ void GameScene::RenderGround()
 		modelStack.Translate(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid()* 0.5f, -m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid() * 0.5f, 0.0f);
 		//modelStack.Rotate(-90, 0, 0, 1);
 		modelStack.Scale(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid(), 1.0f);
-		RenderMesh(meshList[GEO_GROUND], false);
+		RenderMesh(m_meshResource["ground"], false);
 		modelStack.PopMatrix();
 	}
 	
@@ -978,27 +1005,27 @@ void GameScene::RenderSkybox()
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_LEFT], false);
+	RenderMesh(m_meshResource["skybox_left"], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_RIGHT], false);
+	RenderMesh(m_meshResource["skybox_right"], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_FRONT], false);
+	RenderMesh(m_meshResource["skybox_front"], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_BACK], false);
+	RenderMesh(m_meshResource["skybox_back"], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1006,7 +1033,7 @@ void GameScene::RenderSkybox()
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Rotate(90, 0, 0, 1);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_TOP], false);
+	RenderMesh(m_meshResource["skybox_top"], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
@@ -1014,6 +1041,6 @@ void GameScene::RenderSkybox()
 	modelStack.Translate(0, 0, -SKYBOXSIZE / 2 + 2.f);
 	modelStack.Rotate(-90, 0, 0, 1);
 	modelStack.Scale(SKYBOXSIZE, SKYBOXSIZE, SKYBOXSIZE);
-	RenderMesh(meshList[GEO_BOTTOM], false);
+	RenderMesh(m_meshResource["skybox_bottom"], false);
 	modelStack.PopMatrix();
 }

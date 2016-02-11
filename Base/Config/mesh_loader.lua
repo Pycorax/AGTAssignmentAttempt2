@@ -7,6 +7,8 @@ function loadMeshes(context)
 	loadMeshCrosshair(context, "crosshair", 1.0, 1.0, 1.0, 0.1)
 	loadMeshSphere(context, "lightball", 1.0, 0.0, 0.0, 18, 36, 1.0)
 	loadMeshSphere(context, "sphere", 1.0, 0.0, 0.0, 18, 36, 0.1)
+	loadMeshQuad(context, "ground", 1.0, 1.0, 1.0, 1.0)
+	setTexture(context, "ground", "ground")
 
 	-- Player
 	loadMeshCone(context, "playerBody", 0.282, 0.568, 0.803, 36, 1.0, 1.0)
@@ -20,8 +22,27 @@ function loadMeshes(context)
 	loadMeshCone(context, "humanBodyHighRes", 0.83, 0.11, 0.14, 36, 1.0, 1.0)
 
 	-- SkyBox
+	loadMeshQuad(context, "skybox_left", 1, 1, 1, 1.0);
+	setTexture(context, "skybox_left", "skybox_left")
+
+	loadMeshQuad(context, "skybox_right", 1, 1, 1, 1.0);
+	setTexture(context, "skybox_right", "skybox_right")
+
+	loadMeshQuad(context, "skybox_top", 1, 1, 1, 1.0);
+	setTexture(context, "skybox_top", "skybox_top")
+
+	loadMeshQuad(context, "skybox_bottom", 1, 1, 1, 1.0);
+	setTexture(context, "skybox_bottom", "skybox_bottom")
+
+	loadMeshQuad(context, "skybox_front", 1, 1, 1, 1.0);
+	setTexture(context, "skybox_front", "skybox_front")
+
+	loadMeshQuad(context, "skybox_back", 1, 1, 1, 1.0);
+	setTexture(context, "skybox_back", "skybox_back")
 
 	-- HUD
+	loadMesh2DMesh(context, "Life", 1.0, 1.0, 1.0, 0, 0, 1, 1);
+	setTexture(context, "Life", "life")
 	loadMeshQuad(context, "Ammo Bar", 0.65, 0.87, 0.97, 1.0)
 	loadMeshQuad(context, "PAmmo Bar", 0.95, 0.396, 0.13, 1.0)
 	loadMeshQuad(context, "Score Bar", 0.22, 0.71, 0.29, 1.0)

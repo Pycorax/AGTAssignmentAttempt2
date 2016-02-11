@@ -34,17 +34,6 @@ private:	// Static Constants
 private:	// Enums
 	enum GEOMETRY_TYPE
 	{
-		// -- Skybox
-		GEO_LEFT,
-		GEO_RIGHT,
-		GEO_TOP,
-		GEO_BOTTOM,
-		GEO_FRONT,
-		GEO_BACK,
-		// -- Floor
-		GEO_GROUND,
-		// -- HUD
-		GEO_LIFE,
 		// -- Text
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -54,6 +43,9 @@ private:	// Variables
 	// Mesh Resources
 	Mesh* meshList[NUM_GEOMETRY];
 	unordered_map<string, Mesh*> m_meshResource;
+
+	// Texture Resources
+	unordered_map<string, unsigned> m_texResource;
 
 	// A list of bombers for players to shoot at
 	vector<Bomber*> m_bomberList;
@@ -112,6 +104,10 @@ private:
 	void loadMeshSphere(string name, Color col, int stack, int slice, float radius);
 	void loadMeshCone(string name, Color col, int slice, float radius, float height);
 	void loadMeshCrosshair(string name, Color col, float length);
+
+	// Texture Loading
+	void textureInit(void);
+	void loadTexture(string name, string filePath);
 	
 	// Level Loading
 	void bomberDemoInit();
@@ -139,5 +135,7 @@ private:
 	static int loadMeshSphere(lua_State* L);
 	static int loadMeshCone(lua_State* L);
 	static int loadMeshCrosshair(lua_State* L);
-
+	// -- Textures
+	static int loadTexture(lua_State* L);
+	static int setTexture(lua_State* L);
 };
