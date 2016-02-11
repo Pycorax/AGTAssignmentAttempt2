@@ -53,7 +53,6 @@ void WinMenuScene::Init()
 	const Vector3 SCALE_BUTTON_SIZE(50, 50);
 
 	createButtonList(BT_TOTAL);
-	m_button[BT_RETRY].Init(meshList[GEO_BT_RETRY], Vector3(m_window_width * 0.5, m_window_height * 0.4), NORMAL_BUTTON_SIZE);
 	m_button[BT_QUIT].Init(meshList[GEO_BT_QUIT], Vector3(m_window_width * 0.5, m_window_height * 0.3), NORMAL_BUTTON_SIZE);
 }
 
@@ -61,11 +60,7 @@ void WinMenuScene::Update(double dt)
 {
 	MenuScene::Update(dt);
 
-	if (m_button[BT_RETRY].GetState() == UIButton::DOWN_STATE)
-	{
-		changeState(nullptr, true, LoseState::TAG_RETRY);
-	}
-	else if (m_button[BT_QUIT].GetState() == UIButton::DOWN_STATE)
+	if (m_button[BT_QUIT].GetState() == UIButton::DOWN_STATE)
 	{
 		changeState(nullptr, true, LoseState::TAG_RETURN_TO_MENU);
 	}

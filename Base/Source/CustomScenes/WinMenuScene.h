@@ -18,7 +18,6 @@ class WinMenuScene : public MenuScene, public IScoreMenu
 
 	enum BUTTON_TYPE
 	{
-		BT_RETRY,
 		BT_QUIT,
 		BT_TOTAL
 	};
