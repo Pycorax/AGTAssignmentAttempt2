@@ -59,6 +59,20 @@ void RunAwayState::Update(double dt)
 		
 		// Get Movement Vector
 		Vector3 move = dir * bomber->m_speed * dt;
+
+		// Do Bounds Checking
+		Vector3 finalPos;
+		bomber->theTransform->GetOffset(finalPos.x, finalPos.y, finalPos.z);
+		finalPos += move;
+		if (finalPos.x < bomber->m_minBounds.x || finalPos.x > bomber->m_maxBounds.x)
+		{
+			move.x = 0.0;
+		}
+		if (finalPos.z < bomber->m_minBounds.z || finalPos.z > bomber->m_maxBounds.z)
+		{
+			move.z = 0.0;
+		}
+
 		// Move towards
 		bomber->ApplyTranslate(move.x, move.y, move.z);
 

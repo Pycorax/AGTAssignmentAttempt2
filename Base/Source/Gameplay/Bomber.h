@@ -67,6 +67,8 @@ private:
 	// -- Normal AI
 	Vector3 m_currentTarget;
 	bool m_targetInvuln;
+	Vector3 m_minBounds;
+	Vector3 m_maxBounds;
 	// -- Flocking AI
 	vector<Bomber*>* m_flock;
 
@@ -84,6 +86,9 @@ public:
 
 	// Models
 	void SetBodyLODModels(Mesh* lowRes, Mesh* medRes, Mesh* highRes);
+
+	// Bounds
+	void SetBounds(Vector3 min, Vector3 max);
 
 	// Interaction
 	void Nudge(Vector3 direction);

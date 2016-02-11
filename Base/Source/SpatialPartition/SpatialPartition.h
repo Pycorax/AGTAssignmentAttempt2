@@ -31,6 +31,11 @@ public:
 	// Get a particular grid's Mesh
 	Mesh* GetGridMesh(const int xIndex, const int yIndex);
 
+	// Get Total Min Size
+	Vector3 GetMinBound(void) const;
+	// Get Total Max Size
+	Vector3 GetMaxBound(void) const;
+
 	// Set a particular grid's Mesh
 	void SetGridMesh(const int xIndex, const int yIndex, Mesh* theGridMesh);
 	// Add a new object

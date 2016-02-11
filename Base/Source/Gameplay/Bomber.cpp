@@ -93,6 +93,12 @@ void Bomber::SetBodyLODModels(Mesh * lowRes, Mesh * medRes, Mesh * highRes)
 	m_body->theModel->SetLODMesh(lowRes, medRes, highRes);
 }
 
+void Bomber::SetBounds(Vector3 min, Vector3 max)
+{
+	m_minBounds = min;
+	m_maxBounds = max;
+}
+
 void Bomber::Nudge(Vector3 direction)
 {
 	if (direction != Vector3::ZERO_VECTOR)

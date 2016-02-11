@@ -151,6 +151,7 @@ void GameScene::Init(string levelString)
 				bomber->LoadedInit(&saveFile, i, humanHat, humanHead, humanBodyLow);
 				bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 				bomber->SetFlock(&m_bomberList);
+				bomber->SetBounds(m_cSpatialPartition->GetMinBound(), m_cSpatialPartition->GetMaxBound());
 				m_cSceneGraph->AddChild(bomber);
 				m_bomberList.push_back(bomber);
 			}
@@ -197,8 +198,9 @@ void GameScene::Init(string levelString)
 	m_cProjectileManager = new CProjectileManager();
 
 	// -- Set the projectile range
-	m_cProjectileManager->Boundary_TopLeft.Set(m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), 300.0f, m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid());
-	m_cProjectileManager->Boundary_BottomRight.Set(-m_cSpatialPartition->GetGridSizeX() * m_cSpatialPartition->GetxNumOfGrid(), -50.0f, -m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid());
+	m_cProjectileManager->Boundary_TopLeft = m_cSpatialPartition->GetMaxBound();
+	m_cProjectileManager->Boundary_TopLeft.y = 300.0f;
+	m_cProjectileManager->Boundary_BottomRight = m_cSpatialPartition->GetMinBound();
 
 	// Give the player the max number of lives
 	m_lives = MAX_LIVES;
@@ -581,6 +583,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, BUFFER_SPACE), humanHat, humanHead, humanBodyLow);
 		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
+		bomber->SetBounds(m_cSpatialPartition->GetMinBound(), m_cSpatialPartition->GetMaxBound());
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -592,6 +595,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, worldHeight), humanHat, humanHead, humanBodyLow);
 		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
+		bomber->SetBounds(m_cSpatialPartition->GetMinBound(), m_cSpatialPartition->GetMaxBound());
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -603,6 +607,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber->Init(Vector3(worldWidth, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), humanHat, humanHead, humanBodyLow);
 		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
+		bomber->SetBounds(m_cSpatialPartition->GetMinBound(), m_cSpatialPartition->GetMaxBound());
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}
@@ -614,6 +619,7 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 		bomber->Init(Vector3(BUFFER_SPACE, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), humanHat, humanHead, humanBodyLow);
 		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
+		bomber->SetBounds(m_cSpatialPartition->GetMinBound(), m_cSpatialPartition->GetMaxBound());
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
 	}

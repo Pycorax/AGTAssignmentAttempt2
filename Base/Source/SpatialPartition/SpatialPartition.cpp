@@ -136,6 +136,16 @@ Mesh* CSpatialPartition::GetGridMesh(const int xIndex, const int yIndex)
         return NULL;
 }
 
+ Vector3 CSpatialPartition::GetMinBound(void) const
+ {
+	 return Vector3();
+ }
+
+ Vector3 CSpatialPartition::GetMaxBound(void) const
+ {
+	 return Vector3(xNumOfGrid * xGridSize, 0.0f, yNumOfGrid * yGridSize);
+ }
+
 /********************************************************************************
  Set a particular grid
  ********************************************************************************/
