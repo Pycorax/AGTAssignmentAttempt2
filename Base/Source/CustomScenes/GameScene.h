@@ -3,12 +3,18 @@
 // Inheritance Include
 #include "../SceneManager.h"
 
+// STL Includes
+#include <unordered_map>
+
 // API Includes
 #include "Lua.h"
 
 // Other Includes
 #include "../Gameplay/Bomber.h"
 #include "../Gameplay/PowerWeapon.h"
+
+// Using Directives
+using std::unordered_map;
 
 class GameScene : public CSceneManager
 {
@@ -28,9 +34,6 @@ private:	// Static Constants
 private:	// Enums
 	enum GEOMETRY_TYPE
 	{
-		GEO_YELLOW_CUBE,
-		GEO_RAY,
-		GEO_AXES,
 		GEO_CROSSHAIR,
 		GEO_LIGHTBALL,
 		GEO_SPHERE,
@@ -69,6 +72,7 @@ private:	// Enums
 private:	// Variables
 	// Mesh Resources
 	Mesh* meshList[NUM_GEOMETRY];
+	unordered_map<string, Mesh*> m_meshResource;
 
 	// A list of bombers for players to shoot at
 	vector<Bomber*> m_bomberList;
@@ -118,7 +122,17 @@ public:
 	virtual void UpdateWeaponStatus(const unsigned char key);
 
 private:
+	// Mesh Loading
 	void meshInit();
+	void loadMeshRay(string name, Color col, float length);
+	void loadMeshQuad(string name, Color col, float length);
+	//void loadMeshText();
+	void loadMesh2DMesh(string name, Color col, int posX, int posY, int width, int height);
+	void loadMeshSphere(string name, Color col, int stack, int slice, float radius);
+	void loadMeshCone(string name, Color col, int slice, float radius, float height);
+	void loadMeshCrosshair(string name, Color col, float length);
+	
+	// Level Loading
 	void bomberDemoInit();
 
 	// Survival Mode
@@ -134,5 +148,15 @@ private:
 	void renderUIBar(Vector3 pos, Vector3 scale, float progress, Mesh* progressMesh);
 
 	// Load from Lua
+	// -- Level
 	static int bomberSurvivalInit(lua_State* L);
+	// -- Mesh
+	static int loadMeshRay(lua_State* L);
+	static int loadMeshQuad(lua_State* L);
+	//static int loadMeshText(lua_State* L);
+	static int loadMesh2DMesh(lua_State* L);
+	static int loadMeshSphere(lua_State* L);
+	static int loadMeshCone(lua_State* L);
+	static int loadMeshCrosshair(lua_State* L);
+
 };

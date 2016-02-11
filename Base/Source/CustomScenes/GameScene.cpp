@@ -435,20 +435,22 @@ void GameScene::meshInit()
 		meshList[i] = NULL;
 	}
 
-	meshList[GEO_YELLOW_CUBE] = MeshBuilder::GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
-	meshList[GEO_RAY] = MeshBuilder::GenerateRay("Ray", Color(1.0f, 0.0f, 0.0f), 10.0f);
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");//, 1000, 1000, 1000);
+	// Load Meshes from Lua
+	LuaFile meshLoader("Config//mesh_loader.lua");
+	meshLoader.RegisterFunction("loadMeshRay", loadMeshRay);
+	meshLoader.RegisterFunction("loadMeshQuad", loadMeshQuad);
+	meshLoader.RegisterFunction("loadMesh2DMesh", loadMesh2DMesh);
+	meshLoader.RegisterFunction("loadMeshSphere", loadMeshSphere);
+	meshLoader.RegisterFunction("loadMeshCone", loadMeshCone);
+	meshLoader.RegisterFunction("loadMeshCrosshair", loadMeshCrosshair);
+	meshLoader.Call("loadMeshes", 0, Lua::LuaFuncList{Lua::NewPtr(this)});
+
 	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair", 1.0f, 1.0f, 1.0f, 0.1f);
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_QUAD]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
 	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
 	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.1f);
-	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
-	meshList[GEO_CONE]->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
-	meshList[GEO_CONE]->material.kSpecular.Set(0.f, 0.f, 0.f);
 
 	// Player
 	meshList[GEO_PLAYER_BODY] = MeshBuilder::GenerateCone("playerBody", Color(0.282f, 0.568f, 0.803f), 36, 1.f, 1.f);
@@ -487,6 +489,36 @@ void GameScene::meshInit()
 	meshList[GEO_POWER_AMMO_BAR] = MeshBuilder::GenerateQuad("PAmmo Bar", Color(0.95f, 0.396f, 0.13f));
 	meshList[GEO_KILL_BAR] = MeshBuilder::GenerateQuad("Score Bar", Color(0.22f, 0.71f, 0.29f));
 	meshList[GEO_BAR_BG] = MeshBuilder::GenerateQuad("Bar BG", Color(0.54f, 0.54f, 0.54f));
+}
+
+void GameScene::loadMeshRay(string name, Color col, float length)
+{
+	m_meshResource[name] = MeshBuilder::GenerateRay(name, col, length);
+}
+
+void GameScene::loadMeshQuad(string name, Color col, float length)
+{
+	m_meshResource[name] = MeshBuilder::GenerateQuad(name, col, length);
+}
+
+void GameScene::loadMesh2DMesh(string name, Color col, int posX, int posY, int width, int height)
+{
+	m_meshResource[name] = MeshBuilder::Generate2DMesh(name, col, posX, posY, width, height);
+}
+
+void GameScene::loadMeshSphere(string name, Color col, int stack, int slice, float radius)
+{
+	m_meshResource[name] = MeshBuilder::GenerateSphere(name, col, stack, slice, radius);
+}
+
+void GameScene::loadMeshCone(string name, Color col, int slice, float radius, float height)
+{
+	m_meshResource[name] = MeshBuilder::GenerateCone(name, col, slice, radius, height);
+}
+
+void GameScene::loadMeshCrosshair(string name, Color col, float length)
+{
+	m_meshResource[name] = MeshBuilder::GenerateCrossHair(name, col.r, col.g, col.b, length);
 }
 
 void GameScene::bomberDemoInit()
@@ -661,6 +693,91 @@ int GameScene::bomberSurvivalInit(lua_State* L)
 	return LuaFunc::postCall(L, returns);
 }
 
+int GameScene::loadMeshRay(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_NUMBER: Color - Red | LT_NUMBER: Color - Green | LT_NUMBER: Color - Blue | LT_NUMBER: Length*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadMeshRay(Lua::ExtStr(params[1]), Color(Lua::ExtNum(params[2]), Lua::ExtNum(params[3]), Lua::ExtNum(params[4])), Lua::ExtNum(params[5]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
+int GameScene::loadMeshQuad(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_NUMBER: Color - Red | LT_NUMBER: Color - Green | LT_NUMBER: Color - Blue | LT_NUMBER: Length*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadMeshQuad(Lua::ExtStr(params[1]), Color(Lua::ExtNum(params[2]), Lua::ExtNum(params[3]), Lua::ExtNum(params[4])), Lua::ExtNum(params[5]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
+int GameScene::loadMesh2DMesh(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_NUMBER: Color - Red | LT_NUMBER: Color - Green | LT_NUMBER: Color - Blue | 
+	  LT_NUMBER: PosX | LT_NUMBER: PosY | LT_NUMBER: Width | LT_NUMBER: Height*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadMesh2DMesh(Lua::ExtStr(params[1]), Color(Lua::ExtNum(params[2]), Lua::ExtNum(params[3]), Lua::ExtNum(params[4])), Lua::ExtNum(params[5]), Lua::ExtNum(params[6]), Lua::ExtNum(params[7]), Lua::ExtNum(params[8]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
+int GameScene::loadMeshSphere(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_NUMBER: Color - Red | LT_NUMBER: Color - Green | LT_NUMBER: Color - Blue | LT_NUMBER: Stack | LT_NUMBER: Slice | LT_NUMBER: Radius*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadMeshSphere(Lua::ExtStr(params[1]), Color(Lua::ExtNum(params[2]), Lua::ExtNum(params[3]), Lua::ExtNum(params[4])), Lua::ExtNum(params[5]), Lua::ExtNum(params[6]), Lua::ExtNum(params[7]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
+int GameScene::loadMeshCone(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_NUMBER: Color - Red | LT_NUMBER: Color - Green | LT_NUMBER: Color - Blue | LT_NUMBER: Slice | LT_NUMBER: Radius | LT_NUMBER: Height*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadMeshCone(Lua::ExtStr(params[1]), Color(Lua::ExtNum(params[2]), Lua::ExtNum(params[3]), Lua::ExtNum(params[4])), Lua::ExtNum(params[5]), Lua::ExtNum(params[6]), Lua::ExtNum(params[7]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
+int GameScene::loadMeshCrosshair(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_NUMBER: Color - Red | LT_NUMBER: Color - Green | LT_NUMBER: Color - Blue | LT_NUMBER: Slice | LT_NUMBER: Radius | LT_NUMBER: Height*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadMeshCrosshair(Lua::ExtStr(params[1]), Color(Lua::ExtNum(params[2]), Lua::ExtNum(params[3]), Lua::ExtNum(params[4])), Lua::ExtNum(params[5]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
 void GameScene::OnResume()
 {
 	CSceneManager::OnResume();
@@ -749,7 +866,7 @@ void GameScene::RenderMobileObjects()
 				glLineWidth(8.0f);
 				modelStack.Rotate(m_cProjectileManager->theListOfProjectiles[i]->GetRotationZ(), 0, 1, 0);
 				modelStack.Rotate(-m_cProjectileManager->theListOfProjectiles[i]->GetRotationY(), 0, 0, 1);
-				RenderMesh(meshList[GEO_RAY], false);
+				RenderMesh(m_meshResource["Ray"], false);
 				glLineWidth(1.0f);
 			}
 			modelStack.PopMatrix();
