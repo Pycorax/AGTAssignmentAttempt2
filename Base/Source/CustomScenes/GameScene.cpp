@@ -74,7 +74,7 @@ void GameScene::Init(string levelString)
 	 */
 	// Initialise and load a model into it
 	m_cAvatar = new CPlayInfo3PV();
-	m_cAvatar->SetModel(meshList[GEO_PLAYER_BODY]);
+	m_cAvatar->SetModel(m_meshResource["playerBody"]);
 	
 	// Create a scenegraph
 	m_cSceneGraph = new CSceneNode();
@@ -133,13 +133,20 @@ void GameScene::Init(string levelString)
 		// If a level string is provided, this means it's Survival mode
 		if (m_levelName.length() > 0)
 		{
+			// Meshes
+			Mesh* humanHat = m_meshResource["humanHat"];
+			Mesh* humanHead = m_meshResource["humanHead"];
+			Mesh* humanBodyLow = m_meshResource["humanBodyLowRes"];
+			Mesh* humanBodyMed = m_meshResource["humanBodyMedRes"];
+			Mesh* humanBodyHigh = m_meshResource["humanBodyHighRes"];
+
 			// Load Enemy Status
 			int numEnemies = saveFile.GetNumber(SAVE_NUM_ENEMIES_PROP_NAME);
 			for (size_t i = 0; i < numEnemies; ++i)
 			{
 				Bomber* bomber = new Bomber;
-				bomber->LoadedInit(&saveFile, i, meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-				bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+				bomber->LoadedInit(&saveFile, i, humanHat, humanHead, humanBodyLow);
+				bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 				bomber->SetFlock(&m_bomberList);
 				m_cSceneGraph->AddChild(bomber);
 				m_bomberList.push_back(bomber);
@@ -437,32 +444,19 @@ void GameScene::meshInit()
 
 	// Load Meshes from Lua
 	LuaFile meshLoader("Config//mesh_loader.lua");
+	// -- Register Mesh Loading Functions
 	meshLoader.RegisterFunction("loadMeshRay", loadMeshRay);
 	meshLoader.RegisterFunction("loadMeshQuad", loadMeshQuad);
 	meshLoader.RegisterFunction("loadMesh2DMesh", loadMesh2DMesh);
 	meshLoader.RegisterFunction("loadMeshSphere", loadMeshSphere);
 	meshLoader.RegisterFunction("loadMeshCone", loadMeshCone);
 	meshLoader.RegisterFunction("loadMeshCrosshair", loadMeshCrosshair);
+	// -- Call Load Mesh Function
 	meshLoader.Call("loadMeshes", 0, Lua::LuaFuncList{Lua::NewPtr(this)});
 
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair", 1.0f, 1.0f, 1.0f, 0.1f);
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 0, 0), 18, 36, 1.f);
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.1f);
-
-	// Player
-	meshList[GEO_PLAYER_BODY] = MeshBuilder::GenerateCone("playerBody", Color(0.282f, 0.568f, 0.803f), 36, 1.f, 1.f);
-	meshList[GEO_PLAYER_INVULN_HAT] = MeshBuilder::GenerateCone("invulnHat", Color(0.84f, 0.0f, 0.027f), 36, 1.f, 1.f);
-
-	// Human
-	meshList[GEO_HUMAN_HAT] = MeshBuilder::GenerateCone("humanHat", Color(0.0f, 0.0f, 0.0f), 36, 1.f, 1.f);
-	
-	meshList[GEO_HUMAN_HEAD] = MeshBuilder::GenerateSphere("humanHead", Color(0.968f, 0.937f, 0.619f), 12, 12, 1.0f);
-	meshList[GEO_HUMAN_BODY_LOW] = MeshBuilder::GenerateCone("humanBodyLowRes", Color(0.83f, 0.11f, 0.14f), 4, 1.f, 1.f);
-	meshList[GEO_HUMAN_BODY_MED] = MeshBuilder::GenerateCone("humanBodyMedRes", Color(0.83f, 0.11f, 0.14f), 8, 1.f, 1.f);
-	meshList[GEO_HUMAN_BODY_HIGH] = MeshBuilder::GenerateCone("humanBodyHighRes", Color(0.83f, 0.11f, 0.14f), 36, 1.f, 1.f);
 
 	// Sky Box
 	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("LEFT", Color(1, 1, 1), 1.f);
@@ -485,10 +479,6 @@ void GameScene::meshInit()
 	// HUD
 	meshList[GEO_LIFE] = MeshBuilder::Generate2DMesh("Life", Color(), 0, 0, 1, 1);
 	meshList[GEO_LIFE]->textureID = LoadTGA("Image//HUD/life.tga");
-	meshList[GEO_AMMO_BAR] = MeshBuilder::GenerateQuad("Ammo Bar", Color(0.65f, 0.87f, 0.97f));
-	meshList[GEO_POWER_AMMO_BAR] = MeshBuilder::GenerateQuad("PAmmo Bar", Color(0.95f, 0.396f, 0.13f));
-	meshList[GEO_KILL_BAR] = MeshBuilder::GenerateQuad("Score Bar", Color(0.22f, 0.71f, 0.29f));
-	meshList[GEO_BAR_BG] = MeshBuilder::GenerateQuad("Bar BG", Color(0.54f, 0.54f, 0.54f));
 }
 
 void GameScene::loadMeshRay(string name, Color col, float length)
@@ -529,34 +519,41 @@ void GameScene::bomberDemoInit()
 	// Adding Bombers to the Scene
 	Bomber* bomber;
 
+	// Meshes
+	Mesh* humanHat = m_meshResource["humanHat"];
+	Mesh* humanHead = m_meshResource["humanHead"];
+	Mesh* humanBodyLow = m_meshResource["humanBodyLowRes"];
+	Mesh* humanBodyMed = m_meshResource["humanBodyMedRes"];
+	Mesh* humanBodyHigh = m_meshResource["humanBodyHighRes"];
+
 	bomber = new Bomber;
-	bomber->Init(Vector3(118, 0, 25), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+	bomber->Init(Vector3(118, 0, 25), humanHat, humanHead, humanBodyLow);
+	bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
-	bomber->Init(Vector3(125, 0, 142), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+	bomber->Init(Vector3(125, 0, 142), humanHat, humanHead, humanBodyLow);
+	bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
-	bomber->Init(Vector3(115, 0, 83), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+	bomber->Init(Vector3(115, 0, 83), humanHat, humanHead, humanBodyLow);
+	bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
-	bomber->Init(Vector3(155, 0, 223), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+	bomber->Init(Vector3(155, 0, 223), humanHat, humanHead, humanBodyLow);
+	bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
-	bomber->Init(Vector3(185, 0, 184), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+	bomber->Init(Vector3(185, 0, 184), humanHat, humanHead, humanBodyLow);
+	bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 	m_cSceneGraph->AddChild(bomber);
 
 	bomber = new Bomber;
-	bomber->Init(Vector3(200, 0, 103), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-	bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+	bomber->Init(Vector3(200, 0, 103), humanHat, humanHead, humanBodyLow);
+	bomber->SetBodyLODModels(humanBodyLow,humanBodyMed, humanBodyHigh);
 	m_cSceneGraph->AddChild(bomber);
 }
 
@@ -570,12 +567,19 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	float worldHeight = m_cSpatialPartition->GetGridSizeY() * m_cSpatialPartition->GetyNumOfGrid() - BUFFER_SPACE;
 	Bomber* bomber = nullptr;
 
+	// Meshes
+	Mesh* humanHat = m_meshResource["humanHat"];
+	Mesh* humanHead = m_meshResource["humanHead"];
+	Mesh* humanBodyLow = m_meshResource["humanBodyLowRes"];
+	Mesh* humanBodyMed = m_meshResource["humanBodyMedRes"];
+	Mesh* humanBodyHigh = m_meshResource["humanBodyHighRes"];
+
 	// Adding Bombers to the left side of the Scene
 	for (size_t bots = 0; bots < left; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, BUFFER_SPACE), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, BUFFER_SPACE), humanHat, humanHead, humanBodyLow);
+		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
@@ -585,8 +589,8 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	for (size_t bots = 0; bots < right; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, worldHeight), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->Init(Vector3(Math::RandFloatMinMax(BUFFER_SPACE, worldWidth), 0, worldHeight), humanHat, humanHead, humanBodyLow);
+		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
@@ -596,8 +600,8 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	for (size_t bots = 0; bots < top; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(worldWidth, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->Init(Vector3(worldWidth, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), humanHat, humanHead, humanBodyLow);
+		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
@@ -607,8 +611,8 @@ void GameScene::bomberSurvivalInit(unsigned left, unsigned right, unsigned top, 
 	for (size_t bots = 0; bots < bot; ++bots)
 	{
 		bomber = new Bomber;
-		bomber->Init(Vector3(BUFFER_SPACE, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), meshList[GEO_HUMAN_HAT], meshList[GEO_HUMAN_HEAD], meshList[GEO_HUMAN_BODY_LOW]);
-		bomber->SetBodyLODModels(meshList[GEO_HUMAN_BODY_LOW], meshList[GEO_HUMAN_BODY_MED], meshList[GEO_HUMAN_BODY_HIGH]);
+		bomber->Init(Vector3(BUFFER_SPACE, 0, Math::RandFloatMinMax(BUFFER_SPACE, worldHeight)), humanHat, humanHead, humanBodyLow);
+		bomber->SetBodyLODModels(humanBodyLow, humanBodyMed, humanBodyHigh);
 		bomber->SetFlock(&m_bomberList);
 		m_cSceneGraph->AddChild(bomber);
 		m_bomberList.push_back(bomber);
@@ -676,7 +680,7 @@ void GameScene::renderUIBar(Vector3 pos, Vector3 scale, float progress, Mesh * p
 
 	// Rendering
 	Render2DMesh(progressMesh, false, barScale.x, barScale.y, pos.x + barDisplaceLength * 0.5, pos.y);
-	Render2DMesh(meshList[GEO_BAR_BG], false, scale.x, scale.y, pos.x, pos.y);
+	Render2DMesh(m_meshResource["Bar BG"], false, scale.x, scale.y, pos.x, pos.y);
 }
 
 int GameScene::bomberSurvivalInit(lua_State* L)
@@ -808,7 +812,7 @@ void GameScene::RenderGUI()
 	}
 
 	// Render the crosshair
-	RenderMeshIn2D(meshList[GEO_CROSSHAIR], false, 10.0f);
+	RenderMeshIn2D(m_meshResource["crosshair"], false, 10.0f);
 
 	// Render Ammo Bar
 	const Vector3 MAX_BAR_SCALE = Vector3(300.0f, 30.0f, 5.0f);
@@ -816,18 +820,18 @@ void GameScene::RenderGUI()
 	if (m_slowGun.IsReloading())
 	{
 		// Show reload status
-		renderUIBar(AMMO_BAR_POS, MAX_BAR_SCALE, m_slowGun.GetReloadStatus(), meshList[GEO_AMMO_BAR]);
+		renderUIBar(AMMO_BAR_POS, MAX_BAR_SCALE, m_slowGun.GetReloadStatus(), m_meshResource["Ammo Bar"]);
 	}
 	else
 	{
 		// Show ammo left
-		renderUIBar(AMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_slowGun.GetCurrentMag()) / m_slowGun.GetMagSize()), meshList[GEO_AMMO_BAR]);
+		renderUIBar(AMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_slowGun.GetCurrentMag()) / m_slowGun.GetMagSize()), m_meshResource["Ammo Bar"]);
 	}
 
 	// Render Power Ammo Bar
 	const Vector3 PAMMO_BAR_POS = Vector3(m_window_width - MAX_BAR_SCALE.x * 0.5f, MAX_BAR_SCALE.y * 1.5f);
 	// Show collection status
-	renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)), meshList[GEO_POWER_AMMO_BAR]);
+	renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)), m_meshResource["PAmmo Bar"]);
 
 	ss << m_killGun.GetCharge();
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, m_window_width - ss.str().length() * 30, MAX_BAR_SCALE.y);
@@ -842,7 +846,7 @@ void GameScene::RenderMobileObjects()
 	// Render LightBall
 	modelStack.PushMatrix();
 	modelStack.Translate(lights[0].position.x, lights[0].position.y, lights[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
+	RenderMesh(m_meshResource["lightball"], false);
 	modelStack.PopMatrix();
 
 	// Draw the scene graph
@@ -859,7 +863,7 @@ void GameScene::RenderMobileObjects()
 			modelStack.Translate(ProjectilePosition.x, ProjectilePosition.y, ProjectilePosition.z);
 			if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_DISCRETE)
 			{
-				RenderMesh(meshList[GEO_SPHERE], false);
+				RenderMesh(m_meshResource["sphere"], false);
 			}
 			else if (m_cProjectileManager->theListOfProjectiles[i]->GetType() == CProjectile::PT_RAY)
 			{
@@ -884,7 +888,7 @@ void GameScene::RenderMobileObjects()
 		modelStack.PushMatrix();
 		modelStack.Translate(0.0f, 0.6f, 0.0f);
 		modelStack.Scale(0.4f, 0.4f, 0.4f);
-		RenderMesh(meshList[GEO_HUMAN_HEAD], false);
+		RenderMesh(m_meshResource["humanHead"], false);
 
 			// Render the Hat
 			modelStack.PushMatrix();
@@ -893,11 +897,11 @@ void GameScene::RenderMobileObjects()
 
 			if (m_invulnTime > 0.0f)
 			{
-				RenderMesh(meshList[GEO_PLAYER_INVULN_HAT], false);
+				RenderMesh(m_meshResource["invulnHat"], false);
 			}
 			else
 			{
-				RenderMesh(meshList[GEO_HUMAN_HAT], false);
+				RenderMesh(m_meshResource["humanHat"], false);
 			}
 			
 			modelStack.PopMatrix();

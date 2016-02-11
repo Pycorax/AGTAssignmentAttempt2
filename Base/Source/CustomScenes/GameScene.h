@@ -34,21 +34,6 @@ private:	// Static Constants
 private:	// Enums
 	enum GEOMETRY_TYPE
 	{
-		GEO_CROSSHAIR,
-		GEO_LIGHTBALL,
-		GEO_SPHERE,
-		GEO_QUAD,
-		GEO_CUBE,
-		GEO_CONE,
-		// -- Player
-		GEO_PLAYER_BODY,
-		GEO_PLAYER_INVULN_HAT,
-		// -- Human
-		GEO_HUMAN_HAT,
-		GEO_HUMAN_HEAD,
-		GEO_HUMAN_BODY_LOW,
-		GEO_HUMAN_BODY_MED,
-		GEO_HUMAN_BODY_HIGH,
 		// -- Skybox
 		GEO_LEFT,
 		GEO_RIGHT,
@@ -60,10 +45,6 @@ private:	// Enums
 		GEO_GROUND,
 		// -- HUD
 		GEO_LIFE,
-		GEO_BAR_BG,
-		GEO_AMMO_BAR,
-		GEO_POWER_AMMO_BAR,
-		GEO_KILL_BAR,
 		// -- Text
 		GEO_TEXT,
 		NUM_GEOMETRY,
