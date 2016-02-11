@@ -17,8 +17,8 @@ function loadMeshes(context)
 	-- Enemies
 	loadMeshCone(context, "humanHat", 0.0, 0.0, 0.0, 36, 1.0, 1.0)
 	loadMeshSphere(context, "humanHead", 0.968, 0.937, 0.619, 12, 12, 1.0)
-	loadMeshCone(context, "humanBodyLowRes", 0.83, 0.11, 0.14, 4, 1.0, 1.0)
-	loadMeshCone(context, "humanBodyMedRes", 0.83, 0.11, 0.14, 8, 1.0, 1.0)
+	loadMeshCone(context, "humanBodyLowRes", 0.83, 0.11, 0.14, 6, 1.0, 1.0)
+	loadMeshCone(context, "humanBodyMedRes", 0.83, 0.11, 0.14, 12, 1.0, 1.0)
 	loadMeshCone(context, "humanBodyHighRes", 0.83, 0.11, 0.14, 36, 1.0, 1.0)
 
 	-- SkyBox
