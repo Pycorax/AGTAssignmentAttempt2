@@ -406,14 +406,20 @@ void GameScene::Exit()
 	}
 
 	// Clear Meshes
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
+	// -- Get all mesh pointers
+	vector<Mesh*> meshPtrs;
+	for (auto mesh = m_meshResource.begin(); mesh != m_meshResource.end(); ++mesh)
 	{
-		if (meshList[i])
-		{
-			delete meshList[i];
-			meshList[i] = nullptr;
-		}
+		meshPtrs.push_back((*mesh).second);
 	}
+	// -- Delete all mesh pointers
+	while (!meshPtrs.empty())
+	{
+		delete meshPtrs.back();
+		meshPtrs.pop_back();
+	}
+	// -- Clear the Meshes from the list
+	m_meshResource.clear();
 
 	// Clear Bombers
 	while (!m_bomberList.empty())
@@ -440,16 +446,12 @@ void GameScene::UpdateWeaponStatus(const unsigned char key)
 
 void GameScene::meshInit()
 {
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
-	{
-		meshList[i] = NULL;
-	}
-
 	// Load Meshes from Lua
 	LuaFile meshLoader("Config//mesh_loader.lua");
 	// -- Register Mesh Loading Functions
 	meshLoader.RegisterFunction("loadMeshRay", loadMeshRay);
 	meshLoader.RegisterFunction("loadMeshQuad", loadMeshQuad);
+	meshLoader.RegisterFunction("loadMeshText", loadMeshText);
 	meshLoader.RegisterFunction("loadMesh2DMesh", loadMesh2DMesh);
 	meshLoader.RegisterFunction("loadMeshSphere", loadMeshSphere);
 	meshLoader.RegisterFunction("loadMeshCone", loadMeshCone);
@@ -457,9 +459,6 @@ void GameScene::meshInit()
 	meshLoader.RegisterFunction("setTexture", setTexture);
 	// -- Call Load Mesh Function
 	meshLoader.Call("loadMeshes", 0, Lua::LuaFuncList{Lua::NewPtr(this)});
-
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 }
 
 void GameScene::loadMeshRay(string name, Color col, float length)
@@ -470,6 +469,11 @@ void GameScene::loadMeshRay(string name, Color col, float length)
 void GameScene::loadMeshQuad(string name, Color col, float length)
 {
 	m_meshResource[name] = MeshBuilder::GenerateQuad(name, col, length);
+}
+
+void GameScene::loadMeshText(string name, int numRow, int numCol)
+{
+	m_meshResource[name] = MeshBuilder::GenerateText(name, numRow, numCol);
 }
 
 void GameScene::loadMesh2DMesh(string name, Color col, int posX, int posY, int width, int height)
@@ -721,6 +725,20 @@ int GameScene::loadMeshQuad(lua_State * L)
 	return LuaFunc::postCall(L, returns);
 }
 
+int GameScene::loadMeshText(lua_State * L)
+{
+	vector<Lua::LuaTypePtr> params;
+	vector<Lua::LuaTypePtr> returns;
+	/*LT_POINTER: Context | LT_STRING: Mesh Name | LT_NUMBER: Rows | LT_NUMBER: Columns*/
+	LuaFunc::preCall(L, params, vector<Lua::Type::LUA_TYPE> { Type::LT_POINTER, Type::LT_STRING, Type::LT_NUMBER, Type::LT_NUMBER });
+
+	GameScene* context = (GameScene*)Lua::ExtPtr(params[0]);
+
+	context->loadMeshText(Lua::ExtStr(params[1]), Lua::ExtNum(params[2]), Lua::ExtNum(params[3]));
+
+	return LuaFunc::postCall(L, returns);
+}
+
 int GameScene::loadMesh2DMesh(lua_State * L)
 {
 	vector<Lua::LuaTypePtr> params;
@@ -828,7 +846,7 @@ void GameScene::RenderGUI()
 
 	// Render scores in the top left
 	ss << "Score: " << m_score;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, 0.0f, m_window_height - 30);
+	RenderTextOnScreen(m_meshResource["calibri"], ss.str(), Color(), 30, 0.0f, m_window_height - 30);
 	ss.str("");
 
 	// Render lives in top right
@@ -861,7 +879,7 @@ void GameScene::RenderGUI()
 	renderUIBar(PAMMO_BAR_POS, MAX_BAR_SCALE, (static_cast<float>(m_lazerCollection) / static_cast<float>(LAZER_PRICE)), m_meshResource["PAmmo Bar"]);
 
 	ss << m_killGun.GetCharge();
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(), 30, m_window_width - ss.str().length() * 30, MAX_BAR_SCALE.y);
+	RenderTextOnScreen(m_meshResource["calibri"], ss.str(), Color(), 30, m_window_width - ss.str().length() * 30, MAX_BAR_SCALE.y);
 	ss.str("");
 }
 
@@ -944,7 +962,6 @@ Render the lights in this scene
 ********************************************************************************/
 void GameScene::RenderFixedObjects()
 {
-	//RenderMesh(meshList[GEO_AXES], false);
 }
 
 /********************************************************************************

@@ -3,7 +3,6 @@
 -- All Textures to load should be in loadTextures()
 function loadTextures(context)
 	-- Mesh Textures
-	loadTexture(context, "calibri", "Image//calibri.tga")
 	loadTexture(context, "ground", "Image//floor.tga")
 
 	-- HUD
@@ -16,4 +15,8 @@ function loadTextures(context)
 	loadTexture(context, "skybox_bottom", "Image//bottom.tga")
 	loadTexture(context, "skybox_front", "Image//front.tga")
 	loadTexture(context, "skybox_back", "Image//back.tga")
+
+	-- Text
+	loadTexture(context, "calibri", "Image//calibri.tga")
+
 end

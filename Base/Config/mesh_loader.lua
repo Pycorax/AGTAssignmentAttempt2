@@ -47,4 +47,8 @@ function loadMeshes(context)
 	loadMeshQuad(context, "PAmmo Bar", 0.95, 0.396, 0.13, 1.0)
 	loadMeshQuad(context, "Score Bar", 0.22, 0.71, 0.29, 1.0)
 	loadMeshQuad(context, "Bar BG", 0.54, 0.54, 0.54, 1.0)
+
+	-- Text
+	loadMeshText(context, "calibri", 16, 16)
+	setTexture(context, "calibri", "calibri")
 end

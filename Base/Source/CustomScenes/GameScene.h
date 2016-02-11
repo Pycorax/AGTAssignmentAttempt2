@@ -31,17 +31,8 @@ private:	// Static Constants
 	static const string SAVE_FILE_SUFFIX;
 	static const string SAVE_NUM_ENEMIES_PROP_NAME;
 
-private:	// Enums
-	enum GEOMETRY_TYPE
-	{
-		// -- Text
-		GEO_TEXT,
-		NUM_GEOMETRY,
-	};
-
 private:	// Variables
 	// Mesh Resources
-	Mesh* meshList[NUM_GEOMETRY];
 	unordered_map<string, Mesh*> m_meshResource;
 
 	// Texture Resources
@@ -99,7 +90,7 @@ private:
 	void meshInit();
 	void loadMeshRay(string name, Color col, float length);
 	void loadMeshQuad(string name, Color col, float length);
-	//void loadMeshText();
+	void loadMeshText(string name, int numRow, int numCol);
 	void loadMesh2DMesh(string name, Color col, int posX, int posY, int width, int height);
 	void loadMeshSphere(string name, Color col, int stack, int slice, float radius);
 	void loadMeshCone(string name, Color col, int slice, float radius, float height);
@@ -130,7 +121,7 @@ private:
 	// -- Mesh
 	static int loadMeshRay(lua_State* L);
 	static int loadMeshQuad(lua_State* L);
-	//static int loadMeshText(lua_State* L);
+	static int loadMeshText(lua_State* L);
 	static int loadMesh2DMesh(lua_State* L);
 	static int loadMeshSphere(lua_State* L);
 	static int loadMeshCone(lua_State* L);
